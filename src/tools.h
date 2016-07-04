@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>      // std::ofstream
 #include <iomanip>      // std::setprecision
+#include <math.h>       // std::sqrt
 
 namespace teo
 {
@@ -71,6 +72,12 @@ public:
     double GetZ();
 
     /**
+     * @brief GetAngle: Return the pose angle from the axis angle rotation.
+     * @return
+     */
+    double GetAngle();
+
+    /**
      * @brief GetRotation: Copies the axis-angle rotation on axis_ and pose_angle variables,
      * @param axis_i
      * @param axis_j
@@ -91,8 +98,8 @@ public:
     bool SetRotation(double axis_i, double axis_j, double axis_k, double pose_angle);
 
 private:
-    double x,y,z;
-    double i,j,k; //axis
+    double x,y,z; //position
+    double ux,uy,uz; //axis
     double angle; //angle
 
 };
@@ -146,15 +153,34 @@ namespace tra
 class SpaceTrajectory
 {
 public:
+    SpaceTrajectory();
+
+    /**
+     * @brief AddTimedWaypoint: Adds a timed waypoint.
+     * @param t: Delta time from last waypoint.
+     * @param waypoint : The Pose to add as waypoint.
+     * @return
+     */
     bool AddTimedWaypoint(double t, kin::Pose waypoint);
+
+    /**
+     * @brief AddWaypoint: Adds a timed waypoint. Time is based on defaultVelocity.
+     * @param waypoint : The Pose to add as waypoint.
+     * @return
+     */
     bool AddWaypoint(kin::Pose waypoint);
     bool GetLastWaypoint(kin::Pose & waypoint);
     bool SaveToFile(std::ofstream &csvFile);
     bool GetWaypoint(int index, kin::Pose &getWaypoint);
     int Size();
+    double getDefaultVelocity() const;
+    void setDefaultVelocity(double value);
+
 private:
     std::vector<kin::Pose> waypoints;
     std::vector<double> delta_t;
+    std::vector<double> total_t;
+    double defaultVelocity; //default tip velocity (m/s)
     /*
     std::map<double,Pose> waypoints;
     std::pair<double,Pose> wp; //Temporary storage. Use as local only. It can change.

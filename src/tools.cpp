@@ -16,9 +16,9 @@ Pose::Pose(double x0, double y0, double z0)
     x=x0;
     y=y0;
     z=z0;
-    i=0;
-    j=0;
-    k=0;
+    ux=0;
+    uy=0;
+    uz=0;
     angle=0;
 }
 
@@ -45,20 +45,25 @@ double Pose::GetZ()
     return z;
 }
 
+double Pose::GetAngle()
+{
+    return angle;
+}
+
 bool Pose::GetRotation(double & axis_i, double & axis_j, double & axis_k, double & pose_angle)
 {
-    axis_i=i;
-    axis_j=j;
-    axis_k=k;
+    axis_i=ux;
+    axis_j=uy;
+    axis_k=uz;
     pose_angle=angle;
     return true;
 }
 
 bool Pose::SetRotation(double axis_i, double axis_j, double axis_k, double pose_angle)
 {
-    i=axis_i;
-    j=axis_j;
-    k=axis_k;
+    ux=axis_i;
+    uy=axis_j;
+    uz=axis_k;
     angle=pose_angle;
     return true;
 }
@@ -123,6 +128,11 @@ void Link::setCOG(const Pose &value)
 
 //SpaceTrajectory definitions
 
+SpaceTrajectory::SpaceTrajectory()
+{
+    defaultVelocity = 0.5;
+}
+
 bool SpaceTrajectory::AddTimedWaypoint(double dt, Pose waypoint)
 {
 
@@ -141,8 +151,22 @@ bool SpaceTrajectory::AddTimedWaypoint(double dt, Pose waypoint)
 bool SpaceTrajectory::AddWaypoint(Pose waypoint)
 {
 
-    waypoints.push_back(waypoint);
-    delta_t.push_back(0);
+
+    //get the time based on default velocity
+    Pose lastwp;
+    double dx,dy,dz, dt;
+
+    GetLastWaypoint(lastwp);
+
+    dx = waypoint.GetX()-lastwp.GetX();
+    dy = waypoint.GetY()-lastwp.GetY();
+    dz = waypoint.GetZ()-lastwp.GetZ();
+
+    dt = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
+
+    //TODO: Calculate rotation angle to limit rotation velocity.
+
+    AddTimedWaypoint(dt, waypoint);
 
     return 0;
 }
@@ -150,6 +174,16 @@ bool SpaceTrajectory::AddWaypoint(Pose waypoint)
 int SpaceTrajectory::Size()
 {
     return waypoints.size();
+}
+
+double SpaceTrajectory::getDefaultVelocity() const
+{
+    return defaultVelocity;
+}
+
+void SpaceTrajectory::setDefaultVelocity(double value)
+{
+    defaultVelocity = value;
 }
 
 bool SpaceTrajectory::GetWaypoint(int index, Pose& getWaypoint)
