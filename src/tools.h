@@ -164,7 +164,7 @@ public:
     bool AddTimedWaypoint(double t, kin::Pose waypoint);
 
     /**
-     * @brief AddWaypoint: Adds a timed waypoint. Time is based on defaultVelocity.
+     * @brief AddWaypoint: Adds a timed waypoint. Delta time is based on defaultVelocity.
      * @param waypoint : The Pose to add as waypoint.
      * @return
      */
@@ -180,6 +180,12 @@ private:
     std::vector<kin::Pose> waypoints;
     std::vector<double> delta_t;
     std::vector<double> total_t;
+
+    //trajectory sampling
+    int nextWaypoint; //store the wp index we are going to
+    double etaNext; //estimated time of arrival
+
+    //movement parameters
     double defaultVelocity; //default tip velocity (m/s)
     /*
     std::map<double,Pose> waypoints;
@@ -188,7 +194,6 @@ private:
     std::pair<std::map<double,Pose>::iterator,bool> error;*/
 
 };
-
 
 }//end namespace tra
 

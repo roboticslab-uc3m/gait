@@ -131,6 +131,8 @@ void Link::setCOG(const Pose &value)
 SpaceTrajectory::SpaceTrajectory()
 {
     defaultVelocity = 0.5;
+    total_t.push_back(0);
+
 }
 
 bool SpaceTrajectory::AddTimedWaypoint(double dt, Pose waypoint)
