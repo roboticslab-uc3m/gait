@@ -131,7 +131,11 @@ void Link::setCOG(const Pose &value)
 SpaceTrajectory::SpaceTrajectory()
 {
     defaultVelocity = 0.5;
-    total_t.push_back(0);
+    time_totals.push_back(0);
+    next_wp = 0;
+    last_wp = 0;
+    next_wpTime = 0;
+    last_wpTime = 0;
 
 }
 
@@ -139,7 +143,8 @@ bool SpaceTrajectory::AddTimedWaypoint(double dt, Pose waypoint)
 {
 
     waypoints.push_back(waypoint);
-    delta_t.push_back(dt);
+    time_deltas.push_back(dt);
+    time_totals.push_back(time_totals.back()+dt);
     /*
     error = waypoints.insert(std::pair<double,Pose>(t,waypoint));
     if (error.second == false)
@@ -186,6 +191,51 @@ double SpaceTrajectory::getDefaultVelocity() const
 void SpaceTrajectory::setDefaultVelocity(double value)
 {
     defaultVelocity = value;
+}
+
+bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
+{
+    Pose nextPose,lastPose;
+
+    next_wp = NextWaypoint(sampleTime);
+    nextPose = waypoints[next_wp];
+    lastPose = waypoints[last_wp];
+    //samplePose.ChangePosition(nextPose.GetX()-lastPose.GetX(),nextPose.GetY()-lastPose.GetY(),nextPose.GetZ()-lastPose.GetZ());
+
+}
+
+int SpaceTrajectory::NextWaypoint(double atTime)
+{
+    //this will happen most times if called sequentially.
+
+    if( (atTime<next_wpTime)&(atTime>last_wpTime) )
+    {
+        return next_wp;
+
+    }
+
+    //this happens sometimes. When track reaches a waypoint, or when calling random.
+    else
+    {
+        time_actual = lower_bound (time_totals.begin(),time_totals.end(),atTime);
+        if (time_actual == time_totals.end())
+        {
+            std::cout << "No Waypoints defined for that time" << std::endl;
+            return -1;
+        }
+        else
+        {
+            next_wp = *time_actual;
+            if (next_wp < 1)
+            {
+                std::cout << "Error: Check if time is positive and waypoints are defined" << std::endl;
+                return -1;
+            }
+            last_wp = next_wp-1; // next_wp > 1 at this point
+            next_wpTime = time_totals[next_wp];
+            last_wpTime = time_totals[last_wp];
+        }
+    }
 }
 
 bool SpaceTrajectory::GetWaypoint(int index, Pose& getWaypoint)

@@ -175,15 +175,20 @@ public:
     int Size();
     double getDefaultVelocity() const;
     void setDefaultVelocity(double value);
+    bool GetSample(double sampleTime, kin::Pose & samplePose);
 
 private:
     std::vector<kin::Pose> waypoints;
-    std::vector<double> delta_t;
-    std::vector<double> total_t;
+    std::vector<double> time_deltas;
+    std::vector<double> time_totals;
+    std::vector<double>::iterator time_actual;
 
-    //trajectory sampling
-    int nextWaypoint; //store the wp index we are going to
-    double etaNext; //estimated time of arrival
+    //trajectory tracking
+    int last_wp; //store the wp index we come from
+    double last_wpTime; //time of last waypoint
+    int next_wp; //store the wp index we are going to
+    double next_wpTime; //time of next waypoint
+
 
     //movement parameters
     double defaultVelocity; //default tip velocity (m/s)
@@ -192,6 +197,8 @@ private:
     std::pair<double,Pose> wp; //Temporary storage. Use as local only. It can change.
     std::map<double,Pose>::iterator it;
     std::pair<std::map<double,Pose>::iterator,bool> error;*/
+
+    int NextWaypoint(double atTime);
 
 };
 
