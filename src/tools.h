@@ -27,6 +27,21 @@ public:
      */
     Pose(double x0, double y0, double z0);
 
+    /**
+     * @brief Pose : Create a Pose as a difference from initial to final pose.
+     * @param initialPose
+     * @param finalPose
+     */
+    Pose(Pose initialPose, Pose finalPose);
+
+    /**
+     * @brief Pose::Pose : Create a pose in a halfway from initial to final pose
+     * @param initialPose
+     * @param finalPose
+     * @param fraction: The ratio defining the halfway position. 0 for initial, 1 for final, other for halfways.
+     */
+    Pose(Pose initialPose, Pose finalPose, double fraction);
+
 
     /**
      * @brief SetPosition: Sets a new position. Overwrites old position.
@@ -97,10 +112,17 @@ public:
      */
     bool SetRotation(double axis_i, double axis_j, double axis_k, double pose_angle);
 
+    bool PoseDifference(Pose otherPose, Pose &difference);
+
+
 private:
     double x,y,z; //position
     double ux,uy,uz; //axis
     double angle; //angle
+    double q1,q2,q3,q4; //quaternion values for rotation
+
+
+
 
 };
 
@@ -153,7 +175,17 @@ namespace tra
 class SpaceTrajectory
 {
 public:
+
+    /**
+     * @brief SpaceTrajectory : If no first point specified, trajectory will start at (0,0,0)
+     */
     SpaceTrajectory();
+
+    /**
+     * @brief SpaceTrajectory : Constructor with first waypoint as parameter
+     * @param initialWaypoint
+     */
+    SpaceTrajectory(kin::Pose initialWaypoint);
 
     /**
      * @brief AddTimedWaypoint: Adds a timed waypoint.
@@ -172,11 +204,15 @@ public:
     bool GetLastWaypoint(kin::Pose & waypoint);
     bool SaveToFile(std::ofstream &csvFile);
     bool GetWaypoint(int index, kin::Pose &getWaypoint);
+    bool GetWaypoint(int index, kin::Pose &getWaypoint, double &time_total);
+
     int Size();
     double getDefaultVelocity() const;
     void setDefaultVelocity(double value);
     bool GetSample(double sampleTime, kin::Pose & samplePose);
 
+    bool SetInitialWaypoint( kin::Pose initialWaypoint);
+    bool Reset();
 private:
     std::vector<kin::Pose> waypoints;
     std::vector<double> time_deltas;
@@ -198,7 +234,7 @@ private:
     std::map<double,Pose>::iterator it;
     std::pair<std::map<double,Pose>::iterator,bool> error;*/
 
-    int NextWaypoint(double atTime);
+    double NextWaypointRate(double atTime);
 
 };
 

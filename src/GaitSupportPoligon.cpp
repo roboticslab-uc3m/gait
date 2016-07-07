@@ -24,8 +24,8 @@ bool GaitSupportPoligon::SaveSpaceTrajectories(ofstream &fileLeftFoot, ofstream 
 
 GaitSupportPoligon::GaitSupportPoligon(kin::Pose initialRightFoot, kin::Pose initialLeftFoot)
 {
-    trajRightFoot.AddTimedWaypoint(-1, initialRightFoot);
-    trajLeftFoot.AddTimedWaypoint(-1, initialLeftFoot);
+    trajRightFoot.SetInitialWaypoint(initialRightFoot);
+    trajLeftFoot.SetInitialWaypoint(initialLeftFoot);
 
     SetSwingParameters(0, 0);
     SetSupportParameters(0);
