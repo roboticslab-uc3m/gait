@@ -14,6 +14,18 @@ namespace teo
 namespace kin
 {
 
+class Quaternion
+{
+public:
+    Quaternion();
+    bool FromAxisAngle(double ux,double uy,double uz,double angle);
+    bool ToAxisAngle(double &ux, double &uy, double &uz, double &angle);
+    bool FromProduct(const Quaternion &q1, const Quaternion &q2);
+private:
+    double qw,qi,qj,qk;
+    double sinPart,cosPart; //sin and cosine of the half angle
+};
+
 class Pose
 {
 public:
@@ -125,11 +137,13 @@ public:
     bool PoseInterpolation(Pose initialPose, Pose finalPose, double factor);
 
     bool PoseFraction(Pose &fraction, double factor);
+    bool ChangeRotation(double u2x, double u2y, double u2z, double angle2);
+    bool ChangePose(Pose variation);
 private:
     double x,y,z; //position
     double ux,uy,uz; //axis
     double angle; //angle
-    double q1,q2,q3,q4; //quaternion values for rotation
+    kin::Quaternion q1,q2,q3; //used in addrotation
 
 
 
@@ -225,7 +239,7 @@ public:
     bool Reset();
 private:
     std::vector<kin::Pose> waypoints;
-    kin::Pose tonext_wp; //transformation from last_wp to next_wp
+    kin::Pose segment; //transformation from last_wp to next_wp
     kin::Pose trajPointer;
     std::vector<double> time_deltas;
     std::vector<double> time_totals;

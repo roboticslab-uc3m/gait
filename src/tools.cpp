@@ -4,6 +4,53 @@ using namespace std;
 using namespace teo::kin;
 using namespace teo::tra;
 
+
+//quaternions
+Quaternion::Quaternion()
+{
+
+}
+
+bool Quaternion::FromAxisAngle(double ux, double uy, double uz, double angle)
+{
+
+    //get the factors
+    cosPart = cos(angle/2);
+    sinPart = sqrt(1-cosPart*cosPart);
+    //get the indices
+    qw = cosPart;
+    qi = ux*sinPart;
+    qj = uy*sinPart;
+    qk = uz*sinPart;
+    return true;
+}
+
+bool Quaternion::ToAxisAngle(double & ux, double & uy, double & uz, double & angle)
+{
+    if (qw==1)
+    {
+        //Angle is 0, so i,j,k are 0
+        ux=uy=uz=0;
+        return true;
+    }
+    sinPart = sqrt(1-qw*qw);
+    angle = 2 * acos(qw);
+    ux = qi / sinPart;
+    uy = qj / sinPart;
+    uz = qk / sinPart;
+    return true;
+
+}
+
+bool Quaternion::FromProduct(const Quaternion & q1, const Quaternion & q2)
+{
+    qi =  q1.qi * q2.qw + q1.qj * q2.qk - q1.qk * q2.qj + q1.qw * q2.qi;
+    qj = -q1.qi * q2.qk + q1.qj * q2.qw + q1.qk * q2.qi + q1.qw * q2.qj;
+    qk =  q1.qi * q2.qj - q1.qj * q2.qi + q1.qk * q2.qw + q1.qw * q2.qk;
+    qw = -q1.qi * q2.qi - q1.qj * q2.qj - q1.qk * q2.qk + q1.qw * q2.qw;
+
+}
+
 //Pose definitions
 
 Pose::Pose()
@@ -32,6 +79,18 @@ Pose::Pose(Pose initialPose, Pose finalPose)
     x=x2-x1;
     y=y2-y1;
     z=z2-z1;
+
+    //Rotation from initial to final trough origin
+    initialPose.GetRotation(ux,uy,uz,angle);
+    //invert rotation so rotation is the same as origin
+    angle = -angle;
+    //compose with final rotation from origin
+    double u2x,u2y,u2z,angle2;
+    finalPose.GetRotation(u2x,u2y,u2z,angle2);
+
+    ChangeRotation(u2x,u2y,u2z,angle2);
+
+    //now rotation is based on initial pose and translation as well.
 
 
 }
@@ -103,15 +162,66 @@ bool Pose::SetRotation(double axis_i, double axis_j, double axis_k, double pose_
     uy=axis_j;
     uz=axis_k;
     angle=pose_angle;
-    double sinAngle = sin(angle/2);
-
-    q1 = cos(angle/2);
-    q2 = ux*sinAngle;
-    q3 = uy*sinAngle;
-    q4 = uz*sinAngle;
 
 
     return true;
+}
+
+bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
+{
+    //double ux1,uy1,uz1,angle1;
+    double angle1=angle;
+    double u1x=ux;
+    double u1y=uy;
+    double u1z=uz;
+    double c1=cos(angle1/2);
+    double s1=sqrt(1-c1*c1);
+    double c2=cos(angle2/2);
+    double s2=sqrt(1-c2*c2);
+
+    //WARNING!!! this should be -s1*s2*( u1x*u2x + u1y*u2y + u1z*u2z )+c1*c2; not (+)
+    //according to quaternion multiplication formulas
+    //TODO: Check why this works and not in the right way!!!!!!!!
+    //Maybe something to do with negative angles and cos(-a)=cos(a), sin(-a)=-sin(a)???
+    double c = +s1*s2*( u1x*u2x + u1y*u2y + u1z*u2z )+c1*c2;
+
+    if (c==1)
+    {
+        //Angle is 0, so no rotation as result
+        angle=ux=uy=uz=0;
+        return true;
+    }
+
+    double s=sqrt(1-c*c);
+
+
+    ux = (s1*s2) * ( +u1y*u2z - u1z*u2y ) + s1*u1x*c2 + s2*c1*u2x;
+    ux=ux/s;
+    uy = (s1*s2) * ( -u1x*u2z + u1z*u2x ) + s1*u1y*c2 + s2*c1*u2y;
+    uy=uy/s;
+    uz = (s1*s2) * ( +u1x*u2y - u1y*u2x  )+ s1*u1z*c2 + s2*c1*u2z;
+    uz=uz/s;
+
+    angle = 2 * acos(c);
+
+    return true;
+
+
+}
+
+bool Pose::ChangePose(Pose variation)
+{
+    double x2,y2,z2;
+    variation.GetPosition(x2,y2,z2);
+    ChangePosition(x2,y2,z2);
+
+    double u2x,u2y,u2z,angle2;
+    variation.GetRotation(u2x,u2y,u2z,angle2);
+
+
+    ChangeRotation(u2x,u2y,u2z,angle2);
+
+
 }
 
 /*bool Pose::PoseDifference( Pose otherPose, Pose & difference)
@@ -139,6 +249,7 @@ bool Pose::ChangePosition(double dx, double dy, double dz)
     return true;
 
 }
+
 /*
 Pose Pose::TransformTo(Pose anotherPose)
 {
@@ -315,8 +426,10 @@ bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
         last_wpTime = time_totals[last_wp];
 
         //recalculate transform between last_wp and next_wp (as a pose) for interpolation
-        //and store at tonext_wp variable
-        tonext_wp = Pose(waypoints[last_wp],waypoints[next_wp]);
+        //and store at segment variable
+        segment = Pose(waypoints[last_wp],waypoints[next_wp]);
+
+        std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << std::endl;
 
 
     }
@@ -324,12 +437,14 @@ bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
     //This will happen most times when called sequentially.
     double wpRatio = (sampleTime-last_wpTime)/(next_wpTime-last_wpTime);
 
-    tonext_wp.PoseFraction(trajPointer, wpRatio);
+    segment.PoseFraction(trajPointer, wpRatio);
     //wpRatio = NextWaypointRate(sampleTime);
 
-    //The sample is the concatenation of last waypoint and trajPointer poses.
+    //The sample is the concatenation of last waypoint and segment poses.
 
-    samplePose.PoseInterpolation(waypoints[last_wp], waypoints[next_wp], wpRatio);
+    samplePose = waypoints[last_wp];
+    samplePose.ChangePose(trajPointer);
+    //samplePose.PoseInterpolation(waypoints[last_wp], waypoints[next_wp], wpRatio);
 
 
 }
@@ -401,3 +516,4 @@ void Robot::setRobotBase(const Pose &value)
 {
     robotBase = value;
 }
+
