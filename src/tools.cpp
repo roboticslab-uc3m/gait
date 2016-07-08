@@ -30,22 +30,34 @@ Pose::Pose(Pose initialPose, Pose finalPose)
     finalPose.GetPosition(x2,y2,z2);
 
     x=x2-x1;
-    y=x1-y1;
+    y=y2-y1;
     z=z2-z1;
+
 
 }
 
-Pose::Pose(Pose initialPose, Pose finalPose, double fraction)
+Pose::Pose(Pose initialPose, Pose finalPose, double factor)
+{
+    PoseInterpolation(initialPose, finalPose, factor);
+}
+
+bool Pose::PoseInterpolation(Pose initialPose, Pose finalPose, double factor)
 {
     double x1,y1,z1;
     double x2,y2,z2;
     initialPose.GetPosition(x1,y1,z1);
     finalPose.GetPosition(x2,y2,z2);
 
-    x=x2-x1;
-    y=x1-y1;
-    z=z2-z1;
+    x=x1+((x2-x1)*factor);
+    y=y1+((y2-y1)*factor);
+    z=z1+((z2-z1)*factor);
 
+}
+
+bool Pose::PoseFraction(Pose & fraction, double factor)
+{
+    fraction.SetPosition(x*factor,y*factor,z*factor);
+    fraction.SetRotation(ux,uy,uz,angle*factor);
 }
 
 bool Pose::GetPosition(double &pose_x, double &pose_y, double &pose_z)
@@ -102,14 +114,14 @@ bool Pose::SetRotation(double axis_i, double axis_j, double axis_k, double pose_
     return true;
 }
 
-bool Pose::PoseDifference( Pose otherPose, Pose & difference)
+/*bool Pose::PoseDifference( Pose otherPose, Pose & difference)
 {
     double x2,y2,z2;
     otherPose.GetPosition(x2,y2,z2);
     difference.SetPosition(x2-x, y2-y, z2-z);
 
     return true;
-}
+}*/
 
 bool Pose::SetPosition(double new_x, double new_y, double new_z)
 {
@@ -220,6 +232,10 @@ bool SpaceTrajectory::AddTimedWaypoint(double dt, Pose waypoint)
 {
 
     waypoints.push_back(waypoint);
+    if (dt == 0)
+    {
+        std::cout << "Warning! Adding waypoint with 0 delta time." << std::endl;
+    }
     time_deltas.push_back(dt);
     time_totals.push_back(time_totals.back()+dt);
     /*
@@ -229,10 +245,10 @@ bool SpaceTrajectory::AddTimedWaypoint(double dt, Pose waypoint)
         std::cout << "Trying to insert existing values" << std::endl;
         return -1;
     }*/
-    return 0;
+    return true;
 }
 
-bool SpaceTrajectory::AddWaypoint(Pose waypoint)
+double SpaceTrajectory::AddWaypoint(Pose waypoint)
 {
 
 
@@ -249,10 +265,12 @@ bool SpaceTrajectory::AddWaypoint(Pose waypoint)
     dt = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
 
     //TODO: Calculate rotation angle to limit rotation velocity.
+    //TODO: apply dt as max between rotation time and translation time (1 second now).
+    dt=max(dt,1.0);
 
     AddTimedWaypoint(dt, waypoint);
 
-    return 0;
+    return dt;
 }
 
 int SpaceTrajectory::Size()
@@ -272,35 +290,12 @@ void SpaceTrajectory::setDefaultVelocity(double value)
 
 bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
 {
-    Pose *nextPose,*lastPose;
 
-    double wpRatio;
-    double xlast,ylast,zlast;
-    double xnext,ynext,znext;
-
-    wpRatio = NextWaypointRate(sampleTime);
-
-    samplePose = waypoints[last_wp];
-
-    nextPose = &waypoints[next_wp];
-    lastPose = &waypoints[last_wp];
-
-    Pose halfWayPose(*lastPose, *nextPose, wpRatio);
-    samplePose = halfWayPose;
-    //lastPose->PoseDifference(nextPose, halfWayPose);
-
-    //samplePose.ChangePosition(nextPose.GetX()-lastPose.GetX(),nextPose.GetY()-lastPose.GetY(),nextPose.GetZ()-lastPose.GetZ());
-
-}
-
-double SpaceTrajectory::NextWaypointRate(double atTime)
-{
-
-    if( (atTime>next_wpTime)|(atTime<last_wpTime) )
+    //This "if loop" only happens sometimes. At waypoints, or when calling random.
+    if( (sampleTime>next_wpTime)|(sampleTime<last_wpTime) )
     {
-    //this only happens sometimes. When track reaches a waypoint, or when calling random.
 
-        time_actual = lower_bound (time_totals.begin(),time_totals.end(),atTime);
+        time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
         if (time_actual == time_totals.end())
         {
             std::cout << "No Waypoints defined for that time" << std::endl;
@@ -319,9 +314,31 @@ double SpaceTrajectory::NextWaypointRate(double atTime)
         next_wpTime = time_totals[next_wp];
         last_wpTime = time_totals[last_wp];
 
+        //recalculate transform between last_wp and next_wp (as a pose) for interpolation
+        //and store at tonext_wp variable
+        tonext_wp = Pose(waypoints[last_wp],waypoints[next_wp]);
+
+
     }
 
-    //just this will happen most times if called sequentially.
+    //This will happen most times when called sequentially.
+    double wpRatio = (sampleTime-last_wpTime)/(next_wpTime-last_wpTime);
+
+    tonext_wp.PoseFraction(trajPointer, wpRatio);
+    //wpRatio = NextWaypointRate(sampleTime);
+
+    //The sample is the concatenation of last waypoint and trajPointer poses.
+
+    samplePose.PoseInterpolation(waypoints[last_wp], waypoints[next_wp], wpRatio);
+
+
+}
+
+double SpaceTrajectory::NextWaypointRate(double atTime)
+{
+
+
+
     return (atTime-last_wpTime)/(next_wpTime-last_wpTime);
 
 }

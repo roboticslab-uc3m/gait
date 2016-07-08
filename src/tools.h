@@ -35,12 +35,12 @@ public:
     Pose(Pose initialPose, Pose finalPose);
 
     /**
-     * @brief Pose::Pose : Create a pose in a halfway from initial to final pose
+     * @brief Pose::Pose : Create intermediate pose from initial to final pose
      * @param initialPose
      * @param finalPose
-     * @param fraction: The ratio defining the halfway position. 0 for initial, 1 for final, other for halfways.
+     * @param factor: The ratio defining the new pose. 0 for initial, 1 for final, other for halfways.
      */
-    Pose(Pose initialPose, Pose finalPose, double fraction);
+    Pose(Pose initialPose, Pose finalPose, double factor);
 
 
     /**
@@ -112,9 +112,19 @@ public:
      */
     bool SetRotation(double axis_i, double axis_j, double axis_k, double pose_angle);
 
-    bool PoseDifference(Pose otherPose, Pose &difference);
+    //bool PoseDifference(Pose otherPose, Pose &difference);
 
 
+    /**
+     * @brief PoseInterpolation : Update the pose values with a pose between initial and final poses
+     * @param initialPose
+     * @param finalPose
+     * @param factor : The ratio defining the new pose. 0 for initial, 1 for final, other for halfways.
+     * @return
+     */
+    bool PoseInterpolation(Pose initialPose, Pose finalPose, double factor);
+
+    bool PoseFraction(Pose &fraction, double factor);
 private:
     double x,y,z; //position
     double ux,uy,uz; //axis
@@ -200,7 +210,7 @@ public:
      * @param waypoint : The Pose to add as waypoint.
      * @return
      */
-    bool AddWaypoint(kin::Pose waypoint);
+    double AddWaypoint(kin::Pose waypoint);
     bool GetLastWaypoint(kin::Pose & waypoint);
     bool SaveToFile(std::ofstream &csvFile);
     bool GetWaypoint(int index, kin::Pose &getWaypoint);
@@ -215,6 +225,8 @@ public:
     bool Reset();
 private:
     std::vector<kin::Pose> waypoints;
+    kin::Pose tonext_wp; //transformation from last_wp to next_wp
+    kin::Pose trajPointer;
     std::vector<double> time_deltas;
     std::vector<double> time_totals;
     std::vector<double>::iterator time_actual;
