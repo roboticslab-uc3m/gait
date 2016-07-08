@@ -175,15 +175,16 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
     double u1y=uy;
     double u1z=uz;
     double c1=cos(angle1/2);
-    double s1=sqrt(1-c1*c1);
+    double s1=sin(angle1/2);
     double c2=cos(angle2/2);
-    double s2=sqrt(1-c2*c2);
+    double s2=sin(angle2/2);
 
     //WARNING!!! this should be -s1*s2*( u1x*u2x + u1y*u2y + u1z*u2z )+c1*c2; not (+)
     //according to quaternion multiplication formulas
     //TODO: Check why this works and not in the right way!!!!!!!!
     //Maybe something to do with negative angles and cos(-a)=cos(a), sin(-a)=-sin(a)???
-    double c = +s1*s2*( u1x*u2x + u1y*u2y + u1z*u2z )+c1*c2;
+    //Done!!! s=sqrt(1-c*c) has + and - solutions, so must keep in mind the angle sign
+    double c = -s1*s2*( u1x*u2x + u1y*u2y + u1z*u2z )+c1*c2;
 
     if (c==1)
     {
@@ -192,6 +193,7 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
         return true;
     }
 
+    //this operation can be a problem (see above) keep in mind the signs.
     double s=sqrt(1-c*c);
 
 
