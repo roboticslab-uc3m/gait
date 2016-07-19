@@ -12,6 +12,11 @@ FILE(GLOB_RECURSE GAIT_INCLUDE_LIST src/*.h src/*.hpp)
 ADD_LIBRARY(${PROJECT_NAME} SHARED ${GAIT_SRCS} ${GAIT_INCLUDE_LIST})
 
 
+if(${CMAKE_PROJECT_NAME} EQUAL "gait")
+    message(STATUS "Configuring gait as main project!")
+
+endif(${CMAKE_PROJECT_NAME} EQUAL "gait")
+
 #orocos kdl
 #  message(STATUS "kdl libraries")
 #  add_subdirectory(external/orocos_kinematics_dynamics/orocos_kdl/)
