@@ -239,8 +239,10 @@ public:
     bool Reset();
 private:
     std::vector<kin::Pose> waypoints;
+    std::vector<kin::Pose> velocities;
+
     kin::Pose segment; //transformation from last_wp to next_wp
-    kin::Pose trajPointer;
+    kin::Pose trajPointer; //
     std::vector<double> time_deltas;
     std::vector<double> time_totals;
     std::vector<double>::iterator time_actual;
@@ -260,7 +262,6 @@ private:
     std::map<double,Pose>::iterator it;
     std::pair<std::map<double,Pose>::iterator,bool> error;*/
 
-    double NextWaypointRate(double atTime);
 
 };
 

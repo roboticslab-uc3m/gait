@@ -351,13 +351,9 @@ bool SpaceTrajectory::AddTimedWaypoint(double dt, Pose waypoint)
     }
     time_deltas.push_back(dt);
     time_totals.push_back(time_totals.back()+dt);
-    /*
-    error = waypoints.insert(std::pair<double,Pose>(t,waypoint));
-    if (error.second == false)
-    {
-        std::cout << "Trying to insert existing values" << std::endl;
-        return -1;
-    }*/
+
+    //TODO: compute velocities and update vector
+
     return true;
 }
 
@@ -404,7 +400,7 @@ void SpaceTrajectory::setDefaultVelocity(double value)
 bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
 {
 
-    //This "if loop" only happens sometimes. At waypoints, or when calling random.
+    //This (if statement) only happens sometimes. At waypoints, or when calling random.
     if( (sampleTime>next_wpTime)|(sampleTime<last_wpTime) )
     {
 
@@ -451,14 +447,7 @@ bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
 
 }
 
-double SpaceTrajectory::NextWaypointRate(double atTime)
-{
 
-
-
-    return (atTime-last_wpTime)/(next_wpTime-last_wpTime);
-
-}
 
 bool SpaceTrajectory::GetWaypoint(int index, Pose& getWaypoint)
 {
