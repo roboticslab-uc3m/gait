@@ -2,7 +2,8 @@
 #include "tools.h"
 #include <stdio.h>
 
-using namespace teo;
+namespace teo
+{
 
 /**
  * @brief The GaitSupportPoligon class encapsulates cartesian foot trajectory generation for biped gaits.
@@ -90,3 +91,6 @@ private:
     bool HalfStepForwardRS();
     bool HalfStepForwardLS();
 };
+
+
+}

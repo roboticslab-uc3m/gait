@@ -4,11 +4,13 @@
 
 using namespace std;
 
+
 #include "GaitSupportPoligon.h"
 
 //kdl
 //#include <frames.hpp>
 
+using namespace teo;
 
 
 

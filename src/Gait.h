@@ -3,7 +3,8 @@
 
 #include "tools.h"
 
-using namespace teo;
+namespace teo
+{
 
 class Gait
 {
@@ -13,5 +14,7 @@ public:
     virtual bool GetTrajectories(tra::SpaceTrajectory& RightFoot, tra::SpaceTrajectory& LeftFoot)=0;
 
 };
+
+}
 
 #endif // GAIT_H
