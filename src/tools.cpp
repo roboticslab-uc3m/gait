@@ -182,11 +182,6 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
     double c2=cos(angle2/2);
     double s2=sin(angle2/2);
 
-    //WARNING!!! this should be -s1*s2*( u1x*u2x + u1y*u2y + u1z*u2z )+c1*c2; not (+)
-    //according to quaternion multiplication formulas
-    //TODO: Check why this works and not in the right way!!!!!!!!
-    //Maybe something to do with negative angles and cos(-a)=cos(a), sin(-a)=-sin(a)???
-    //Done!!! s=sqrt(1-c*c) has + and - solutions, so must keep in mind the angle sign
     double c = -s1*s2*( u1x*u2x + u1y*u2y + u1z*u2z )+c1*c2;
 
     if (c==1)
@@ -196,7 +191,8 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
         return true;
     }
 
-    //this operation can be a problem (see above) keep in mind the signs.
+    //this operation can be a problem mind the signs.
+    //TODO:s=sqrt(1-c*c) has + and - solutions, so check the angle sign
     double s=sqrt(1-c*c);
 
 
@@ -302,7 +298,7 @@ void Link::setCOG(const Pose &value)
 SpaceTrajectory::SpaceTrajectory()
 {
 
-    ResetPointer();
+    TrajectoryInit();
     SetInitialWaypoint(Pose(0,0,0)); //Undefined trajectories start at origin
 
 
@@ -310,7 +306,7 @@ SpaceTrajectory::SpaceTrajectory()
 
 SpaceTrajectory::SpaceTrajectory(kin::Pose initialWaypoint)
 {
-    ResetPointer();
+    TrajectoryInit();
     SetInitialWaypoint(initialWaypoint); //Defined trajectories start at initialWaypoint
 
 }
@@ -334,9 +330,10 @@ bool SpaceTrajectory::SetInitialWaypoint(kin::Pose initialWaypoint)
     return true;
 }
 
-bool SpaceTrajectory::ResetPointer()
+bool SpaceTrajectory::TrajectoryInit()
 {
-    defaultVelocity = 0.1;
+    defaultVelocity = 0.1; //[m/s]
+    defaultRotationSpeed = 0.1; //[rad/sec]
     next_wp = 0;
     last_wp = 0;
     next_wpTime = 0;
@@ -394,7 +391,7 @@ bool SpaceTrajectory::ShowData()
 
 }
 
-bool SpaceTrajectory::AddTimedWaypoint(double dt,const Pose& newWaypoint)
+bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
 {
 
     //Compute segment and update segments vector
@@ -405,7 +402,19 @@ bool SpaceTrajectory::AddTimedWaypoint(double dt,const Pose& newWaypoint)
     waypoints.push_back(newWaypoint);
     if (dt == 0)
     {
-        std::cout << "Warning! Adding waypoint with 0 delta time." << std::endl;
+
+        std::cout << "Warning! Adding waypoint with default velocity" << std::endl;
+
+        double dx,dy,dz;
+        double dtp,dtr;
+        double angle = segment.GetAngle();
+
+        segment.GetPosition(dx,dy,dz);
+
+        dtp = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
+        dtr = angle / defaultRotationSpeed;
+        dt= max(dtp,dtr);
+
     }
     time_deltas.push_back(dt);
     time_totals.push_back(time_totals.back()+dt);
@@ -446,6 +455,7 @@ double SpaceTrajectory::AddWaypoint(const Pose &waypoint)
     //TODO: apply dt as max between rotation time and translation time (1 second now).
     dt=max(dt,1.0);
 
+    dt=0;
     AddTimedWaypoint(dt, waypoint);
 
     return dt;

@@ -217,7 +217,7 @@ public:
      * @param waypoint : The Pose to add as waypoint.
      * @return
      */
-    bool AddTimedWaypoint(double t, const kin::Pose &waypoint);
+    bool AddTimedWaypoint(double &t, const kin::Pose &waypoint);
 
     /**
      * @brief AddWaypoint: Adds a timed waypoint. Delta time is based on defaultVelocity.
@@ -238,7 +238,7 @@ public:
 
 
     bool SetInitialWaypoint( kin::Pose initialWaypoint);
-    bool ResetPointer();
+    bool TrajectoryInit();
     int UpdatePointers(double atTime);
 
     bool ShowData();
@@ -263,6 +263,8 @@ private:
 
     //movement parameters
     double defaultVelocity; //default tip velocity (m/s)
+    double defaultRotationSpeed; //default tip rotational speed (rad/s)
+
     /*
     std::map<double,Pose> waypoints;
     std::pair<double,Pose> wp; //Temporary storage. Use as local only. It can change.
