@@ -86,17 +86,17 @@ public:
      * @brief GetX: Return the pose x coordinate.
      * @return
      */
-    double GetX();
+    double GetX() const;
     /**
      * @brief GetY: Return the pose y coordinate.
      * @return
      */
-    double GetY();
+    double GetY() const;
     /**
      * @brief GetZ: Return the pose z coordinate.
      * @return
      */
-    double GetZ();
+    double GetZ() const;
 
     /**
      * @brief GetAngle: Return the pose angle from the axis angle rotation.
@@ -239,7 +239,9 @@ public:
 
     bool SetInitialWaypoint( kin::Pose initialWaypoint);
     bool ResetPointer();
-    double UpdatePointers(double atTime);
+    int UpdatePointers(double forTime);
+
+    bool ShowData();
 private:
     std::vector<kin::Pose> waypoints;
     std::vector<kin::Pose> segments;
@@ -252,10 +254,10 @@ private:
     std::vector<double>::iterator time_actual;
 
     //trajectory tracking
-    unsigned int segmentIndex;
-    unsigned int last_wp; //store the wp index we come from
+    int segmentIndex; //cant use unsigned due to latter use of lower_bound
+    int last_wp; //store the wp index we come from
     double last_wpTime; //time of last waypoint
-    unsigned int next_wp; //store the wp index we are going to
+    int next_wp; //store the wp index we are going to
     double next_wpTime; //time of next waypoint
 
 

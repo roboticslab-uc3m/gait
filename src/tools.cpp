@@ -127,17 +127,17 @@ bool Pose::GetPosition(double &pose_x, double &pose_y, double &pose_z)
     return true;
 }
 
-double Pose::GetX()
+double Pose::GetX() const
 {
     return x;
 }
 
-double Pose::GetY()
+double Pose::GetY() const
 {
     return y;
 }
 
-double Pose::GetZ()
+double Pose::GetZ() const
 {
     return z;
 }
@@ -312,6 +312,7 @@ SpaceTrajectory::SpaceTrajectory(kin::Pose initialWaypoint)
 
 }
 
+
 bool SpaceTrajectory::SetInitialWaypoint(kin::Pose initialWaypoint)
 {
     if (waypoints.size()==0)
@@ -332,7 +333,7 @@ bool SpaceTrajectory::SetInitialWaypoint(kin::Pose initialWaypoint)
 
 bool SpaceTrajectory::ResetPointer()
 {
-    defaultVelocity = 0.2;
+    defaultVelocity = 0.1;
     next_wp = 0;
     last_wp = 0;
     next_wpTime = 0;
@@ -341,10 +342,11 @@ bool SpaceTrajectory::ResetPointer()
     return true;
 }
 
-double SpaceTrajectory::UpdatePointers(double atTime)
+int SpaceTrajectory::UpdatePointers(double forTime)
 {
+    time_actual = lower_bound (time_totals.begin(),time_totals.end(),forTime);
+    std::cout << "time_totals;" << time_totals[*time_actual-1] << "-" << time_totals[*time_actual] << ",atTime:" << forTime;
 
-    time_actual = lower_bound (time_totals.begin(),time_totals.end(),atTime);
     if (time_actual == time_totals.end())
     {
         std::cout << "No Trajectory defined for that time" << std::endl;
@@ -352,6 +354,8 @@ double SpaceTrajectory::UpdatePointers(double atTime)
     }
 
     next_wp = *time_actual;
+    //std::cout << "next_wp " << next_wp << ", ";
+
     if (next_wp < 1)
     {
         std::cout << "Error: Check if time is positive and waypoints are defined" << std::endl;
@@ -359,25 +363,42 @@ double SpaceTrajectory::UpdatePointers(double atTime)
     }
 
     //if no errors, store index values and times.
-    last_wp = next_wp-1; // next_wp > 1 at this point
+    last_wp = next_wp-1; // next_wp >= 1 at this point
     next_wpTime = time_totals[next_wp];
     last_wpTime = time_totals[last_wp];
 
     //recalculate transform between last_wp and next_wp (as a pose) for interpolation
     //and store at segment variable
     segment = Pose(waypoints[last_wp],waypoints[next_wp]);
-    segmentIndex = next_wp;
+    segmentIndex = last_wp;
 
-    std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << std::endl;
+    std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << ", Segment index: " << segmentIndex << std::endl;
 
     return segmentIndex;
 
 }
 
-bool SpaceTrajectory::AddTimedWaypoint(double dt,const Pose& waypoint)
+bool SpaceTrajectory::ShowData()
 {
 
-    waypoints.push_back(waypoint);
+    std::cout << "vector time_totals";
+    for (int i=0;i<time_totals.size();i++)
+    {
+        std::cout << time_totals[i] << ", ";
+    }
+    std::cout << std::endl;
+
+}
+
+bool SpaceTrajectory::AddTimedWaypoint(double dt,const Pose& newWaypoint)
+{
+
+    //Compute segment and update segments vector
+    Pose lastWaypoint=waypoints.back(); //can compress these three lines in one.
+    Pose segment(lastWaypoint, newWaypoint);
+    segments.push_back(segment);
+
+    waypoints.push_back(newWaypoint);
     if (dt == 0)
     {
         std::cout << "Warning! Adding waypoint with 0 delta time." << std::endl;
@@ -385,13 +406,11 @@ bool SpaceTrajectory::AddTimedWaypoint(double dt,const Pose& waypoint)
     time_deltas.push_back(dt);
     time_totals.push_back(time_totals.back()+dt);
 
-    //Compute segment and update segments vector
-    Pose segment(waypoints[waypoints.size()-1], waypoint);
 
+    //std::cout << "lastWaypoint: " << lastWaypoint.GetX() << "," << lastWaypoint.GetY() << "," << lastWaypoint.GetZ() << std::endl;
+    //std::cout << "waypoint: " << newWaypoint.GetX() << "," << newWaypoint.GetY() << "," << newWaypoint.GetZ() << std::endl;
     //std::cout << "segment: " << segment.GetX() << "," << segment.GetY() << "," << segment.GetZ() << std::endl;
 
-
-    segments.push_back(segment);
 
     //compute velocities and update velocities vector
     Pose velocity;
@@ -501,7 +520,36 @@ bool SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelo
     //if sampleTime is outside actual segment
     if( (sampleTime>next_wpTime)|(sampleTime<last_wpTime) )
     {
-        UpdatePointers(sampleTime);
+        time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
+        std::cout << "time_totals;" << time_totals[*time_actual-1] << "-" << time_totals[*time_actual] << ",atTime:" << sampleTime;
+
+        if (time_actual == time_totals.end())
+        {
+            std::cout << "No Trajectory defined for that time" << std::endl;
+            return -1;
+        }
+
+        next_wp = *time_actual;
+        //std::cout << "next_wp " << next_wp << ", ";
+
+        if (next_wp < 1)
+        {
+            std::cout << "Error: Check if time is positive and waypoints are defined" << std::endl;
+            return -1;
+        }
+
+        //if no errors, store index values and times.
+        last_wp = next_wp-1; // next_wp >= 1 at this point
+        next_wpTime = time_totals[next_wp];
+        last_wpTime = time_totals[last_wp];
+
+        //recalculate transform between last_wp and next_wp (as a pose) for interpolation
+        //and store at segment variable
+        segment = Pose(waypoints[last_wp],waypoints[next_wp]);
+        segmentIndex = last_wp;
+
+        std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << ", Segment index: " << segmentIndex << std::endl;
+        //UpdatePointers(sampleTime);
     }
 
 
