@@ -224,7 +224,7 @@ public:
      * @param waypoint : The Pose to add as waypoint.
      * @return
      */
-    double AddWaypoint(kin::Pose waypoint);
+    double AddWaypoint(const kin::Pose &waypoint);
     bool GetLastWaypoint(kin::Pose & waypoint);
     bool SaveToFile(std::ofstream &csvFile);
     bool GetWaypoint(int index, kin::Pose &getWaypoint);
@@ -239,7 +239,7 @@ public:
 
     bool SetInitialWaypoint( kin::Pose initialWaypoint);
     bool ResetPointer();
-    int UpdatePointers(double forTime);
+    int UpdatePointers(double atTime);
 
     bool ShowData();
 private:

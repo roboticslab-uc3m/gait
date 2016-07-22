@@ -1,5 +1,8 @@
 #include "tools.h"
 
+int FindValueIndex(std::vector<double> vector, double value);
+
+
 using namespace std;
 using namespace teo::kin;
 using namespace teo::tra;
@@ -333,8 +336,7 @@ bool SpaceTrajectory::SetInitialWaypoint(kin::Pose initialWaypoint)
 
 bool SpaceTrajectory::ResetPointer()
 {
-    //TODO: check the errors for defaultVelocity = 0.1
-    defaultVelocity = 0.2;
+    defaultVelocity = 0.1;
     next_wp = 0;
     last_wp = 0;
     next_wpTime = 0;
@@ -343,18 +345,19 @@ bool SpaceTrajectory::ResetPointer()
     return true;
 }
 
-int SpaceTrajectory::UpdatePointers(double forTime)
+int SpaceTrajectory::UpdatePointers(double atTime)
 {
-    time_actual = lower_bound (time_totals.begin(),time_totals.end(),forTime);
-    std::cout << "time_totals;" << time_totals[*time_actual-1] << "-" << time_totals[*time_actual] << ",atTime:" << forTime;
+    /*time_actual = lower_bound (time_totals.begin(),time_totals.end(),forTime);
+    //std::cout << "time_totals;" << time_totals[*time_actual-1] << "-" << time_totals[*time_actual] << ",atTime:" << forTime;
 
     if (time_actual == time_totals.end())
     {
         std::cout << "No Trajectory defined for that time" << std::endl;
         return -1;
-    }
+    }*/
 
-    next_wp = *time_actual;
+
+    next_wp = FindValueIndex(time_totals, atTime);
     //std::cout << "next_wp " << next_wp << ", ";
 
     if (next_wp < 1)
@@ -423,7 +426,7 @@ bool SpaceTrajectory::AddTimedWaypoint(double dt,const Pose& newWaypoint)
     return true;
 }
 
-double SpaceTrajectory::AddWaypoint(Pose waypoint)
+double SpaceTrajectory::AddWaypoint(const Pose &waypoint)
 {
 
 
@@ -470,7 +473,8 @@ bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
     if( (sampleTime>next_wpTime)|(sampleTime<last_wpTime) )
     {
 
-        time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
+        UpdatePointers(sampleTime);
+/*        time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
         if (time_actual == time_totals.end())
         {
             std::cout << "No Trajectory defined for that time" << std::endl;
@@ -494,7 +498,7 @@ bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
         segment = Pose(waypoints[last_wp],waypoints[next_wp]);
 
         std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << std::endl;
-
+*/
 
     }
 
@@ -521,7 +525,7 @@ bool SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelo
     //if sampleTime is outside actual segment
     if( (sampleTime>next_wpTime)|(sampleTime<last_wpTime) )
     {
-        time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
+       /* time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
         //std::cout << "time_totals;" << time_totals[*time_actual-1] << "-" << time_totals[*time_actual] << ",atTime:" << sampleTime;
 
         if (time_actual == time_totals.end())
@@ -549,8 +553,8 @@ bool SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelo
         segment = Pose(waypoints[last_wp],waypoints[next_wp]);
         segmentIndex = last_wp;
 
-        std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << ", Segment index: " << segmentIndex << std::endl;
-        //UpdatePointers(sampleTime);
+        std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << ", Segment index: " << segmentIndex << std::endl;*/
+        UpdatePointers(sampleTime);
     }
 
 
@@ -626,3 +630,16 @@ void Robot::setRobotBase(const Pose &value)
     robotBase = value;
 }
 
+
+//get the first data greater than a value from a vector.
+int FindValueIndex(std::vector<double> vector, double value)
+{
+    for (int i=0;i<vector.size();i++)
+    {
+        if (value<vector[i])
+        {
+            return i;
+        }
+    }
+    return -1;
+}
