@@ -299,7 +299,7 @@ void Link::setCOG(const Pose &value)
 SpaceTrajectory::SpaceTrajectory()
 {
 
-    Reset();
+    ResetPointer();
     SetInitialWaypoint(Pose(0,0,0)); //Undefined trajectories start at origin
 
 
@@ -307,8 +307,8 @@ SpaceTrajectory::SpaceTrajectory()
 
 SpaceTrajectory::SpaceTrajectory(kin::Pose initialWaypoint)
 {
-    Reset();
-    SetInitialWaypoint(initialWaypoint); //Undefined trajectories start at origin
+    ResetPointer();
+    SetInitialWaypoint(initialWaypoint); //Defined trajectories start at initialWaypoint
 
 }
 
@@ -330,7 +330,7 @@ bool SpaceTrajectory::SetInitialWaypoint(kin::Pose initialWaypoint)
     return true;
 }
 
-bool SpaceTrajectory::Reset()
+bool SpaceTrajectory::ResetPointer()
 {
     defaultVelocity = 0.2;
     next_wp = 0;
@@ -341,7 +341,40 @@ bool SpaceTrajectory::Reset()
     return true;
 }
 
-bool SpaceTrajectory::AddTimedWaypoint(double dt, Pose waypoint)
+double SpaceTrajectory::UpdatePointers(double atTime)
+{
+
+    time_actual = lower_bound (time_totals.begin(),time_totals.end(),atTime);
+    if (time_actual == time_totals.end())
+    {
+        std::cout << "No Trajectory defined for that time" << std::endl;
+        return -1;
+    }
+
+    next_wp = *time_actual;
+    if (next_wp < 1)
+    {
+        std::cout << "Error: Check if time is positive and waypoints are defined" << std::endl;
+        return -1;
+    }
+
+    //if no errors, store index values and times.
+    last_wp = next_wp-1; // next_wp > 1 at this point
+    next_wpTime = time_totals[next_wp];
+    last_wpTime = time_totals[last_wp];
+
+    //recalculate transform between last_wp and next_wp (as a pose) for interpolation
+    //and store at segment variable
+    segment = Pose(waypoints[last_wp],waypoints[next_wp]);
+    segmentIndex = next_wp;
+
+    std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << std::endl;
+
+    return segmentIndex;
+
+}
+
+bool SpaceTrajectory::AddTimedWaypoint(double dt,const Pose& waypoint)
 {
 
     waypoints.push_back(waypoint);
@@ -352,7 +385,20 @@ bool SpaceTrajectory::AddTimedWaypoint(double dt, Pose waypoint)
     time_deltas.push_back(dt);
     time_totals.push_back(time_totals.back()+dt);
 
-    //TODO: compute velocities and update vector
+    //Compute segment and update segments vector
+    Pose segment(waypoints[waypoints.size()-1], waypoint);
+
+    //std::cout << "segment: " << segment.GetX() << "," << segment.GetY() << "," << segment.GetZ() << std::endl;
+
+
+    segments.push_back(segment);
+
+    //compute velocities and update velocities vector
+    Pose velocity;
+    segment.PoseFraction(velocity,1/dt);
+
+    //std::cout << "velocity: " << velocity.GetX() << "," << velocity.GetY() << "," << velocity.GetZ() << std::endl;
+    velocities.push_back(velocity);
 
     return true;
 }
@@ -407,7 +453,7 @@ bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
         time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
         if (time_actual == time_totals.end())
         {
-            std::cout << "No Waypoints defined for that time" << std::endl;
+            std::cout << "No Trajectory defined for that time" << std::endl;
             return -1;
         }
 
@@ -446,6 +492,27 @@ bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
 
 
 }
+
+
+bool SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelocity)
+{
+
+    //This (if statement) only happens sometimes. At waypoints, or when calling random.
+    //if sampleTime is outside actual segment
+    if( (sampleTime>next_wpTime)|(sampleTime<last_wpTime) )
+    {
+        UpdatePointers(sampleTime);
+    }
+
+
+    //This will happen most times when called sequentially.
+
+    samplePoseVelocity= velocities[segmentIndex];
+
+    return true;
+
+}
+
 
 
 
@@ -487,6 +554,8 @@ bool SpaceTrajectory::SaveToFile(std::ofstream &csvFile)
         csvFile << k << ",";
         csvFile << angle << std::endl;
     }
+
+
 }
 
 

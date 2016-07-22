@@ -143,7 +143,7 @@ private:
     double x,y,z; //position
     double ux,uy,uz; //axis
     double angle; //angle
-    kin::Quaternion q1,q2,q3; //used in addrotation
+    kin::Quaternion q1,q2,q3; //Not used in addrotation
 
 
 
@@ -217,7 +217,7 @@ public:
      * @param waypoint : The Pose to add as waypoint.
      * @return
      */
-    bool AddTimedWaypoint(double t, kin::Pose waypoint);
+    bool AddTimedWaypoint(double t, const kin::Pose &waypoint);
 
     /**
      * @brief AddWaypoint: Adds a timed waypoint. Delta time is based on defaultVelocity.
@@ -234,11 +234,15 @@ public:
     double getDefaultVelocity() const;
     void setDefaultVelocity(double value);
     bool GetSample(double sampleTime, kin::Pose & samplePose);
+    bool GetSampleVelocity(double sampleTime, kin::Pose &samplePoseVelocity);
+
 
     bool SetInitialWaypoint( kin::Pose initialWaypoint);
-    bool Reset();
+    bool ResetPointer();
+    double UpdatePointers(double atTime);
 private:
     std::vector<kin::Pose> waypoints;
+    std::vector<kin::Pose> segments;
     std::vector<kin::Pose> velocities;
 
     kin::Pose segment; //transformation from last_wp to next_wp
@@ -248,9 +252,10 @@ private:
     std::vector<double>::iterator time_actual;
 
     //trajectory tracking
-    int last_wp; //store the wp index we come from
+    unsigned int segmentIndex;
+    unsigned int last_wp; //store the wp index we come from
     double last_wpTime; //time of last waypoint
-    int next_wp; //store the wp index we are going to
+    unsigned int next_wp; //store the wp index we are going to
     double next_wpTime; //time of next waypoint
 
 
