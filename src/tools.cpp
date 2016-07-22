@@ -333,7 +333,8 @@ bool SpaceTrajectory::SetInitialWaypoint(kin::Pose initialWaypoint)
 
 bool SpaceTrajectory::ResetPointer()
 {
-    defaultVelocity = 0.1;
+    //TODO: check the errors for defaultVelocity = 0.1
+    defaultVelocity = 0.2;
     next_wp = 0;
     last_wp = 0;
     next_wpTime = 0;
@@ -521,7 +522,7 @@ bool SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelo
     if( (sampleTime>next_wpTime)|(sampleTime<last_wpTime) )
     {
         time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
-        std::cout << "time_totals;" << time_totals[*time_actual-1] << "-" << time_totals[*time_actual] << ",atTime:" << sampleTime;
+        //std::cout << "time_totals;" << time_totals[*time_actual-1] << "-" << time_totals[*time_actual] << ",atTime:" << sampleTime;
 
         if (time_actual == time_totals.end())
         {
