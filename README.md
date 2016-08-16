@@ -3,6 +3,9 @@ c++ Humanoid gait generation library.
 
 Use as system lib or as source code.
 
+For use with 'FIND_PACKAGE(gait REQUIRED)' put "Findgait.cmake" in your cmake folder. Find the file in the example cmake folder:
+https://github.com/roboticslab-uc3m/gaitcontrol/tree/master/cmake
+
 For automatic (system preferred) Add this to Cmakelists.txt:
 
 	#gait  
