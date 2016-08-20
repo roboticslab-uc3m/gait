@@ -42,13 +42,14 @@ if("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
     add_custom_target(uninstall
         COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
-#Set Library variables if subdirectory (called from add_subdirectory(${PROJECT_SOURCE_DIR}/lib/gait) )
+#Set Library variables if subdirectory (called from add_subdirectory(${PROJECT_SOURCE_DIR}/lib/${PROJECT_NAME}) )
 else("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
-    message(STATUS "Configuring gait as sub-project")
-    set(GAIT_INCLUDE_DIR ${CURRENT_SOURCE_DIR}/src ${GAIT_INCLUDE_DIR})
-    set(GAIT_LIBRARY ${CURRENT_BINARY_DIR})
-    set(GAIT_LIBRARIES ${GAIT_LIBRARY} )
-    set(GAIT_INCLUDE_DIRS ${GAIT_INCLUDE_DIR} )
+    message(STATUS "Configuring " ${PROJECT_NAME} " as sub-project in " ${CMAKE_CURRENT_SOURCE_DIR})
+    find_path(GAIT_INCLUDE_DIR Gait.h
+        HINTS ${CMAKE_CURRENT_SOURCE_DIR} PATH_SUFFIXES include src)
+    find_library(GAIT_LIBRARY NAMES ${PROJECT_NAME} lib${PROJECT_NAME}
+        HINTS ${CMAKE_CURRENT_BINARY_DIR} )
+
 
 endif()
 
