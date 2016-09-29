@@ -64,8 +64,7 @@ set(GAIT_LIBRARIES CACHE INTERNAL "appended libraries" FORCE)
 
 # add main contents
 #add_subdirectory(share)
-add_subdirectory(libraries)
-# add_subdirectory(programs)
+add_subdirectory(src)
 
 # export our variables to a GAITConfig.cmake creation
 set(GAIT_LINK_DIRS ${GAIT_LINK_DIRS} ${LIBRARY_OUTPUT_PATH})
