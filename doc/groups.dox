@@ -1,0 +1,33 @@
+
+/**
+@brief The main, catch-all namespace for TEO.
+ */
+namespace teo {}
+
+/**
+ * \defgroup gait_libraries gait Libraries
+ *
+ * @brief gait libraries.
+ *
+ */
+
+/**
+ * \defgroup gait_programs gait Programs
+ *
+ * @brief gait programs.
+ */
+
+/**
+ * \defgroup gait_applications gait Applications (Collections of Programs)
+ *
+ * @brief gait applications (collections of programs).
+ */
+
+/**
+ * \defgroup gait_examples gait Examples
+ *
+ * @brief gait examples.
+ */
+
+
+

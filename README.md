@@ -1,30 +1,21 @@
 # gait
-c++ Humanoid gait generation library.
+c++ biped gait generation library.
 
-Use as system lib or as source code.
+Basic lines to add/modify in CMake:
 
-For use with 'FIND_PACKAGE(gait REQUIRED)' put "Findgait.cmake" in your cmake folder. Find the file in the example cmake folder:
-https://github.com/roboticslab-uc3m/gaitcontrol/tree/master/cmake
+```cmake
+find_package(GAIT REQUIRED)
 
-For automatic (system preferred) Add this to Cmakelists.txt:
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${GAIT_INCLUDE_DIRS})
 
-	#gait  
-	#Change directory here if Gait instalation is not found  
-	set(GAIT_LOCATION /usr/local)  
-	message(STATUS "Looking for local Gait in: [${GAIT_LOCATION}].")  
-	# TODO:force to refresh find_library every run  
-	find_library(gait_LIBRARY NAMES gait libgait PATHS "${GAIT_LOCATION}/lib/gait/")  
-	if(${gait_LIBRARY} STREQUAL "gait_LIBRARY-NOTFOUND")  
-	    #Try to use the source code if not installed  
-	    message(STATUS "Gait not installed. Trying to compile gait from sources")  
-	    add_subdirectory(${PROJECT_SOURCE_DIR}/lib/gait)  
-	    set(GAIT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/lib/gait/src ${GAIT_INCLUDE_DIR})  
-	    set(gait_LIBRARY "gait")  
-	else()  
-	    #Try to use the local lib if installed  
-	    message(STATUS "Gait library found. Using local files")  
-	    FIND_PATH(GAIT_INCLUDE_DIR Gait.h /usr/local/include/gait/)  
-	    message(STATUS "Local Gait files detected: [${gait_LIBRARY}].")  
-	    message(STATUS "Local include directories: [${GAIT_INCLUDE_DIR}].")  
-	endif()  
-	INCLUDE_DIRECTORIES(${GAIT_INCLUDE_DIR})  
+link_directories(${GAIT_LINK_DIRS})
+target_link_libraries(${KEYWORD} ${GAIT_LIBRARIES})
+```
+
+For CMake find_package(GAIT REQUIRED), you may also be interested in adding the following to your .bashrc or .profile:
+
+```bash
+export GAIT_DIR=/home/teo/repos/gait/build
+```
+
+Change the path according to your folder structure.

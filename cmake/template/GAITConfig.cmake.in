@@ -1,0 +1,14 @@
+# Authors: Juan G Victores
+# CopyPolicy: Released under the terms of the LGPLv2.1 or later, see LGPL.TXT
+# Evident yet unstandarized names
+
+IF (NOT GAIT_FOUND)
+
+  SET(GAIT_LIBRARIES "@GAIT_LIBRARIES@")
+  SET(GAIT_INCLUDE_DIRS "@GAIT_INCLUDE_DIRS@")
+  SET(GAIT_LINK_DIRS "@GAIT_LINK_DIRS@")
+  SET(GAIT_DEFINES "@GAIT_DEFINES@")
+  SET(GAIT_MODULE_PATH "@GAIT_MODULE_PATH@")
+
+  SET (GAIT_FOUND TRUE)
+ENDIF (NOT GAIT_FOUND)
