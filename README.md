@@ -1,6 +1,8 @@
 # gait
 c++ biped gait generation library.
 
+## Use as an external library
+
 Basic lines to add/modify in CMake:
 
 ```cmake
@@ -19,3 +21,27 @@ export GAIT_DIR=/home/teo/repos/gait/build
 ```
 
 Change the path according to your folder structure.
+
+## Use as part of a project
+
+In [teo-main](https://github.com/roboticslab-uc3m/teo-main) we added these lines to `teo-main/libraries/CMakeFiles.txt`:
+
+```cmake
+set(GAIT_PART_OF_PROJECT TRUE)
+add_subdirectory(gait)
+```
+
+And then we added a hardcoded a `teo-main/cmake/FindGAIT.cmake` for it to be found at compilation:
+
+```cmake
+IF (NOT GAIT_FOUND)
+
+  SET(GAIT_LIBRARIES "Gait")
+  SET(GAIT_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/libraries/gait/src/")
+  SET(GAIT_LINK_DIRS "${CMAKE_SOURCE_DIR}/build/lib")
+  SET(GAIT_DEFINES "")
+  SET(GAIT_MODULE_PATH "./gait/cmake")
+
+  SET (GAIT_FOUND TRUE)
+ENDIF (NOT GAIT_FOUND)
+```
