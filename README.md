@@ -45,3 +45,5 @@ IF (NOT GAIT_FOUND)
   SET (GAIT_FOUND TRUE)
 ENDIF (NOT GAIT_FOUND)
 ```
+
+Another example of use can be found at [gaitcontrol](https://github.com/roboticslab-uc3m/gaitcontrol), especially at `gaitcontrol/cmake` folder.
