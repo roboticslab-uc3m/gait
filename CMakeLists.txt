@@ -66,6 +66,8 @@ set(GAIT_LIBRARIES CACHE INTERNAL "appended libraries" FORCE)
 #add_subdirectory(share)
 add_subdirectory(src)
 
+if(NOT GAIT_PART_OF_PROJECT)
+
 # export our variables to a GAITConfig.cmake creation
 set(GAIT_LINK_DIRS ${GAIT_LINK_DIRS} ${LIBRARY_OUTPUT_PATH})
 configure_file(${CMAKE_SOURCE_DIR}/cmake/template/GAITConfig.cmake.in
@@ -87,4 +89,6 @@ configure_file(
 
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/GAITConfigUninstall.cmake)
+
+endif(NOT GAIT_PART_OF_PROJECT)
 
