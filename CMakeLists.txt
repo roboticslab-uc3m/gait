@@ -11,7 +11,7 @@ if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-project(GAIT)
+project(gait)
 
 ### options: cpp libraries
 option(ENABLE_Gait "Choose if you want to compile Gait" TRUE)
