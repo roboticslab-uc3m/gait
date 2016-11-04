@@ -14,7 +14,7 @@ using namespace teo;
 
 
 
-bool GaitSupportPoligon::SaveSpaceTrajectories(ofstream &fileLeftFoot, ofstream &fileRightFoot)
+bool GaitSupportPoligon::SaveSpaceTrajectories(ofstream &fileRightFoot, ofstream &fileLeftFoot)
 {
 
     trajLeftFoot.SaveToFile(fileLeftFoot);

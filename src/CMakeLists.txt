@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.6)
 
 IF (ENABLE_Gait)
 
-set(KEYWORD "Gait")
+set(KEYWORD "gait")
 
 # Search for source code.
 file(GLOB folder_source *.cpp *.cc *.c)

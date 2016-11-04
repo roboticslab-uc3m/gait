@@ -47,7 +47,7 @@ public:
      * @param fileRightFoot: File (std::ofstream) for saving right foot trajectory.
      * @return true on success.
      */
-    bool SaveSpaceTrajectories(std::ofstream &fileLeftFoot, std::ofstream &fileRightFoot);
+    bool SaveSpaceTrajectories(std::ofstream &fileRightFoot, std::ofstream &fileLeftFoot);
 
 
     /**
