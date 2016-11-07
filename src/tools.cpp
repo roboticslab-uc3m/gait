@@ -624,6 +624,25 @@ bool SpaceTrajectory::SaveToFile(std::ofstream &csvFile)
 
 
 
+bool teoRightFootInDH(const teo::kin::Pose & gaitRightFootPose, teo::kin::Pose & teoRightFootPose)
+{
+
+//    teoRightFootPose = gaitRightFootPose;
+
+    return true;
+
+}
+
+
+bool teoLeftFootInDH(const teo::kin::Pose & gaitLeftFootPose, teo::kin::Pose & teoLeftFootPose)
+{
+    return true;
+
+
+}
+
+
+
 bool Robot::addLink(const Link& newLink)
 {
     links.push_back(newLink);

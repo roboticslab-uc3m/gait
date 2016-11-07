@@ -279,9 +279,6 @@ private:
 
 
 
-
-
-
 }//end namespace teo
 
 #endif // TOOLS_H
