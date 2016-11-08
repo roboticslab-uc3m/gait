@@ -137,6 +137,16 @@ public:
     bool PoseInterpolation(Pose initialPose, Pose finalPose, double factor);
 
     bool PoseFraction(Pose &fraction, double factor);
+
+    /**
+     * @brief ChangeRotation : Change the rotation of the pose. Added rotation is defined from the actual pose.
+     * It is based on cuaternion multiplication (0_Q_1 * 1_Q_2).
+     * @param u2x : rotation axis x component from actual pose.
+     * @param u2y : rotation axis y component from actual pose.
+     * @param u2z : rotation axis z component from actual pose.
+     * @param angle2 : rotation angle.
+     * @return
+     */
     bool ChangeRotation(double u2x, double u2y, double u2z, double angle2);
     bool ChangePose(Pose variation);
 private:
