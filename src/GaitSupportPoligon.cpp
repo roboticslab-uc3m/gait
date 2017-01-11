@@ -30,10 +30,18 @@ GaitSupportPoligon::GaitSupportPoligon(kin::Pose initialRightFoot, kin::Pose ini
     trajLeftFoot.SetInitialWaypoint(initialLeftFoot);
 
     SetSwingParameters(0, 0);
-    SetSupportParameters(0);
+    SetHipParameters(0,0);
     legHeight = initialLeftFoot.GetZ();
 
     startOnRightFootSupport = true;
+
+}
+
+bool GaitSupportPoligon::BeforeStep()
+{
+    //Reduce hip elevation by changing z coordinate on both feet.
+    trajLeftFoot.move(0,0,hipLower);
+    trajRightFoot.move(0,0,hipLower);
 
 }
 
@@ -46,9 +54,10 @@ bool GaitSupportPoligon::SetSwingParameters( double swingFootDistance, double sw
     return true;
 }
 
-bool GaitSupportPoligon::SetSupportParameters(double new_hipSideshift)
+bool GaitSupportPoligon::SetHipParameters(double new_hipSideshift, double new_hipLower)
 {
     hipSideshift = new_hipSideshift;
+    hipLower = new_hipLower;
 
     return true;
 }
@@ -247,3 +256,8 @@ bool GaitSupportPoligon::HalfStepForwardLS()
 
     return true;
 }
+
+
+
+
+

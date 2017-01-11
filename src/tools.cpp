@@ -461,6 +461,27 @@ double SpaceTrajectory::AddWaypoint(const Pose &waypoint)
     return dt;
 }
 
+double SpaceTrajectory::move(double dx, double dy, double dz)
+{
+
+    double dt;
+
+
+    kin::Pose actual;
+    kin::Pose desired;
+
+    //get actual pose
+    GetLastWaypoint(actual);
+
+
+    desired=actual;
+    desired.ChangePosition(dx,dy,dz);
+
+    dt=AddWaypoint(desired);
+
+    return dt;
+}
+
 int SpaceTrajectory::Size()
 {
     return waypoints.size();

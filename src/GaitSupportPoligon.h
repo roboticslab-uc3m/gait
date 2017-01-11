@@ -31,6 +31,8 @@ public:
     GaitSupportPoligon(kin::Pose initialRightFoot, kin::Pose initialLeftFoot);
 
 
+    bool BeforeStep();
+
     /**
      * @brief This function will add "stepNumber" steps in forward direction, using
      * support poligon stability criteria. Results are stored in the Space trajectory variable.
@@ -57,7 +59,7 @@ public:
      * @return
      */
     bool SetSwingParameters(double swingFootDistance, double swingFootElevation);
-    bool SetSupportParameters(double new_hipSideshift);
+    bool SetHipParameters(double new_hipSideshift, double new_hipLower);
 
 
     bool GetTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTrajectory& getLeftFoot);
@@ -74,6 +76,7 @@ private:
 
     //support foot parameters
     double hipSideshift; //meters. Lateral hip movement for one leg support.
+    double hipLower; //meters. Hip lowering for step ik reachability.
     double legHeight; //meters. Heigth of one leg.
 
     //step parameters

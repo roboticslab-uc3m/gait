@@ -252,6 +252,15 @@ public:
     int UpdatePointers(double atTime);
 
     bool ShowData();
+
+    /**
+     * @brief move: Change actual position by dx, dy, dz and store a new waypoint
+     * @param dx: x coordinate shift.
+     * @param dy: y coordinate shift.
+     * @param dz: z coordinate shift.
+     * @return : estimated time at default velocity
+     */
+    double move(double dx, double dy, double dz);
 private:
     std::vector<kin::Pose> waypoints;
     std::vector<kin::Pose> segments;
