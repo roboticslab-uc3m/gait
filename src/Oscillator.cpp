@@ -6,21 +6,52 @@ Oscillator::Oscillator()
     Initialization(1,1/10);
 }
 
-Oscillator::Oscillator(double periodT, double positiveAmplitude, double negativeAmplitude)
+Oscillator::Oscillator(double periodT, double A1, double A2)
 {
 
     Initialization(periodT, periodT/10);
-    double amp;
-    //double timeRate = positiveAmplitude/(positiveAmplitude - negativeAmplitude);
-    //double pT= timeRate*T;
-    //double pSamples = (int) (1/timeRate);
+    double t;
+    double timeRate = A1/(A1 - A2);
+    double T1= timeRate*T;
+    double T2= (1-timeRate)*T;
+    double samples1 = (int) (1/timeRate);
+    double samples2 = (int) (samples-samples1);
+
     //double aN= negativeAmplitude/(positiveAmplitude - negativeAmplitude);
-    unsigned int pSamples = (int) samples * negativeAmplitude/(positiveAmplitude - negativeAmplitude);
+    //unsigned int pSamples = (int) samples * negativeAmplitude/(positiveAmplitude - negativeAmplitude);
+
+    double w1 = 2*M_PI/T1;
+    double w2 = 2*M_PI/T2;
     //zero position crossing at
-    for (int i=0; i<pSamples; i++)
+    //compute position and velocity profiles
+    for (int i=0; i<samples1; i++)
     {
+        t= i*Ts;
+        positionProfile.push_back(A1*sin(w1*t));
+        velocityProfile.push_back(A1*w1*cos(w1*t));
+        std::cout << i << "time : " <<  t << ",pos: " << positionProfile[i] << ",vel: " << velocityProfile[i];
+    }
+    for (int i=samples1; i<samples2; i++)
+    {
+        t= i*Ts;
+        positionProfile.push_back(A2*sin(w2*t));
+        velocityProfile.push_back(A2*w2*cos(w2*t));
+        std::cout << i << "time : " <<  t << ",pos: " << positionProfile[i] << ",vel: " << velocityProfile[i];
 
     }
+
+
+}
+
+double Oscillator::GetVelocity(double actualPos)
+{
+    if( (actualPos>nextPos)|(actualPos<lastPos) )
+    {
+        profileSegment = UpdateVectorPointer(positionProfile,actualPos,nextPos,lastPos);
+    }
+
+    posRatio = (actualPos-lastPos)/(nextPos-lastPos);
+    return posRatio*velocityProfile[profileSegment];
 
 
 }
@@ -30,5 +61,7 @@ bool Oscillator::Initialization(double newT, double newTs)
     T=newT;
     Ts=newTs;
     samples = T/Ts;
+    profileSegment=0;
+
 
 }

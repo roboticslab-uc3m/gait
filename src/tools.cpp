@@ -1,6 +1,5 @@
 #include "tools.h"
 
-int FindValueIndex(std::vector<double> vector, double value);
 
 
 using namespace std;
@@ -354,17 +353,17 @@ int SpaceTrajectory::UpdatePointers(double atTime)
     }*/
 
 
-    next_wp = FindValueIndex(time_totals, atTime);
+    last_wp = FindValueIndex(time_totals, atTime);
     //std::cout << "next_wp " << next_wp << ", ";
 
-    if (next_wp < 1)
+    if (last_wp < 1)
     {
         std::cout << "Error: Check if time is positive and waypoints are defined" << std::endl;
         return -1;
     }
 
     //if no errors, store index values and times.
-    last_wp = next_wp-1; // next_wp >= 1 at this point
+    next_wp = last_wp+1; // next_wp >= 1 at this point
     next_wpTime = time_totals[next_wp];
     last_wpTime = time_totals[last_wp];
 
@@ -688,8 +687,35 @@ int FindValueIndex(std::vector<double> vector, double value)
     {
         if (value<vector[i])
         {
-            return i;
+            return (i-1);
         }
     }
     return -1;
 }
+
+int UpdateVectorPointer(const std::vector<double> & vector, const double & actual, double & next, double & last )
+{
+
+
+    int vectorSegment;
+
+    vectorSegment = FindValueIndex(vector, actual);
+    //std::cout << "next_wp " << next_wp << ", ";
+
+    if (vectorSegment < 1)
+    {
+        std::cout << "Error: Check if actual value exist and vector have data" << std::endl;
+        return -1;
+    }
+
+    //if no errors, store index and values.
+    last = vector[vectorSegment];
+    next = vector[vectorSegment+1];
+
+
+    //std::cout << "New segment : " << last << "->" << next << ", Segment index: " << vectorSegment << std::endl;
+
+    return vectorSegment;
+
+}
+

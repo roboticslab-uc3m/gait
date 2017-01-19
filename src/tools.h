@@ -300,5 +300,9 @@ private:
 
 }//end namespace teo
 
+
+int FindValueIndex(std::vector<double> vector, double value);
+int UpdateVectorPointer(const std::vector<double> & vector, const double & actual, double & next, double & last );
+
 #endif // TOOLS_H
 
