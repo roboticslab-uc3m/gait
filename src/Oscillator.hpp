@@ -12,7 +12,7 @@ public:
     Oscillator();
     Oscillator(double periodT, double Amplitude1, double A2);
 
-    double GetVelocity(double actualPos);
+    double GetVelocity(double actualTime);
 
 
 private:
@@ -21,9 +21,10 @@ private:
     unsigned int samples; //number of samples per period
     std::vector<double> positionProfile;
     std::vector<double> velocityProfile;
+    std::vector<double> timeProfile;
 
     int profileSegment;
-    double lastPos, nextPos, posRatio;
+    double lastTime, nextTime, tRatio;
 
     bool Initialization(double newT, double newTs);
 };
