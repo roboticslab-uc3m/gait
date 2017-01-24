@@ -685,6 +685,7 @@ int FindValueIndex(std::vector<double> vector, double value)
 {
     for (int i=0;i<vector.size();i++)
     {
+        std::cout << "value: " << value << "vector i :" << vector[i];
         if (value<vector[i])
         {
             return (i-1);
@@ -702,7 +703,7 @@ int UpdateVectorPointer(const std::vector<double> & vector, const double & actua
     vectorSegment = FindValueIndex(vector, actual);
     //std::cout << "next_wp " << next_wp << ", ";
 
-    if (vectorSegment < 1)
+    if (vectorSegment < 0)
     {
         std::cout << "Error: Check if actual value exist and vector have data" << std::endl;
         return -1;

@@ -10,7 +10,7 @@ class Oscillator
 {
 public:
     Oscillator();
-    Oscillator(double periodT, double Amplitude1, double A2);
+    Oscillator(double periodT, double A1, double A2);
 
     double GetVelocity(double actualTime);
 

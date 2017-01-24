@@ -28,17 +28,19 @@ Oscillator::Oscillator(double periodT, double A1, double A2)
     {
         t= i*Ts;
         timeProfile.push_back(t);
+        std::cout << "," <<  t ;
         positionProfile.push_back(A1*sin(w1*t));
         velocityProfile.push_back(A1*w1*cos(w1*t));
-        //std::cout << i << "time : " <<  t << ",pos: " << positionProfile[i] << ",vel: " << velocityProfile[i];
+        std::cout << i << "time : " <<  t << ",pos: " << positionProfile[i] << ",vel: " << velocityProfile[i];
     }
     for (int i=samples1; i<samples; i++)
     {
         t= i*Ts;
         timeProfile.push_back(t);
+        std::cout << "," <<  t ;
         positionProfile.push_back(A2*sin(w2*t));
         velocityProfile.push_back(A2*w2*cos(w2*t));
-        //std::cout << i << "time : " <<  t << ",pos: " << positionProfile[i] << ",vel: " << velocityProfile[i];
+        std::cout << i << "time : " <<  t << ",pos: " << positionProfile[i] << ",vel: " << velocityProfile[i];
 
     }
 
@@ -52,7 +54,6 @@ double Oscillator::GetVelocity(double actualTime)
     {
         profileSegment = UpdateVectorPointer(timeProfile,actualTime,nextTime,lastTime);
     }
-
     tRatio = (actualTime-lastTime)/(nextTime-lastTime);
    // std::cout << "time : " <<  actualTime << ",ratio: " << tRatio << ",vel: " << tRatio*velocityProfile[profileSegment];
 
