@@ -9,38 +9,36 @@ Oscillator::Oscillator()
 Oscillator::Oscillator(double periodT, double A1, double A2)
 {
 
-    Initialization(periodT, periodT/10);
+    Initialization(periodT, periodT/100);
     double t;
     double timeRate = A1/(A1 - A2);
     double T1= timeRate*T;
     double T2= (1-timeRate)*T;
-    double samples1 = (int) (1/timeRate);
+    double samples1 = (int) (T1/Ts);
     //double samples2 = (int) (samples-samples1);
 
     //double aN= negativeAmplitude/(positiveAmplitude - negativeAmplitude);
     //unsigned int pSamples = (int) samples * negativeAmplitude/(positiveAmplitude - negativeAmplitude);
 
-    double w1 = 2*M_PI/T1;
-    double w2 = 2*M_PI/T2;
+    double w1 = M_PI/T1;
+    double w2 = M_PI/T2;
     //zero position crossing at
     //compute position and velocity profiles
     for (int i=0; i<samples1; i++)
     {
         t= i*Ts;
         timeProfile.push_back(t);
-        std::cout << "," <<  t ;
         positionProfile.push_back(A1*sin(w1*t));
         velocityProfile.push_back(A1*w1*cos(w1*t));
-        std::cout << i << "time : " <<  t << ",pos: " << positionProfile[i] << ",vel: " << velocityProfile[i];
+        std::cout << i << "time : " <<  t << ",pos: " << positionProfile[i] << ",vel: " << velocityProfile[i] << std::endl;
     }
     for (int i=samples1; i<samples; i++)
     {
         t= i*Ts;
         timeProfile.push_back(t);
-        std::cout << "," <<  t ;
-        positionProfile.push_back(A2*sin(w2*t));
-        velocityProfile.push_back(A2*w2*cos(w2*t));
-        std::cout << i << "time : " <<  t << ",pos: " << positionProfile[i] << ",vel: " << velocityProfile[i];
+        positionProfile.push_back(-A2*sin(w2*t));
+        velocityProfile.push_back(-A2*w2*cos(w2*t));
+        std::cout << i << "time : " <<  t << ",pos: " << positionProfile[i] << ",vel: " << velocityProfile[i] << std::endl;
 
     }
 
@@ -57,7 +55,8 @@ double Oscillator::GetVelocity(double actualTime)
     tRatio = (actualTime-lastTime)/(nextTime-lastTime);
    // std::cout << "time : " <<  actualTime << ",ratio: " << tRatio << ",vel: " << tRatio*velocityProfile[profileSegment];
 
-    return tRatio*velocityProfile[profileSegment];
+    return velocityProfile[profileSegment]+
+            tRatio*(velocityProfile[profileSegment+1] - velocityProfile[profileSegment]);
 
     //this code was deigned for position but not used at the end
     /*

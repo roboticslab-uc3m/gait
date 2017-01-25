@@ -685,7 +685,7 @@ int FindValueIndex(std::vector<double> vector, double value)
 {
     for (int i=0;i<vector.size();i++)
     {
-        std::cout << "value: " << value << "vector i :" << vector[i];
+        //std::cout << "value: " << value << "vector i :" << vector[i];
         if (value<vector[i])
         {
             return (i-1);
