@@ -144,7 +144,7 @@ public:
      * @param u2x : rotation axis x component from actual pose.
      * @param u2y : rotation axis y component from actual pose.
      * @param u2z : rotation axis z component from actual pose.
-     * @param angle2 : rotation angle.
+     * @param angle2 : rotation angle in radians (like std::cos).
      * @return
      */
     bool ChangeRotation(double u2x, double u2y, double u2z, double angle2);

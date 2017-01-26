@@ -67,7 +67,7 @@ Pose::Pose(double x0, double y0, double z0)
     z=z0;
     ux=0;
     uy=0;
-    uz=0;
+    uz=1;
     angle=0;
 }
 
@@ -186,7 +186,8 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
     if (c==1)
     {
         //Angle is 0, so no rotation as result
-        angle=ux=uy=uz=0;
+        angle=ux=uy=0;
+        uz==1;
         return true;
     }
 
