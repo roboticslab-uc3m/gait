@@ -357,7 +357,7 @@ int SpaceTrajectory::UpdatePointers(double atTime)
     last_wp = FindValueIndex(time_totals, atTime);
     //std::cout << "next_wp " << next_wp << ", ";
 
-    if (last_wp < 1)
+    if (last_wp < 0)
     {
         std::cout << "Error: Check if time is positive and waypoints are defined" << std::endl;
         return -1;
