@@ -504,7 +504,7 @@ bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
     if( (sampleTime>next_wpTime)|(sampleTime<last_wpTime) )
     {
 
-        UpdatePointers(sampleTime);
+        if (UpdatePointers(sampleTime)<0) return false;
 /*        time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
         if (time_actual == time_totals.end())
         {
@@ -585,7 +585,7 @@ bool SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelo
         segmentIndex = last_wp;
 
         std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << ", Segment index: " << segmentIndex << std::endl;*/
-        UpdatePointers(sampleTime);
+        if (UpdatePointers(sampleTime)<0) return false;
     }
 
 

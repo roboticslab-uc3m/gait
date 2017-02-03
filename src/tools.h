@@ -140,7 +140,7 @@ public:
 
     /**
      * @brief ChangeRotation : Change the rotation of the pose. Added rotation is defined from the actual pose.
-     * It is based on cuaternion multiplication (0_Q_1 * 1_Q_2).
+     * It is based on cuaternion multiplication (0_Q_1 * 1_Q_2) so rotations are allways intrinsic.
      * @param u2x : rotation axis x component from actual pose.
      * @param u2y : rotation axis y component from actual pose.
      * @param u2z : rotation axis z component from actual pose.
