@@ -172,6 +172,12 @@ bool Pose::SetRotation(double axis_i, double axis_j, double axis_k, double pose_
 bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
 {
     //double ux1,uy1,uz1,angle1;
+  /*  double normal = sqrt( u2xi*u2xi + u2yi*u2yi + u2zi*u2zi );
+
+    double u2x=u2xi/normal;
+    double u2y=u2yi/normal;
+    double u2z=u2zi/normal;*/
+
     double angle1=angle;
     double u1x=ux;
     double u1y=uy;
@@ -185,7 +191,7 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
 
     if (c==1)
     {
-        //Angle is 0, so no rotation as result
+        //Angle is 0 -> no rotation
         angle=ux=uy=0;
         uz==1;
         return true;
