@@ -84,7 +84,7 @@ Pose::Pose(Pose initialPose, Pose finalPose)
 
     //Rotation from initial to final trough origin
     initialPose.GetRotation(ux,uy,uz,angle);
-    //invert rotation so rotation is the same as origin
+    //invert rotation so rotation it is like negative rotation
     angle = -angle;
     //compose with final rotation from origin
     double u2x,u2y,u2z,angle2;
@@ -447,21 +447,27 @@ double SpaceTrajectory::AddWaypoint(const Pose &waypoint)
 
     //get the time based on default velocity
     Pose lastwp;
-    double dx,dy,dz, dt;
+
+    double dx,dy,dz,dangle, dt;
 
     GetLastWaypoint(lastwp);
+
+    Pose segment(lastwp, waypoint);
+
 
     dx = waypoint.GetX()-lastwp.GetX();
     dy = waypoint.GetY()-lastwp.GetY();
     dz = waypoint.GetZ()-lastwp.GetZ();
+    dangle = segment.GetAngle();
 
-    dt = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
+    //dt = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
 
     //TODO: Calculate rotation angle to limit rotation velocity.
     //TODO: apply dt as max between rotation time and translation time (1 second now).
-    dt=max(dt,1.0);
+    dt=max(sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity,
+           dangle / defaultRotationSpeed);
 
-    dt=0;
+    //dt=0;
     AddTimedWaypoint(dt, waypoint);
 
     return dt;

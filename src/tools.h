@@ -273,10 +273,10 @@ private:
     std::vector<double>::iterator time_actual;
 
     //trajectory tracking
-    int segmentIndex; //cant use unsigned due to latter use of lower_bound
-    int last_wp; //store the wp index we come from
+    long segmentIndex; //cant use unsigned due to latter use of lower_bound
+    long last_wp; //store the wp index we come from
     double last_wpTime; //time of last waypoint
-    int next_wp; //store the wp index we are going to
+    long next_wp; //store the wp index we are going to
     double next_wpTime; //time of next waypoint
 
 
