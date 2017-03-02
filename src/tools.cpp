@@ -83,10 +83,12 @@ Pose::Pose(Pose initialPose, Pose finalPose)
     z=z2-z1;
 
     //Rotation from initial to final trough origin
+
+    //Compute rotation from initialPose to common origin.
     initialPose.GetRotation(ux,uy,uz,angle);
-    //invert rotation so rotation it is like negative rotation
-    angle = -angle;
-    //compose with final rotation from origin
+    angle = -angle;    //invert rotation.
+
+    //compose with finalPose rotation from origin
     double u2x,u2y,u2z,angle2;
     finalPose.GetRotation(u2x,u2y,u2z,angle2);
 
@@ -189,7 +191,7 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
 
     double c = -s1*s2*( u1x*u2x + u1y*u2y + u1z*u2z )+c1*c2;
 
-    if (c==1)
+    if (c>0.99)
     {
         //Angle is 0 -> no rotation
         angle=ux=uy=0;
@@ -203,13 +205,14 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
 
 
     ux = (s1*s2) * ( +u1y*u2z - u1z*u2y ) + s1*u1x*c2 + s2*c1*u2x;
-    ux=ux/s;
     uy = (s1*s2) * ( -u1x*u2z + u1z*u2x ) + s1*u1y*c2 + s2*c1*u2y;
-    uy=uy/s;
-    uz = (s1*s2) * ( +u1x*u2y - u1y*u2x  )+ s1*u1z*c2 + s2*c1*u2z;
-    uz=uz/s;
+    uz = (s1*s2) * ( +u1x*u2y - u1y*u2x ) + s1*u1z*c2 + s2*c1*u2z;
 
     angle = 2 * acos(c);
+
+    ux=ux/s;
+    uy=uy/s;
+    uz=uz/s;
 
     return true;
 
@@ -401,15 +404,13 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
 {
 
     //Compute segment and update segments vector
-    Pose lastWaypoint=waypoints.back(); //can compress these three lines in one.
-    Pose segment(lastWaypoint, newWaypoint);
+    Pose segment(waypoints.back(), newWaypoint);
     segments.push_back(segment);
 
-    waypoints.push_back(newWaypoint);
     if (dt == 0)
     {
 
-        std::cout << "Warning! Adding waypoint with default velocity" << std::endl;
+        std::cout << "Warning! Adding waypoint with default velocities" << std::endl;
 
         double dx,dy,dz;
         double dtp,dtr;
@@ -425,10 +426,12 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
     time_deltas.push_back(dt);
     time_totals.push_back(time_totals.back()+dt);
 
-
+    //Pose lastWaypoint=waypoints.back();
     //std::cout << "lastWaypoint: " << lastWaypoint.GetX() << "," << lastWaypoint.GetY() << "," << lastWaypoint.GetZ() << std::endl;
     //std::cout << "waypoint: " << newWaypoint.GetX() << "," << newWaypoint.GetY() << "," << newWaypoint.GetZ() << std::endl;
     //std::cout << "segment: " << segment.GetX() << "," << segment.GetY() << "," << segment.GetZ() << std::endl;
+
+    waypoints.push_back(newWaypoint);
 
 
     //compute velocities and update velocities vector
@@ -446,7 +449,7 @@ double SpaceTrajectory::AddWaypoint(const Pose &waypoint)
 
 
     //get the time based on default velocity
-    Pose lastwp;
+ /*   Pose lastwp;
 
     double dx,dy,dz,dangle, dt;
 
@@ -460,14 +463,18 @@ double SpaceTrajectory::AddWaypoint(const Pose &waypoint)
     dz = waypoint.GetZ()-lastwp.GetZ();
     dangle = segment.GetAngle();
 
-    //dt = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
+    std::cout << "Warning! Adding waypoint with default velocity" << std::endl;
 
-    //TODO: Calculate rotation angle to limit rotation velocity.
-    //TODO: apply dt as max between rotation time and translation time (1 second now).
-    dt=max(sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity,
-           dangle / defaultRotationSpeed);
+    double dx,dy,dz;
+    double dtp,dtr;
+    double angle = segment.GetAngle();
 
-    //dt=0;
+    segment.GetPosition(dx,dy,dz);
+
+    dtp = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
+    dtr = angle / defaultRotationSpeed;
+    dt= max(dtp,dtr);*/
+    double dt=0;
     AddTimedWaypoint(dt, waypoint);
 
     return dt;
