@@ -190,12 +190,13 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
     double s2=sin(angle2/2);
 
     double c = -s1*s2*( u1x*u2x + u1y*u2y + u1z*u2z )+c1*c2;
+    //std::cout << "c: " << c << std::endl;
 
-    if (c>0.99)
+    if (c>0.999999)
     {
         //Angle is 0 -> no rotation
-        angle=ux=uy=0;
-        uz==1;
+        angle=ux=uy=uz=0;
+        //uz=1;
         return true;
     }
 
@@ -232,6 +233,21 @@ bool Pose::ChangePose(Pose variation)
     ChangeRotation(u2x,u2y,u2z,angle2);
 
 
+}
+
+double Pose::GetUx() const
+{
+    return ux;
+}
+
+double Pose::GetUy() const
+{
+    return uy;
+}
+
+double Pose::GetUz() const
+{
+    return uz;
 }
 
 /*bool Pose::PoseDifference( Pose otherPose, Pose & difference)
@@ -342,7 +358,7 @@ bool SpaceTrajectory::SetInitialWaypoint(kin::Pose initialWaypoint)
 bool SpaceTrajectory::TrajectoryInit()
 {
     defaultVelocity = 0.1; //[m/s]
-    defaultRotationSpeed = 0.1; //[rad/sec]
+    defaultRotationSpeed = 0.05; //[rad/sec]
     next_wp = 0;
     last_wp = 0;
     next_wpTime = 0;
@@ -410,7 +426,6 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
     if (dt == 0)
     {
 
-        std::cout << "Warning! Adding waypoint with default velocities" << std::endl;
 
         double dx,dy,dz;
         double dtp,dtr;
@@ -419,8 +434,11 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
         segment.GetPosition(dx,dy,dz);
 
         dtp = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
-        dtr = angle / defaultRotationSpeed;
+        dtr = std::abs(angle) / defaultRotationSpeed;
         dt= max(dtp,dtr);
+        std::cout << "dtp: " << dtp << " , dtr: " << dtr << std::endl;
+        std::cout << "Warning! Adding waypoint [" << waypoints.size()-1 << "] with default velocities. dt = " << dt << std::endl;
+
 
     }
     time_deltas.push_back(dt);
@@ -438,7 +456,10 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
     Pose velocity;
     segment.PoseFraction(velocity,1/dt);
 
-    //std::cout << "velocity: " << velocity.GetX() << "," << velocity.GetY() << "," << velocity.GetZ() << std::endl;
+    std::cout << "velocity: " << velocity.GetX() << "," << velocity.GetY() << "," << velocity.GetZ() << std::endl;
+    std::cout << "angular v: " << velocity.GetUx() << "," << velocity.GetUy() << "," << velocity.GetUz() << "," << velocity.GetAngle() << std::endl;
+    std::cout << "segment: " << segment.GetUx() << "," << segment.GetUy() << "," << segment.GetUz() << "," << segment.GetAngle() << std::endl;
+
     velocities.push_back(velocity);
 
     return true;
@@ -486,14 +507,14 @@ double SpaceTrajectory::move(double dx, double dy, double dz)
     double dt;
 
 
-    kin::Pose actual;
+    //kin::Pose actual;
     kin::Pose desired;
 
     //get actual pose
-    GetLastWaypoint(actual);
+    GetLastWaypoint(desired);
 
 
-    desired=actual;
+    //desired=actual;
     desired.ChangePosition(dx,dy,dz);
 
     dt=AddWaypoint(desired);

@@ -149,6 +149,12 @@ public:
      */
     bool ChangeRotation(double u2x, double u2y, double u2z, double angle2);
     bool ChangePose(Pose variation);
+    double GetUx() const;
+
+    double GetUy() const;
+
+    double GetUz() const;
+
 private:
     double x,y,z; //position
     double ux,uy,uz; //axis
