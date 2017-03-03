@@ -136,10 +136,8 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     //std::cout << "VALUES: "<< hipSideshift<< ","<<legWeight << ","<< legHeight<< ","<<hipSideshift << ","<< ankleAngle<< ","<<std::endl;
     //check angle sign before apply!!
     //apply angle
-    //desiredRightFoot.SetRotation(1,0,0,-ankleAngle);
-    double cux,cuy,cuz,cangle;
-    //desiredRightFoot.GetRotation(cux,cuy,cuz,cangle);
-    //desiredRightFoot.SetRotation(-0.69,-0.2,0.69,2.91);
+    /*double cux,cuy,cuz,cangle;
+    desiredRightFoot.GetRotation(cux,cuy,cuz,cangle);*/
     desiredRightFoot.ChangeRotation(1,0,0,-ankleAngle);
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
