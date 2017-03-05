@@ -24,14 +24,14 @@ Change the path according to your folder structure.
 
 ## Use as part of a project
 
-In [teo-main](https://github.com/roboticslab-uc3m/teo-main) we added these lines to `teo-main/libraries/CMakeFiles.txt`:
+In [kinematics-dynamics](https://github.com/roboticslab-uc3m/kinematics-dynamics) we added these lines to `kinematics-dynamics/libraries/CMakeFiles.txt`:
 
 ```cmake
 set(GAIT_PART_OF_PROJECT TRUE)
 add_subdirectory(gait)
 ```
 
-And then we added a hardcoded a `teo-main/cmake/FindGAIT.cmake` for it to be found at compilation:
+And then we added a hardcoded a `kinematics-dynamics/cmake/FindGAIT.cmake` for it to be found at compilation:
 
 ```cmake
 IF (NOT GAIT_FOUND)
