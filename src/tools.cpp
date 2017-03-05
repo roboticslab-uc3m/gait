@@ -434,7 +434,7 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
         segment.GetPosition(dx,dy,dz);
 
         dtp = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
-        dtr = std::abs(angle) / defaultRotationSpeed;
+        dtr = fabs(angle) / defaultRotationSpeed;
         dt= max(dtp,dtr);
         std::cout << "dtp: " << dtp << " , dtr: " << dtr << std::endl;
         std::cout << "Warning! Adding waypoint [" << waypoints.size()-1 << "] with default velocities. dt = " << dt << std::endl;
