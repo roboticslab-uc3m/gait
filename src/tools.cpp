@@ -160,6 +160,16 @@ bool Pose::GetRotation(double & axis_i, double & axis_j, double & axis_k, double
     return true;
 }
 
+bool Pose::GetRotation(std::vector<double> & rotation)
+{
+    rotation.clear();
+    rotation.push_back(ux);
+    rotation.push_back(uy);
+    rotation.push_back(uz);
+    rotation.push_back(angle);
+    return true;
+}
+
 bool Pose::SetRotation(double axis_i, double axis_j, double axis_k, double pose_angle)
 {
     ux=axis_i;
@@ -184,6 +194,7 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
     double u1x=ux;
     double u1y=uy;
     double u1z=uz;
+
     double c1=cos(angle1/2);
     double s1=sin(angle1/2);
     double c2=cos(angle2/2);
@@ -192,7 +203,7 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
     double c = -s1*s2*( u1x*u2x + u1y*u2y + u1z*u2z )+c1*c2;
     //std::cout << "c: " << c << std::endl;
 
-    if (c>0.999999)
+    if (c>0.999999 | c<-0.999999)
     {
         //Angle is 0 -> no rotation
         angle=ux=uy=uz=0;
@@ -200,8 +211,9 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
         return true;
     }
 
-    //this operation can be a problem mind the signs.
-    //TODO:s=sqrt(1-c*c) has + and - solutions, so check the angle sign
+
+    //sin(theta/2) can always be positive?
+
     double s=sqrt(1-c*c);
 
 

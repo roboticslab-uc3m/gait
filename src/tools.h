@@ -115,6 +115,14 @@ public:
     bool GetRotation(double &axis_i, double &axis_j, double &axis_k, double &pose_angle);
 
     /**
+     * @brief GetRotation: Copies the axis-angle rotation on axis_ and pose_angle variables,
+     * @param rotation: vetor of (x,y,z,angle)
+     * @return
+     */
+    bool GetRotation(std::vector<double> &rotation);
+
+
+    /**
      * @brief SetRotation: Set a new pose rotation given an axis angle. Overwrites old rotation.
      * @param axis_i
      * @param axis_j
@@ -140,7 +148,7 @@ public:
 
     /**
      * @brief ChangeRotation : Change the rotation of the pose. Added rotation is defined from the actual pose.
-     * It is based on cuaternion multiplication (0_Q_1 * 1_Q_2) so rotations are allways intrinsic.
+     * It is based on cuaternion multiplication. Rotation is Extrinsic from the initial Frame of reference.
      * @param u2x : rotation axis x component from actual pose.
      * @param u2y : rotation axis y component from actual pose.
      * @param u2z : rotation axis z component from actual pose.
