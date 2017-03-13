@@ -13,6 +13,12 @@ class GaitLipm : public Gait
 public:
     GaitLipm(kin::Pose initialRightFoot, kin::Pose initialLeftFoot) :
         Gait(initialRightFoot,initialLeftFoot){}
+
+private:
+    //Pure virtual Definitions.
+    bool HalfStepForwardRS();
+    bool HalfStepForwardLS();
+
 };
 
 } //namespace teo

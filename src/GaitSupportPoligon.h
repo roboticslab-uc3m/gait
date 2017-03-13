@@ -27,7 +27,7 @@ public:
 
 private:
 
-    //private functions
+    //Pure virtual Definitions.
     bool HalfStepForwardRS();
     bool HalfStepForwardLS();
 
