@@ -26,6 +26,12 @@ private:
     double sinPart,cosPart; //sin and cosine of the half angle
 };
 
+class Rotation
+{
+public:
+    Rotation() {}
+};
+
 class Pose
 {
 public:

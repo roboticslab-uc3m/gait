@@ -170,6 +170,22 @@ bool Pose::GetRotation(std::vector<double> & rotation)
     return true;
 }
 
+/*bool Pose::GetRotationExtrinsic(const kin::Pose & extPose, std::vector<double> & rotation)
+{
+    std::vector<double> extRotationAA;
+    extPose.GetRotation(extRotationAA);
+
+    kin::Rotation extRotation(extRotationAA);
+
+    rotation.clear();
+    rotation.push_back(ux);
+    rotation.push_back(uy);
+    rotation.push_back(uz);
+    rotation.push_back(angle);
+    return true;
+}*/
+
+
 bool Pose::SetRotation(double axis_i, double axis_j, double axis_k, double pose_angle)
 {
     ux=axis_i;
