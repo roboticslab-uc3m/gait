@@ -28,6 +28,7 @@ public:
     double Qj() const;
     double Qk() const;
 
+    Quaternion operator *(const Quaternion &q2);
 private:
     double qw,qi,qj,qk;
     double sinPart,cosPart; //sin and cosine of the half angle

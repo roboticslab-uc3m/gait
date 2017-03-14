@@ -63,15 +63,35 @@ bool Quaternion::FromProduct(const Quaternion & q1, const Quaternion & q2)
     qi = (+q1.Qi() * q2.Qw() + q1.Qj() * q2.Qk() - q1.Qk() * q2.Qj() + q1.Qw() * q2.Qi());
     std::cout << "qi assignement: " << qi << ", " << (+q1.Qi() * q2.Qw() + q1.Qj() * q2.Qk() - q1.Qk() * q2.Qj() + q1.Qw() * q2.Qi()) << std::endl;
     qj = -q1.Qi() * q2.Qk() + q1.Qj() * q2.Qw() + q1.Qk() * q2.Qi() + q1.Qw() * q2.Qj();
+    std::cout << "qj assignement: " << qj << ", "
+      << -q1.Qi() * q2.Qk() + q1.Qj() * q2.Qw() + q1.Qk() * q2.Qi() + q1.Qw() * q2.Qj() << std::endl;
     qk = +q1.Qi() * q2.Qj() - q1.Qj() * q2.Qi() + q1.Qk() * q2.Qw() + q1.Qw() * q2.Qk();
+    std::cout << "qk assignement: " << qk << ", "
+      << +q1.Qi() * q2.Qj() - q1.Qj() * q2.Qi() + q1.Qk() * q2.Qw() + q1.Qw() * q2.Qk() << std::endl;
     qw = -q1.Qi() * q2.Qi() - q1.Qj() * q2.Qj() - q1.Qk() * q2.Qk() + q1.Qw() * q2.Qw();
+    std::cout << "qw assignement: " << qw << ", "
+      << -q1.Qi() * q2.Qi() - q1.Qj() * q2.Qj() - q1.Qk() * q2.Qk() + q1.Qw() * q2.Qw() << std::endl;
 
-//    qi =  q1.qi * q2.qw + q1.qj * q2.qk - q1.qk * q2.qj + q1.qw * q2.qi;
-//    qj = -q1.qi * q2.qk + q1.qj * q2.qw + q1.qk * q2.qi + q1.qw * q2.qj;
-//    qk =  q1.qi * q2.qj - q1.qj * q2.qi + q1.qk * q2.qw + q1.qw * q2.qk;
-//    qw = -q1.qi * q2.qi - q1.qj * q2.qj - q1.qk * q2.qk + q1.qw * q2.qw;
+    //    qi =  q1.qi * q2.qw + q1.qj * q2.qk - q1.qk * q2.qj + q1.qw * q2.qi;
+    //    qj = -q1.qi * q2.qk + q1.qj * q2.qw + q1.qk * q2.qi + q1.qw * q2.qj;
+    //    qk =  q1.qi * q2.qj - q1.qj * q2.qi + q1.qk * q2.qw + q1.qw * q2.qk;
+    //    qw = -q1.qi * q2.qi - q1.qj * q2.qj - q1.qk * q2.qk + q1.qw * q2.qw;
 
     return true;
+}
+
+Quaternion Quaternion::operator*(const Quaternion & q2)
+{
+    Quaternion q1=*this;
+    double pw,pi,pj,pk;
+    pw = -q1.Qi() * q2.Qi() - q1.Qj() * q2.Qj() - q1.Qk() * q2.Qk() + q1.Qw() * q2.Qw();
+    pi = +q1.Qi() * q2.Qw() + q1.Qj() * q2.Qk() - q1.Qk() * q2.Qj() + q1.Qw() * q2.Qi();
+    pj = -q1.Qi() * q2.Qk() + q1.Qj() * q2.Qw() + q1.Qk() * q2.Qi() + q1.Qw() * q2.Qj();
+    pk = +q1.Qi() * q2.Qj() - q1.Qj() * q2.Qi() + q1.Qk() * q2.Qw() + q1.Qw() * q2.Qk();
+
+    return Quaternion(pw,pi,pj,pk);
+
+
 }
 
 Quaternion Quaternion::Conjugate()
@@ -239,7 +259,7 @@ long Pose::SetRotation(Quaternion newRotation)
 bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
 {
     //double ux1,uy1,uz1,angle1;
-  /*  double normal = sqrt( u2xi*u2xi + u2yi*u2yi + u2zi*u2zi );
+    /*  double normal = sqrt( u2xi*u2xi + u2yi*u2yi + u2zi*u2zi );
 
     double u2x=u2xi/normal;
     double u2y=u2yi/normal;
@@ -578,7 +598,7 @@ double SpaceTrajectory::AddWaypoint(const Pose &waypoint)
 
 
     //get the time based on default velocity
- /*   Pose lastwp;
+    /*   Pose lastwp;
 
     double dx,dy,dz,dangle, dt;
 
@@ -653,7 +673,7 @@ bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
     {
 
         if (UpdatePointers(sampleTime)<0) return false;
-/*        time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
+        /*        time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
         if (time_actual == time_totals.end())
         {
             std::cout << "No Trajectory defined for that time" << std::endl;
@@ -704,7 +724,7 @@ bool SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelo
     //if sampleTime is outside actual segment
     if( (sampleTime>next_wpTime)|(sampleTime<last_wpTime) )
     {
-       /* time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
+        /* time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
         //std::cout << "time_totals;" << time_totals[*time_actual-1] << "-" << time_totals[*time_actual] << ",atTime:" << sampleTime;
 
         if (time_actual == time_totals.end())
@@ -796,7 +816,7 @@ bool SpaceTrajectory::SaveToFile(std::ofstream &csvFile)
 bool teoRightFootInDH(const teo::kin::Pose & gaitRightFootPose, teo::kin::Pose & teoRightFootPose)
 {
 
-//    teoRightFootPose = gaitRightFootPose;
+    //    teoRightFootPose = gaitRightFootPose;
 
     return true;
 
@@ -896,8 +916,9 @@ long Rotation::RotatePoint(double & px, double & py, double & pz)
 
     //Rotation is computed as p'=q0*p*q0^-1
     kin::Quaternion oldP(0,px,py,pz),newP;
-    newP.FromProduct(oldP,q.Conjugate());
-    newP.FromProduct(q,newP);
+    /*newP.FromProduct(oldP,q.Conjugate());
+    newP.FromProduct(q,newP);*/
+    newP=q*oldP*q.Conjugate();
     //remember that newP is not a Quaternion, but the new rotated point.
 
     px=newP.Qi();
