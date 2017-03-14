@@ -18,18 +18,35 @@ class Quaternion
 {
 public:
     Quaternion();
-    bool FromAxisAngle(double ux,double uy,double uz,double angle);
+    Quaternion(double new_w, double new_i, double new_j, double new_k);
+    bool FromAxisAngle(const double ux, const double uy, const double uz, double angle);
     bool ToAxisAngle(double &ux, double &uy, double &uz, double &angle);
     bool FromProduct(const Quaternion &q1, const Quaternion &q2);
+    Quaternion Conjugate();
+    double Qw() const;
+    double Qi() const;
+    double Qj() const;
+    double Qk() const;
+
 private:
     double qw,qi,qj,qk;
     double sinPart,cosPart; //sin and cosine of the half angle
 };
 
+
+
 class Rotation
 {
 public:
-    Rotation() {}
+    Rotation();
+    Rotation(double new_ux, double new_uy, double new_uz, double new_angle);
+
+
+    long RotatePoint(double &px, double &py, double &pz);
+private:
+    //Quaternion q;
+    double ux,uy,uz; //axis
+    double angle; //angle
 };
 
 class Pose
@@ -108,7 +125,7 @@ public:
      * @brief GetAngle: Return the pose angle from the axis angle rotation.
      * @return
      */
-    double GetAngle();
+    double Angle() const;
 
     /**
      * @brief GetRotation: Copies the axis-angle rotation on axis_ and pose_angle variables,
@@ -118,7 +135,7 @@ public:
      * @param pose_angle
      * @return
      */
-    bool GetRotation(double &axis_i, double &axis_j, double &axis_k, double &pose_angle);
+    bool GetRotation(double &axis_i, double &axis_j, double &axis_k, double &pose_angle) const;
 
     /**
      * @brief GetRotation: Copies the axis-angle rotation on axis_ and pose_angle variables,
@@ -163,12 +180,15 @@ public:
      */
     bool ChangeRotation(double u2x, double u2y, double u2z, double angle2);
     bool ChangePose(Pose variation);
-    double GetUx() const;
+    double Ux() const;
 
-    double GetUy() const;
+    double Uy() const;
 
-    double GetUz() const;
+    double Uz() const;
 
+    long SetRotation(Quaternion newRotation);
+    kin::Pose ExtrinsicTransform(const kin::Pose &pose0);
+    Pose Inverse();
 private:
     double x,y,z; //position
     double ux,uy,uz; //axis
