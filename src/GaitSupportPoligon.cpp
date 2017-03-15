@@ -57,7 +57,7 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     //apply angle
     /*double cux,cuy,cuz,cangle;
     desiredRightFoot.GetRotation(cux,cuy,cuz,cangle);*/
-    desiredRightFoot.ChangeRotation(1,0,0,-ankleAngle);
+    desiredRightFoot.ChangeRotation(0,0,1,+ankleAngle);
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
@@ -75,7 +75,7 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     //-4-reset ankle position after landing
     //remove angle
     //desiredRightFoot.SetRotation(cux,cuy,cuz,cangle);
-    desiredRightFoot.ChangeRotation(1,0,0,ankleAngle);
+    desiredRightFoot.ChangeRotation(0,0,1,-ankleAngle);
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
@@ -140,7 +140,7 @@ bool GaitSupportPoligon::HalfStepForwardLS()
     //std::cout << "VALUES: "<< hipSideshift<< ","<< legHeight<< ","<<hipSideshift << ","<< ankleAngle<< ","<<std::endl;
 
     //apply angle
-    desiredLeftFoot.ChangeRotation(1,0,0,ankleAngle);
+    desiredLeftFoot.ChangeRotation(0,0,1,-ankleAngle);
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
@@ -159,7 +159,7 @@ bool GaitSupportPoligon::HalfStepForwardLS()
 
     //-9-reset ankle position after landing
     //remove angle
-    desiredLeftFoot.ChangeRotation(1,0,0,-ankleAngle);
+    desiredLeftFoot.ChangeRotation(0,0,1,+ankleAngle);
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
