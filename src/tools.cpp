@@ -13,12 +13,42 @@ Quaternion::Quaternion()
 
 }
 
+Quaternion::Quaternion(const Quaternion &new_q)
+{
+    *this=new_q;
+
+}
+
 Quaternion::Quaternion(double new_w, double new_i, double new_j, double new_k)
 {
     qw = new_w;
     qi = new_i;
     qj = new_j;
     qk = new_k;
+
+}
+
+Quaternion::Quaternion(const Quaternion & q1, const Quaternion & q2)
+{
+
+/*
+    qi = (+q1.Qi() * q2.Qw() + q1.Qj() * q2.Qk() - q1.Qk() * q2.Qj() + q1.Qw() * q2.Qi());
+    std::cout << "qi assignement: " << qi << ", " << (+q1.Qi() * q2.Qw() + q1.Qj() * q2.Qk() - q1.Qk() * q2.Qj() + q1.Qw() * q2.Qi()) << std::endl;
+    qj = -q1.Qi() * q2.Qk() + q1.Qj() * q2.Qw() + q1.Qk() * q2.Qi() + q1.Qw() * q2.Qj();
+    std::cout << "qj assignement: " << qj << ", "
+      << -q1.Qi() * q2.Qk() + q1.Qj() * q2.Qw() + q1.Qk() * q2.Qi() + q1.Qw() * q2.Qj() << std::endl;
+    qk = +q1.Qi() * q2.Qj() - q1.Qj() * q2.Qi() + q1.Qk() * q2.Qw() + q1.Qw() * q2.Qk();
+    std::cout << "qk assignement: " << qk << ", "
+      << +q1.Qi() * q2.Qj() - q1.Qj() * q2.Qi() + q1.Qk() * q2.Qw() + q1.Qw() * q2.Qk() << std::endl;
+    qw = -q1.Qi() * q2.Qi() - q1.Qj() * q2.Qj() - q1.Qk() * q2.Qk() + q1.Qw() * q2.Qw();
+    std::cout << "qw assignement: " << qw << ", "
+      << -q1.Qi() * q2.Qi() - q1.Qj() * q2.Qj() - q1.Qk() * q2.Qk() + q1.Qw() * q2.Qw() << std::endl;
+*/
+
+    qw = -q1.qi * q2.qi - q1.qj * q2.qj - q1.qk * q2.qk + q1.qw * q2.qw;
+    qi =  q1.qi * q2.qw + q1.qj * q2.qk - q1.qk * q2.qj + q1.qw * q2.qi;
+    qj = -q1.qi * q2.qk + q1.qj * q2.qw + q1.qk * q2.qi + q1.qw * q2.qj;
+    qk =  q1.qi * q2.qj - q1.qj * q2.qi + q1.qk * q2.qw + q1.qw * q2.qk;
 
 }
 
@@ -53,32 +83,7 @@ bool Quaternion::ToAxisAngle(double & ux, double & uy, double & uz, double & ang
 
 }
 
-bool Quaternion::FromProduct(const Quaternion & q1, const Quaternion & q2)
-{
 
-    /*     x =  q1.x * q2.w + q1.y * q2.z - q1.z * q2.y + q1.w * q2.x;
-    y = -q1.x * q2.z + q1.y * q2.w + q1.z * q2.x + q1.w * q2.y;
-    z =  q1.x * q2.y - q1.y * q2.x + q1.z * q2.w + q1.w * q2.z;
-    w = -q1.x * q2.x - q1.y * q2.y - q1.z * q2.z + q1.w * q2.w; */
-    qi = (+q1.Qi() * q2.Qw() + q1.Qj() * q2.Qk() - q1.Qk() * q2.Qj() + q1.Qw() * q2.Qi());
-    std::cout << "qi assignement: " << qi << ", " << (+q1.Qi() * q2.Qw() + q1.Qj() * q2.Qk() - q1.Qk() * q2.Qj() + q1.Qw() * q2.Qi()) << std::endl;
-    qj = -q1.Qi() * q2.Qk() + q1.Qj() * q2.Qw() + q1.Qk() * q2.Qi() + q1.Qw() * q2.Qj();
-    std::cout << "qj assignement: " << qj << ", "
-      << -q1.Qi() * q2.Qk() + q1.Qj() * q2.Qw() + q1.Qk() * q2.Qi() + q1.Qw() * q2.Qj() << std::endl;
-    qk = +q1.Qi() * q2.Qj() - q1.Qj() * q2.Qi() + q1.Qk() * q2.Qw() + q1.Qw() * q2.Qk();
-    std::cout << "qk assignement: " << qk << ", "
-      << +q1.Qi() * q2.Qj() - q1.Qj() * q2.Qi() + q1.Qk() * q2.Qw() + q1.Qw() * q2.Qk() << std::endl;
-    qw = -q1.Qi() * q2.Qi() - q1.Qj() * q2.Qj() - q1.Qk() * q2.Qk() + q1.Qw() * q2.Qw();
-    std::cout << "qw assignement: " << qw << ", "
-      << -q1.Qi() * q2.Qi() - q1.Qj() * q2.Qj() - q1.Qk() * q2.Qk() + q1.Qw() * q2.Qw() << std::endl;
-
-    //    qi =  q1.qi * q2.qw + q1.qj * q2.qk - q1.qk * q2.qj + q1.qw * q2.qi;
-    //    qj = -q1.qi * q2.qk + q1.qj * q2.qw + q1.qk * q2.qi + q1.qw * q2.qj;
-    //    qk =  q1.qi * q2.qj - q1.qj * q2.qi + q1.qk * q2.qw + q1.qw * q2.qk;
-    //    qw = -q1.qi * q2.qi - q1.qj * q2.qj - q1.qk * q2.qk + q1.qw * q2.qw;
-
-    return true;
-}
 
 Quaternion Quaternion::operator*(const Quaternion & q2)
 {
@@ -144,6 +149,7 @@ Pose::Pose(Pose initialPose, Pose finalPose)
     initialPose.GetPosition(x1,y1,z1);
     finalPose.GetPosition(x2,y2,z2);
 
+    ///TODO: fix to relative movement
     x=x2-x1;
     y=y2-y1;
     z=z2-z1;
@@ -162,6 +168,31 @@ Pose::Pose(Pose initialPose, Pose finalPose)
 
     //now rotation is based on initial pose and translation as well.
 
+
+}
+
+Pose Pose::ExtrinsicMoveTo(Pose finalPose)
+{
+    Pose result(finalPose.GetX()-x, finalPose.GetY()-y, finalPose.GetZ()-z);
+
+
+    //Rotation from  origin to initial
+    Rotation from0(ux,uy,uz,angle);
+
+    //Compute rotation from initialPose to common origin.
+    //result will be the relative rotation from pose to finalPose
+    result.SetRotation(-ux,-uy,-uz,angle);
+    result.ChangeRotation(finalPose.Ux(),finalPose.Uy(),finalPose.Uz(),finalPose.Angle());
+
+    double rux,ruy,ruz,rangle;
+    result.GetRotation(rux,ruy,ruz,rangle);
+    //Change origin for rotation.
+    //It is achieved by rotating the relative vector of rotation
+    from0.RotatePoint(rux,ruy,ruz);
+    //now rotation is based on initial Origin and translation as well.
+    result.SetRotation(rux,ruy,ruz,rangle);
+
+    return result;
 
 }
 
@@ -370,7 +401,10 @@ Pose Pose::TransformTo(Pose anotherPose)
     return transform;
 }
 */
-Pose Pose::ExtrinsicTransform(const kin::Pose & pose0)
+
+///TODO: Name is not good, can lead to mistake. Find a better name.
+/// Or find a better implementation and name.
+Pose Pose::WatchFromOriginOf(const kin::Pose & pose0)
 {
     kin::Pose extrinsic;
 
@@ -380,16 +414,16 @@ Pose Pose::ExtrinsicTransform(const kin::Pose & pose0)
     q0.FromAxisAngle(pose0.Ux(),pose0.Uy(),pose0.Uz(),pose0.Angle());
 
     //Rotation is computed as r'=q0*r*q0^-1
-    kin::Quaternion intRot(0,ux,uy,uz),extRot;
-    extRot.FromProduct(intRot,q0.Conjugate());
-    extRot.FromProduct(q0,extRot);
+    kin::Quaternion intRot(0,ux,uy,uz);
+    kin::Quaternion extRot;
+    extRot = q0*intRot*q0.Conjugate();
+    //extRot=q0*extRot;
     //remember that extRot is not a Quaternion, but the unit rotation axis.
     extrinsic.SetRotation(extRot.Qi(),extRot.Qj(),extRot.Qk(),angle);
 
     //Position is computed as p'=q0*p*q0^-1
     kin::Quaternion intPos(0,x,y,z),extPos;
-    extPos.FromProduct(intPos,q0.Conjugate());
-    extPos.FromProduct(q0,extPos);
+    extPos= q0*intPos*q0.Conjugate();
 
     //remember that extPos is not a Quaternion, but the (x,y,z) vector.
     extrinsic.SetPosition(extPos.Qi(),extPos.Qj(),extPos.Qk());
@@ -403,12 +437,16 @@ Pose Pose::Inverse()
 {
     Pose inverse(*this);
 
-    kin::Rotation directRotation(ux,uy,uz,angle);
+    kin::Rotation invRotation(-ux,-uy,-uz,angle);
+
+    inverse.SetRotation(-ux,-uy,-ux,angle);
 
     double ix,iy,iz;
     inverse.GetPosition(ix,iy,iz);
 
-    directRotation.RotatePoint(ix,iy,iz);
+    invRotation.RotatePoint(ix,iy,iz);
+    inverse.SetPosition(-ix,-iy,-iz);
+
 
     return inverse;
 }
@@ -577,7 +615,6 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
     //std::cout << "waypoint: " << newWaypoint.GetX() << "," << newWaypoint.GetY() << "," << newWaypoint.GetZ() << std::endl;
     //std::cout << "segment: " << segment.GetX() << "," << segment.GetY() << "," << segment.GetZ() << std::endl;
 
-    waypoints.push_back(newWaypoint);
 
 
     //compute velocities and update velocities vector
@@ -588,7 +625,14 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
     std::cout << "angular v: " << velocity.Ux() << "," << velocity.Uy() << "," << velocity.Uz() << "," << velocity.Angle() << std::endl;
     std::cout << "segment: " << segment.Ux() << "," << segment.Uy() << "," << segment.Uz() << "," << segment.Angle() << std::endl;
 
-    velocities.push_back(velocity);
+    velocitiesRel.push_back(velocity);
+
+    Pose segmentAbs = waypoints.back().ExtrinsicMoveTo(newWaypoint);
+    Pose velocityAbs;
+    segmentAbs.PoseFraction(velocityAbs,1/dt);
+    velocitiesAbs.push_back(velocityAbs);
+
+    waypoints.push_back(newWaypoint);
 
     return true;
 }
@@ -759,7 +803,7 @@ bool SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelo
 
     //This will happen most times when called sequentially.
 
-    samplePoseVelocity= velocities[segmentIndex];
+    samplePoseVelocity= velocitiesAbs[segmentIndex];
 
     return true;
 
@@ -925,7 +969,7 @@ long Rotation::RotatePoint(double & px, double & py, double & pz)
     py=newP.Qj();
     pz=newP.Qk();
 
-    return 0;
+    return 0;//no error
 
 
 }

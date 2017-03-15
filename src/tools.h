@@ -18,10 +18,13 @@ class Quaternion
 {
 public:
     Quaternion();
+    Quaternion(const Quaternion &new_q);
+    Quaternion(const Quaternion &q1, const Quaternion &q2);
     Quaternion(double new_w, double new_i, double new_j, double new_k);
     bool FromAxisAngle(const double ux, const double uy, const double uz, double angle);
     bool ToAxisAngle(double &ux, double &uy, double &uz, double &angle);
-    bool FromProduct(const Quaternion &q1, const Quaternion &q2);
+    //removed for errors calling with itself as q1 or q2
+    //bool FromProduct(const Quaternion &q1, const Quaternion &q2);
     Quaternion Conjugate();
     double Qw() const;
     double Qi() const;
@@ -188,8 +191,9 @@ public:
     double Uz() const;
 
     long SetRotation(Quaternion newRotation);
-    kin::Pose ExtrinsicTransform(const kin::Pose &pose0);
+    kin::Pose WatchFromOriginOf(const kin::Pose &pose0);
     Pose Inverse();
+    Pose ExtrinsicMoveTo(Pose finalPose);
 private:
     double x,y,z; //position
     double ux,uy,uz; //axis
@@ -305,7 +309,8 @@ public:
 private:
     std::vector<kin::Pose> waypoints;
     std::vector<kin::Pose> segments;
-    std::vector<kin::Pose> velocities;
+    std::vector<kin::Pose> velocitiesRel;
+    std::vector<kin::Pose> velocitiesAbs;
 
     kin::Pose segment; //transformation from last_wp to next_wp
     kin::Pose trajPointer; //
