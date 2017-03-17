@@ -66,8 +66,9 @@ protected:
 
     //support foot parameters
     double hipSideshift; //meters. Lateral hip movement for one leg support.
-    double hipLower; //meters. Hip lowering for step ik reachability.
+    double hipSquat; //meters. Hip lowering for step ik reachability.
     double legHeight; //meters. Heigth of one leg.
+    //double hipDistance; //meters. distance from root to hip joint.
 
     //step parameters
     double t;

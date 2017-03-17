@@ -32,8 +32,8 @@ Gait::Gait(kin::Pose initialRightFoot, kin::Pose initialLeftFoot)
 bool Gait::BeforeStep()
 {
     //Reduce hip elevation by changing z coordinate on both feet.
-    trajLeftFoot.move(0,0,hipLower);
-    trajRightFoot.move(0,0,hipLower);
+    trajLeftFoot.move(0,0,hipSquat);
+    trajRightFoot.move(0,0,hipSquat);
 
 }
 
@@ -56,7 +56,7 @@ bool Gait::SetSwingParameters( double swingFootDistance, double swingFootElevati
 bool Gait::SetHipParameters(double new_hipSideshift, double new_hipLower)
 {
     hipSideshift = new_hipSideshift;
-    hipLower = new_hipLower;
+    hipSquat = new_hipLower;
 
     return true;
 }
