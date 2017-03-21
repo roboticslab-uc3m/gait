@@ -347,6 +347,24 @@ private:
 }//end namespace teo
 
 
+namespace fdc //finite difference classes
+{
+
+class PhysicsVariable
+{
+public:
+    long Initialize(std::vector<double> initialState);
+    PhysicsVariable();
+
+    double BackwardFD(int derivativeOrder);
+
+    double GetOrder();
+private:
+    std::vector<double> state;
+};
+
+}//end namespace fdm
+
 int FindValueIndex(std::vector<double> vector, double value);
 int UpdateVectorPointer(const std::vector<double> & vector, const double & actual, double & next, double & last );
 

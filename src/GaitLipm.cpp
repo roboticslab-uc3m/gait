@@ -49,14 +49,11 @@ bool GaitLipm::HalfStepForwardRS()
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
 
-    //-2-balance over right foot
-    //get ankle angle that balances robot over right foot
-    ankleAngle = atan( hipSideshift / 2*sqrt(pow(legHeight,2)-pow(hipSideshift,2)) );
-    //std::cout << "VALUES: "<< hipSideshift<< ","<<legWeight << ","<< legHeight<< ","<<hipSideshift << ","<< ankleAngle<< ","<<std::endl;
-    //check angle sign before apply!!
-    //apply angle
-    /*double cux,cuy,cuz,cangle;
-    desiredRightFoot.GetRotation(cux,cuy,cuz,cangle);*/
+    //-2-ZMP balance over right foot
+
+    //feed zmp trajectory in time
+    //retrieve list of points same size as zmp trajectory
+
     desiredRightFoot.ChangeRotation(1,0,0,-ankleAngle);
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);

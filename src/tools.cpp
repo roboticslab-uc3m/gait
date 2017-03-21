@@ -5,7 +5,7 @@
 using namespace std;
 using namespace teo::kin;
 using namespace teo::tra;
-
+using namespace fdc;
 
 //quaternions
 Quaternion::Quaternion()
@@ -975,4 +975,38 @@ long Rotation::RotatePoint(double & px, double & py, double & pz)
 }
 
 
+
+
+long PhysicsVariable::Initialize(std::vector<double> initialState)
+{
+    state=initialState;
+}
+
+fdc::PhysicsVariable::PhysicsVariable()
+{
+    Initialize(std::vector<double>(3,0));
+
+}
+
+double PhysicsVariable::BackwardFD(int derivativeOrder)
+{
+    if (derivativeOrder>GetOrder())
+    {
+        std::cout << "Cant find derivative for this order. Variable has order : " << GetOrder() << std::endl;
+        return 0;
+    }
+
+    uint n_i=1;
+    for (uint i=0; i<derivativeOrder; i++)
+    {
+
+    }
+
+}
+
+double PhysicsVariable::GetOrder()
+{
+    return state.size();
+
+}
 
