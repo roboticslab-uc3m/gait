@@ -2,6 +2,7 @@
 #define TOOLS_H
 
 #include <vector>
+#include <deque>
 #include <map>
 #include <iostream>
 #include <fstream>      // std::ofstream
@@ -353,14 +354,22 @@ namespace fdc //finite difference classes
 class PhysicsVariable
 {
 public:
-    long Initialize(std::vector<double> initialState);
     PhysicsVariable();
 
     double BackwardFD(int derivativeOrder);
 
+    long Update(double newValue, double dt);
+
     double GetOrder();
 private:
-    std::vector<double> state;
+
+    long Initialize(std::vector<double> initialState);
+
+
+    long order;
+    std::vector<double> state; //current value [0] and derivatives of order [1],[2]...[n]
+    std::vector<double> former; //former value [0] and derivatives of order [1],[2]...[n]
+
 };
 
 }//end namespace fdm

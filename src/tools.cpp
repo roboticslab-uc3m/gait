@@ -980,6 +980,9 @@ long Rotation::RotatePoint(double & px, double & py, double & pz)
 long PhysicsVariable::Initialize(std::vector<double> initialState)
 {
     state=initialState;
+    order=state.size();
+    former.clear();
+    former.resize(state.size());
 }
 
 fdc::PhysicsVariable::PhysicsVariable()
@@ -1001,6 +1004,24 @@ double PhysicsVariable::BackwardFD(int derivativeOrder)
     {
 
     }
+
+}
+
+long PhysicsVariable::Update(double newValue, double dt)
+{
+    //first of all, actual state becomes former state
+    former=state;
+
+    //then update values for state
+    state[0]=newValue;
+
+    for (uint i=1; i<order; i++)
+    {
+        state[i]=(state[i-1]-former[i-1])/dt;
+
+    }
+    return 0;
+
 
 }
 
