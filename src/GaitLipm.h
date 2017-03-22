@@ -19,6 +19,11 @@ private:
     bool HalfStepForwardRS();
     bool HalfStepForwardLS();
 
+    long LipForceZMP(const double & xzmp, const double & yzmp, double & x);
+
+    physics::StateVariable mx,my,mz; //inverted pendulum x,y,z mass position from base (foot) variables
+
+
 };
 
 } //namespace teo

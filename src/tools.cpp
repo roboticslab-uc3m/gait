@@ -5,7 +5,7 @@
 using namespace std;
 using namespace teo::kin;
 using namespace teo::tra;
-using namespace fdc;
+using namespace physics;
 
 //quaternions
 Quaternion::Quaternion()
@@ -977,7 +977,7 @@ long Rotation::RotatePoint(double & px, double & py, double & pz)
 
 
 
-long PhysicsVariable::Initialize(std::vector<double> initialState)
+long StateVariable::Initialize(std::vector<double> initialState)
 {
     state=initialState;
     order=state.size();
@@ -985,13 +985,19 @@ long PhysicsVariable::Initialize(std::vector<double> initialState)
     former.resize(state.size());
 }
 
-fdc::PhysicsVariable::PhysicsVariable()
+StateVariable::StateVariable()
 {
     Initialize(std::vector<double>(3,0));
 
 }
 
-double PhysicsVariable::BackwardFD(int derivativeOrder)
+StateVariable::StateVariable(std::vector<double> initialState)
+{
+    Initialize(initialState);
+
+}
+
+double StateVariable::BackwardFD(int derivativeOrder)
 {
     if (derivativeOrder>GetOrder())
     {
@@ -1007,7 +1013,7 @@ double PhysicsVariable::BackwardFD(int derivativeOrder)
 
 }
 
-long PhysicsVariable::Update(double newValue, double dt)
+long StateVariable::Update(double newValue, double dt)
 {
     //first of all, actual state becomes former state
     former=state;
@@ -1018,16 +1024,61 @@ long PhysicsVariable::Update(double newValue, double dt)
     for (uint i=1; i<order; i++)
     {
         state[i]=(state[i-1]-former[i-1])/dt;
-
     }
     return 0;
 
 
 }
 
-double PhysicsVariable::GetOrder()
+double StateVariable::GetOrder()
 {
     return state.size();
+
+}
+
+
+long TimedVariable::Initialize(const std::deque<double> & newValues, const std::deque<double> newTimes)
+{
+    values = newValues;
+    times = newTimes;
+}
+
+TimedVariable::TimedVariable()
+{
+    Initialize(std::deque<double>(3,0), std::deque<double>(3,0));
+
+}
+
+double TimedVariable::BackwardFiniteDifference(uint diffOrder)
+{
+    if (diffOrder > values.size())
+    {
+        std::cout << "error in derivative order" << std::endl;
+        return 0;
+    }
+    std::vector<double> results;
+
+
+    for (uint i=0; i<diffOrder; i++)
+    {
+        std::cout<< "NOT READY!!! TODO:FINISH" << std::endl;
+    }
+
+
+}
+
+double TimedVariable::D1()
+{
+    return (values[0]-values[1])/times[0];
+
+}
+
+
+double TimedVariable::D2()
+{
+    double v1=(values[0]-values[1])/times[0];
+    double v2=(values[1]-values[2])/times[1];
+    return (v1-v2)/times[0];
 
 }
 

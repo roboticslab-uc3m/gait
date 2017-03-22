@@ -348,19 +348,21 @@ private:
 }//end namespace teo
 
 
-namespace fdc //finite difference classes
+namespace physics //physics classes
 {
 
-class PhysicsVariable
+class StateVariable
 {
 public:
-    PhysicsVariable();
+    StateVariable();
+    StateVariable(std::vector<double> initialState);
 
     double BackwardFD(int derivativeOrder);
 
     long Update(double newValue, double dt);
 
     double GetOrder();
+
 private:
 
     long Initialize(std::vector<double> initialState);
@@ -368,11 +370,27 @@ private:
 
     long order;
     std::vector<double> state; //current value [0] and derivatives of order [1],[2]...[n]
-    std::vector<double> former; //former value [0] and derivatives of order [1],[2]...[n]
+    std::vector<double> former; //former value [0] and derivatives of order [1],[2]...[n]    
 
 };
 
-}//end namespace fdm
+class TimedVariable
+{
+public:
+    long Initialize(const std::deque<double> &newValues, const std::deque<double> newTimes);
+    TimedVariable();
+
+    double BackwardFiniteDifference(uint diffOrder);
+    double D1();
+    double D2();
+
+private:
+
+    std::deque<double> values; //current value [0] and past values at dt intervals [1],[2]...[n]
+    std::deque<double> times; //dt between one value and former
+};
+
+}//end namespace physics
 
 int FindValueIndex(std::vector<double> vector, double value);
 int UpdateVectorPointer(const std::vector<double> & vector, const double & actual, double & next, double & last );

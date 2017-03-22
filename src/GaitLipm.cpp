@@ -51,6 +51,7 @@ bool GaitLipm::HalfStepForwardRS()
 
     //-2-ZMP balance over right foot
 
+
     //feed zmp trajectory in time
     //retrieve list of points same size as zmp trajectory
 
