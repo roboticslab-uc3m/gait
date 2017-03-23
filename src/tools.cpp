@@ -977,41 +977,45 @@ long Rotation::RotatePoint(double & px, double & py, double & pz)
 
 
 
-long StateVariable::Initialize(std::vector<double> initialState)
+long StateVariable::Initialize(std::vector<double> newFormer, std::vector<double> newInitial)
 {
-    state=initialState;
+    state = newInitial;
     order=state.size();
-    former.clear();
-    former.resize(state.size());
+    former = newFormer;
+}
+
+std::vector<double> StateVariable::getFormer() const
+{
+    return former;
+}
+
+std::vector<double> StateVariable::getState() const
+{
+    return state;
 }
 
 StateVariable::StateVariable()
 {
-    Initialize(std::vector<double>(3,0));
+    Initialize(std::vector<double>(3,0), std::vector<double>(3,0));
 
 }
 
-StateVariable::StateVariable(std::vector<double> initialState)
+StateVariable::StateVariable(std::vector<double> formerState, std::vector<double> initialState)
 {
-    Initialize(initialState);
+    Initialize(formerState, initialState);
 
 }
 
-double StateVariable::BackwardFD(int derivativeOrder)
+StateVariable::StateVariable(double newValue, double D1, double D2)
 {
-    if (derivativeOrder>GetOrder())
-    {
-        std::cout << "Cant find derivative for this order. Variable has order : " << GetOrder() << std::endl;
-        return 0;
-    }
 
-    uint n_i=1;
-    for (uint i=0; i<derivativeOrder; i++)
-    {
-
-    }
+    state = std::vector<double>{newValue,D1,D2};
+    order = state.size();
+    former.clear();
+    former.resize(order);
 
 }
+
 
 long StateVariable::Update(double newValue, double dt)
 {
@@ -1033,6 +1037,19 @@ long StateVariable::Update(double newValue, double dt)
 double StateVariable::GetOrder()
 {
     return state.size();
+
+}
+
+double StateVariable::D(uint dOrder)
+{
+    if (dOrder>order)
+    {
+        return 0;
+    }
+    else
+    {
+        return state[dOrder];
+    }
 
 }
 

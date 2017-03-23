@@ -12,7 +12,9 @@ class GaitLipm : public Gait
 {
 public:
     GaitLipm(kin::Pose initialRightFoot, kin::Pose initialLeftFoot, double newMass);
-
+    long LipmInitialState(physics::StateVariable mx0, physics::StateVariable my0, physics::StateVariable mz0);
+    long LipmInitialState(std::vector<double> xyzActual, std::vector<double> xyzFormer, double dt);
+    long LipZmpTrajectory(std::vector<double> & xwp, std::vector<double> & ywp, std::vector<double> & zwp, double dt);
 
 private:
     //Step Definitions.
@@ -20,7 +22,7 @@ private:
     bool HalfStepForwardLS();
 
     //long LipForceZMP(const double & xzmp, const double & yzmp, double & x);
-    long ChangeComPosition(double dt, double xzmp, double yzmp);
+    long ChangeMassPosition(double dt, double xzmp, double yzmp);
 
 
 

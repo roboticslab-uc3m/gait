@@ -29,6 +29,56 @@ GaitLipm::GaitLipm(kin::Pose initialRightFoot, kin::Pose initialLeftFoot, double
     k2 = height/gravity;
 }
 
+long GaitLipm::LipmInitialState(physics::StateVariable mx0, physics::StateVariable my0, physics::StateVariable mz0)
+{
+    mx=mx0;
+    my=my0;
+    mz=mz0;
+
+    return 0;
+}
+
+long GaitLipm::LipmInitialState(std::vector<double> xyzActual, std::vector<double> xyzFormer, double dt)
+{
+
+    mx = physics::StateVariable(xyzActual[0],(xyzActual[0]-xyzFormer[0])/dt,0);
+    my = physics::StateVariable(xyzActual[1],(xyzActual[1]-xyzFormer[1])/dt,0);
+    mz = physics::StateVariable(xyzActual[2],(xyzActual[2]-xyzFormer[2])/dt,0);
+    return 0;
+}
+
+
+long GaitLipm::LipZmpTrajectory(std::vector<double> &xwp, std::vector<double> &ywp, std::vector<double> &zwp, double dt)
+{
+    if( (xwp.size()<2)|(ywp.size()<2)|(zwp.size()<2) )
+    {
+        std::cout << "Please initialize x,y,z vectors with two values." << std::endl;
+        return -1;
+    }
+
+    //initalize the lipm
+    mx = physics::StateVariable(xwp.back(),(xwp.back()-xwp[xwp.size()-2])/dt,0);
+    my = physics::StateVariable(ywp.back(),(ywp.back()-ywp[xwp.size()-2])/dt,0);
+    mz = physics::StateVariable(zwp.back(),(zwp.back()-zwp[xwp.size()-2])/dt,0);
+
+    std::cout << "order: " << mx.GetOrder() << ", x: " << mx.D(0) << ", Dx: "  << mx.D(1) << ", D2x: "  << mx.D(2)  << std::endl;
+    std::cout << "order: " << my.GetOrder() << ", y: " << my.D(0) << ", Dy: "  << my.D(1) << ", D2y: "  << my.D(2)  << std::endl;
+    std::cout << "order: " << mz.GetOrder() << ", z: " << mz.D(0) << ", Dz: "  << mz.D(1) << ", D2z: "  << mz.D(2)  << std::endl;
+
+    std::cout << "std::abs(ywp.back()): " << std::abs(ywp.back()) << ", std::abs(ywp[0]): " << std::abs(ywp[0]) << std::endl;
+
+    //Compute trajectory for a lipm half cycle with zmp 0,0
+    for (uint i=0; i<5; i++) //while( std::abs(ywp.back()) < std::abs(ywp[0]) )
+    {
+        ChangeMassPosition(dt,0,0);
+        xwp.push_back( mx.D(0) );
+        ywp.push_back( my.D(0) );
+        zwp.push_back( mz.D(0) );
+        std::cout << "newx: " << mx.D(0)<< ", newy: " << my.D(0)<< ", newz: " << mz.D(0) << std::endl;
+    }
+
+}
+
 bool GaitLipm::HalfStepForwardRS()
 {
 
@@ -192,11 +242,31 @@ bool GaitLipm::HalfStepForwardLS()
 }
 
 
-long GaitLipm::ChangeComPosition(double dt, double xzmp, double yzmp)
+long GaitLipm::ChangeMassPosition(double dt, double xzmp, double yzmp)
 {
     double nx,ny;
 
-    nx = xzmp;
+    kv=k1/dt;
+    kp=(k2/dt*dt)+k1/dt;
+
+    //compute new x position based on xzmp and former x variable
+    nx = (xzmp-kp*mx.D(0)-kv*mx.D(1))/(1-kp);
+
+
+    kv=-k1/dt;
+    kp=(k2/dt*dt)-k1/dt;
+
+    //compute new y position based on xzmp and former y variable
+    ny = ( yzmp-kp*my.D(0)-kv*my.D(1) )/(1-kp);
+
+    std::cout << "-kv*my.D(1): " << my.D(1) << ", -kp*my.D(0): " << my.D(0) <<std::endl;
+
+    std::cout << "nx: " << nx << ", ny: " << ny <<std::endl;
+
+    mx.Update(nx,dt);
+    my.Update(ny,dt);
+
+    return 0;
 
 
 }
