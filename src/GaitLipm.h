@@ -13,17 +13,22 @@ class GaitLipm : public Gait
 public:
     GaitLipm(kin::Pose initialRightFoot, kin::Pose initialLeftFoot, double newMass);
 
+
 private:
-    //Pure virtual Definitions.
+    //Step Definitions.
     bool HalfStepForwardRS();
     bool HalfStepForwardLS();
 
-    long LipForceZMP(const double & xzmp, const double & yzmp, double & x);
+    //long LipForceZMP(const double & xzmp, const double & yzmp, double & x);
     long ChangeComPosition(double dt, double xzmp, double yzmp);
 
-    physics::StateVariable mx,my,mz; //currrent inverted pendulum x,y,z mass position from base (foot) variables
 
+
+    //Variables section
+    physics::StateVariable mx,my,mz; //currrent inverted pendulum x,y,z mass position from base (foot) variables
+    std::vector<double> trax,tray,traz,trat; //x,y,z, time trajectories
     double lipMass;
+    double k1,k2,kp,kv;
 
 };
 

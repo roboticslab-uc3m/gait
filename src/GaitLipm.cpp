@@ -19,7 +19,14 @@ GaitLipm::GaitLipm(kin::Pose initialRightFoot, kin::Pose initialLeftFoot, double
     Gait(initialRightFoot,initialLeftFoot)
 {
 
+    double gravity = 9.81;
+    double height = this->legHeight;
+    double inertia = newMass*height*height;
+
+
     lipMass=newMass;
+    k1 = inertia/(lipMass*9.81/*gravity*/);
+    k2 = height/gravity;
 }
 
 bool GaitLipm::HalfStepForwardRS()
@@ -184,8 +191,13 @@ bool GaitLipm::HalfStepForwardLS()
     return true;
 }
 
+
 long GaitLipm::ChangeComPosition(double dt, double xzmp, double yzmp)
 {
+    double nx,ny;
+
+    nx = xzmp;
+
 
 }
 
