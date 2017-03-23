@@ -11,8 +11,7 @@ namespace teo {
 class GaitLipm : public Gait
 {
 public:
-    GaitLipm(kin::Pose initialRightFoot, kin::Pose initialLeftFoot) :
-        Gait(initialRightFoot,initialLeftFoot){}
+    GaitLipm(kin::Pose initialRightFoot, kin::Pose initialLeftFoot, double newMass);
 
 private:
     //Pure virtual Definitions.
@@ -20,9 +19,11 @@ private:
     bool HalfStepForwardLS();
 
     long LipForceZMP(const double & xzmp, const double & yzmp, double & x);
+    long ChangeComPosition(double dt, double xzmp, double yzmp);
 
-    physics::StateVariable mx,my,mz; //inverted pendulum x,y,z mass position from base (foot) variables
+    physics::StateVariable mx,my,mz; //currrent inverted pendulum x,y,z mass position from base (foot) variables
 
+    double lipMass;
 
 };
 

@@ -15,6 +15,13 @@ using namespace teo;
 
 
 
+GaitLipm::GaitLipm(kin::Pose initialRightFoot, kin::Pose initialLeftFoot, double newMass) :
+    Gait(initialRightFoot,initialLeftFoot)
+{
+
+    lipMass=newMass;
+}
+
 bool GaitLipm::HalfStepForwardRS()
 {
 
@@ -175,5 +182,10 @@ bool GaitLipm::HalfStepForwardLS()
 
 
     return true;
+}
+
+long GaitLipm::ChangeComPosition(double dt, double xzmp, double yzmp)
+{
+
 }
 
