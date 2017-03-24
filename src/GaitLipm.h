@@ -15,6 +15,7 @@ public:
     long LipmInitialState(physics::StateVariable mx0, physics::StateVariable my0, physics::StateVariable mz0);
     long LipmInitialState(std::vector<double> xyzActual, std::vector<double> xyzFormer, double dt);
     long LipZmpTrajectory(std::vector<double> & xwp, std::vector<double> & ywp, std::vector<double> & zwp, double dt);
+    long LipmAngularResponse(std::vector<double> & tiltwp, double dt, double radius);
 
 private:
     //Step Definitions.
