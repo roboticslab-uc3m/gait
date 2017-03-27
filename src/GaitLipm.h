@@ -14,7 +14,19 @@ public:
     GaitLipm(kin::Pose initialRightFoot, kin::Pose initialLeftFoot, double newMass);
     long LipmInitialState(physics::StateVariable mx0, physics::StateVariable my0, physics::StateVariable mz0);
     long LipmInitialState(std::vector<double> xyzActual, std::vector<double> xyzFormer, double dt);
+
+    double GetSwingYInitialSpeed(double initialY, double swingTime);
     long LipZmpTrajectory(std::vector<double> & xwp, std::vector<double> & ywp, std::vector<double> & zwp, double dt);
+
+    /**
+     * @brief LipmAngularResponse: Angular response of an inverted pendulum. Give an initial trajectory,
+     * timestep, and pendulum length, and receive the trajectory.
+     * @param tiltwp <io> : Insert two angles for initial trajectory, then receive the following angles for
+     * the resulting trajectory of the lipm.
+     * @param dt <i> : time step for the trajectory.
+     * @param radius <i> : Pendulum length, distance to the mass.
+     * @return
+     */
     long LipmAngularResponse(std::vector<double> & tiltwp, double dt, double radius);
 
 private:

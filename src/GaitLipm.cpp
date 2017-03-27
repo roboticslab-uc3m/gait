@@ -47,6 +47,11 @@ long GaitLipm::LipmInitialState(std::vector<double> xyzActual, std::vector<doubl
     return 0;
 }
 
+double GaitLipm::GetSwingYInitialSpeed(double initialY, double swingTime)
+{
+    return initialY*( (k1/k2)-(1-swingTime) );
+}
+
 
 long GaitLipm::LipZmpTrajectory(std::vector<double> &xwp, std::vector<double> &ywp, std::vector<double> &zwp, double dt)
 {
