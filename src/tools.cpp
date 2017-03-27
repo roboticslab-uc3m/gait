@@ -149,12 +149,15 @@ Pose::Pose(Pose initialPose, Pose finalPose)
     initialPose.GetPosition(x1,y1,z1);
     finalPose.GetPosition(x2,y2,z2);
 
-    ///TODO: fix to relative movement
+
+    ///TODO: fix to relative movement check ¿Fixed?
     x=x2-x1;
     y=y2-y1;
     z=z2-z1;
-
-    //Rotation from initial to final trough origin
+    //Rotation from initial to origin
+    Rotation to0(-initialPose.Ux(),-initialPose.Uy(),-initialPose.Uz(),initialPose.Angle());
+    to0.RotatePoint(x,y,z);
+    x=-x;y=-y;z=-z;
 
     //Compute rotation from initialPose to common origin.
     initialPose.GetRotation(ux,uy,uz,angle);
@@ -392,6 +395,16 @@ bool Pose::ChangePosition(double dx, double dy, double dz)
     z+=dz;
     return true;
 
+}
+
+long Pose::CircularMotion(double xaxis, double yaxis, double zaxis, double ang)
+{
+    kin::Rotation cm(xaxis,yaxis, zaxis, ang);
+    cm.RotatePoint(x,y,z);
+
+    ChangeRotation(xaxis,yaxis, zaxis, ang);
+
+    return 0;
 }
 
 /*

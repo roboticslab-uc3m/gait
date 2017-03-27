@@ -101,6 +101,8 @@ public:
      */
     bool ChangePosition(double dx, double dy, double dz);
 
+    long CircularMotion(double xaxis, double yaxis, double zaxis, double ang);
+
     /**
      * @brief GetPosition: Copies actual pose coordinates on pose_ variables.
      * @param pose_x
