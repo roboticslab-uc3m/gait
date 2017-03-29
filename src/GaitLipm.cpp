@@ -27,6 +27,10 @@ GaitLipm::GaitLipm(kin::Pose initialRightFoot, kin::Pose initialLeftFoot, double
     lipMass=newMass;
     k1 = inertia/(lipMass*9.81/*gravity*/);
     k2 = height/gravity;
+
+    comDisplacement = (hipSideshift/2)*0.32;//32% is the weight percentage of legs
+    comHeight = 0.3;
+
 }
 
 long GaitLipm::LipmInitialState(physics::StateVariable mx0, physics::StateVariable my0, physics::StateVariable mz0)
@@ -47,13 +51,18 @@ long GaitLipm::LipmInitialState(std::vector<double> &xwp, std::vector<double> &y
     return 0;
 }
 
+long GaitLipm::LipmInitialState(const std::vector<double> &xyz0, const std::vector<double> &xyz1, const std::vector<double> &D)
+{
+
+}
+
 double GaitLipm::GetSwingYInitialSpeed(double initialY, double swingTime)
 {
     return initialY*( (k1/k2)-(1-swingTime) );
 }
 
 
-double GaitLipm::LipZmpTrajectoryWithInit(std::vector<double> &xwp, std::vector<double> &ywp, std::vector<double> &zwp, double dt)
+double GaitLipm::LipInitAndGetZmpTrajectory(std::vector<double> &xwp, std::vector<double> &ywp, std::vector<double> &zwp, double dt)
 {
     double timeSpent = 0;
     if( (xwp.size()<2)|(ywp.size()<2)|(zwp.size()<2) )
@@ -90,6 +99,9 @@ double GaitLipm::LipZmpTrajectory(std::vector<double> &xwp, std::vector<double> 
 {
     double timeSpent = 0;
 
+    xwp.clear();
+    ywp.clear();
+    zwp.clear();
 //    std::cout << "order: " << mx.GetOrder() << ", x: " << mx.D(0) << ", Dx: "  << mx.D(1) << ", D2x: "  << mx.D(2)  << std::endl;
 //    std::cout << "order: " << my.GetOrder() << ", y: " << my.D(0) << ", Dy: "  << my.D(1) << ", D2y: "  << my.D(2)  << std::endl;
 //    std::cout << "order: " << mz.GetOrder() << ", z: " << mz.D(0) << ", Dz: "  << mz.D(1) << ", D2z: "  << mz.D(2)  << std::endl;
@@ -169,6 +181,42 @@ bool GaitLipm::HalfStepForwardRS()
     //-2-ZMP balance over right foot
 
 
+    //define the pose of com from root.
+    kin::Pose comFromRoot(0,comDisplacement,comHeight);
+
+
+    //define the pose of com from the actual support foot.
+    kin::Pose tFootCom(desiredRightFoot,comFromRoot);
+
+
+    comFromRoot.Print();
+    desiredRightFoot.Print();
+    tFootCom.Print();
+
+    //pendulum mass variables x,y,z from the foot in the pendulum frame (z:height, y:swing, x:0)
+    mx = physics::StateVariable(comFromRoot.GetX() - desiredRightFoot.GetX(),0,0);
+    my = physics::StateVariable(comFromRoot.GetY() - desiredRightFoot.GetY(),-dy/dt,0);
+    mz = physics::StateVariable(comFromRoot.GetY() - desiredRightFoot.GetZ(),0,0);
+    //LipmInitialState(sx,sy,sz); (Already initialized in latter lines)
+
+
+    dt = LipZmpTrajectory(ptx,pty,ptz,0.01);
+    std::cout << "dt: " << dt << std::endl;
+    //update next y values for com from the foot
+
+    kin::Pose footfinal;
+
+    for (long i=0; i<ptx.size(); i++)
+    {
+        //update pendulum mass position
+        tFootCom.SetPosition(ptx[i],pty[i],ptz[i]);
+        //computation of foot position based on com position
+        footfinal = kin::Pose(comFromRoot.Inverse(),tFootCom.Inverse());
+        footfinal.Print();
+
+    }
+
+
     //feed zmp trajectory in time
     //retrieve list of points same size as zmp trajectory
 
@@ -178,12 +226,12 @@ bool GaitLipm::HalfStepForwardRS()
 
     //-3-left foot forward
     //forward up
-    desiredLeftFoot.ChangePosition(swingDistance/2, 0, swingElevation);
+    desiredLeftFoot.ChangePosition(kickDistance/2, 0, kickElevation);
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
     //forward down
-    desiredLeftFoot.ChangePosition(swingDistance/2, 0, -swingElevation);
+    desiredLeftFoot.ChangePosition(kickDistance/2, 0, -kickElevation);
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
@@ -198,8 +246,8 @@ bool GaitLipm::HalfStepForwardRS()
     desiredRightFoot.ChangePosition(-dx,-dy,-dz);
     desiredLeftFoot.ChangePosition(-dx,-dy,-dz);
     //also, move root x axis half a swing positive (feet x axis half a swing negative)
-    desiredRightFoot.ChangePosition(-swingDistance/2,0,0);
-    desiredLeftFoot.ChangePosition(-swingDistance/2,0,0);
+    desiredRightFoot.ChangePosition(-kickDistance/2,0,0);
+    desiredLeftFoot.ChangePosition(-kickDistance/2,0,0);
 
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
@@ -262,12 +310,12 @@ bool GaitLipm::HalfStepForwardLS()
 
     //-8-right foot forward
     //forward up
-    desiredRightFoot.ChangePosition(swingDistance/2, 0, swingElevation);
+    desiredRightFoot.ChangePosition(kickDistance/2, 0, kickElevation);
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
     //forward down
-    desiredRightFoot.ChangePosition(swingDistance/2, 0, -swingElevation);
+    desiredRightFoot.ChangePosition(kickDistance/2, 0, -kickElevation);
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
@@ -282,8 +330,8 @@ bool GaitLipm::HalfStepForwardLS()
     desiredRightFoot.ChangePosition(-dx,-dy,-dz);
     desiredLeftFoot.ChangePosition(-dx,-dy,-dz);
     //also, move root x axis half a swing positive (or feet x axis half a swing negative)
-    desiredRightFoot.ChangePosition(-swingDistance/2,0,0);
-    desiredLeftFoot.ChangePosition(-swingDistance/2,0,0);
+    desiredRightFoot.ChangePosition(-kickDistance/2,0,0);
+    desiredLeftFoot.ChangePosition(-kickDistance/2,0,0);
 
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);

@@ -64,12 +64,12 @@ bool GaitSupportPoligon::HalfStepForwardRS()
 
     //-3-left foot forward
     //forward up
-    desiredLeftFoot.ChangePosition(swingDistance/2, 0, swingElevation);
+    desiredLeftFoot.ChangePosition(kickDistance/2, 0, kickElevation);
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
     //forward down
-    desiredLeftFoot.ChangePosition(swingDistance/2, 0, -swingElevation);
+    desiredLeftFoot.ChangePosition(kickDistance/2, 0, -kickElevation);
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
@@ -85,8 +85,8 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     desiredRightFoot.ChangePosition(-dx,-dy,-dz);
     desiredLeftFoot.ChangePosition(-dx,-dy,-dz);
     //also, move root x axis half a swing positive (feet x axis half a swing negative)
-    desiredRightFoot.ChangePosition(-swingDistance/2,0,0);
-    desiredLeftFoot.ChangePosition(-swingDistance/2,0,0);
+    desiredRightFoot.ChangePosition(-kickDistance/2,0,0);
+    desiredLeftFoot.ChangePosition(-kickDistance/2,0,0);
 
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
@@ -153,12 +153,12 @@ bool GaitSupportPoligon::HalfStepForwardLS()
 
     //-8-right foot forward
     //forward up
-    desiredRightFoot.ChangePosition(swingDistance/2, 0, swingElevation);
+    desiredRightFoot.ChangePosition(kickDistance/2, 0, kickElevation);
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
     //forward down
-    desiredRightFoot.ChangePosition(swingDistance/2, 0, -swingElevation);
+    desiredRightFoot.ChangePosition(kickDistance/2, 0, -kickElevation);
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
@@ -175,8 +175,8 @@ bool GaitSupportPoligon::HalfStepForwardLS()
     desiredRightFoot.ChangePosition(-dx,-dy,-dz);
     desiredLeftFoot.ChangePosition(-dx,-dy,-dz);
     //also, move root x axis half a swing positive (or feet x axis half a swing negative)
-    desiredRightFoot.ChangePosition(-swingDistance/2,0,0);
-    desiredLeftFoot.ChangePosition(-swingDistance/2,0,0);
+    desiredRightFoot.ChangePosition(-kickDistance/2,0,0);
+    desiredLeftFoot.ChangePosition(-kickDistance/2,0,0);
 
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);

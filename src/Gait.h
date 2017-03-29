@@ -50,7 +50,7 @@ public:
      * @param swingFootElevation = The distance the floating foot will raise from ground on every step.
      * @return
      */
-    bool SetSwingParameters(double swingFootDistance, double swingFootElevation);
+    bool SetKickParameters(double swingFootDistance, double swingFootElevation);
     bool SetHipParameters(double new_hipSideshift, double new_hipLower);
 
 
@@ -60,8 +60,8 @@ protected:
     //parameters in meters, seconds
 
     //swing foot parameters
-    double swingElevation; //meters
-    double swingDistance; //meters
+    double kickElevation; //meters
+    double kickDistance; //meters
     bool startOnRightFootSupport;
 
     //support foot parameters
@@ -76,7 +76,7 @@ protected:
     long stepTotalPhases; //total number of phases in a step
 
     //initial foot poses
-    kin::Pose poseRf0,poseLf0;
+    kin::Pose initialPoseRightFoot,initialPoseLeftFoot;
 
     //trajectories based on root
     tra::SpaceTrajectory trajRightFoot, trajLeftFoot;

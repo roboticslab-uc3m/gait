@@ -371,6 +371,13 @@ double Pose::Uz() const
     return uz;
 }
 
+long Pose::Print()
+{
+    std::cout << "position: (" << x << ", " << y << ", " << z <<  ")" << std::endl;
+    std::cout << "rotation: (" << Ux() << ", " << Uy() << ", " << Uz() << ", " << Angle()*180/M_PI <<  ")" << std::endl;
+
+}
+
 /*bool Pose::PoseDifference( Pose otherPose, Pose & difference)
 {
     double x2,y2,z2;
@@ -615,9 +622,9 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
         dtp = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
         dtr = fabs(angle) / defaultRotationSpeed;
         dt= max(dtp,dtr);
-        std::cout << "dtp: " << dtp << " , dtr: " << dtr << std::endl;
+    /*    std::cout << "dtp: " << dtp << " , dtr: " << dtr << std::endl;
         std::cout << "Warning! Adding waypoint [" << waypoints.size()-1 << "] with default velocities. dt = " << dt << std::endl;
-
+*/
 
     }
     time_deltas.push_back(dt);
@@ -633,11 +640,11 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
     //compute velocities and update velocities vector
     Pose velocity;
     segment.PoseFraction(velocity,1/dt);
-
+/*
     std::cout << "velocity: " << velocity.GetX() << "," << velocity.GetY() << "," << velocity.GetZ() << std::endl;
     std::cout << "angular v: " << velocity.Ux() << "," << velocity.Uy() << "," << velocity.Uz() << "," << velocity.Angle() << std::endl;
     std::cout << "segment: " << segment.Ux() << "," << segment.Uy() << "," << segment.Uz() << "," << segment.Angle() << std::endl;
-
+*/
     velocitiesRel.push_back(velocity);
 
     Pose segmentAbs = waypoints.back().ExtrinsicMoveTo(newWaypoint);

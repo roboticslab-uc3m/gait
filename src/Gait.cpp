@@ -20,8 +20,11 @@ Gait::Gait(kin::Pose initialRightFoot, kin::Pose initialLeftFoot)
     trajRightFoot.SetInitialWaypoint(initialRightFoot);
     trajLeftFoot.SetInitialWaypoint(initialLeftFoot);
 
-    SetSwingParameters(0, 0);
-    SetHipParameters(0,0);
+    std::cout << "setting default gait parameters: " << std::endl;
+    SetKickParameters(0.05, 0.02); //(Kick distance, Kick height). revisar valores
+    SetHipParameters(0.10, 0.10); //(hip sideshift, hip squat). revisar estos valores
+    std::cout << "SetKickParameters( " << kickDistance << ", " << kickElevation << " )" << std::endl;
+    std::cout << "SetHipParameters( "<< hipSideshift << ", " << hipSquat << " )" <<std::endl;
     legHeight = initialLeftFoot.GetZ();
 
     startOnRightFootSupport = true;
@@ -45,10 +48,10 @@ bool Gait::SaveSpaceTrajectories(ofstream &fileRightFoot, ofstream &fileLeftFoot
     return true;
 }
 
-bool Gait::SetSwingParameters( double swingFootDistance, double swingFootElevation )
+bool Gait::SetKickParameters( double kickFloatingFootDistance, double kickFloatingFootElevation )
 {
-    swingDistance = swingFootDistance;
-    swingElevation = swingFootElevation;
+    kickDistance = kickFloatingFootDistance;
+    kickElevation = kickFloatingFootElevation;
 
     return true;
 }

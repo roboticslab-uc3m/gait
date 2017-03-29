@@ -193,6 +193,8 @@ public:
 
     double Uz() const;
 
+    long Print();
+
     long SetRotation(Quaternion newRotation);
     kin::Pose WatchFromOriginOf(const kin::Pose &pose0);
     Pose Inverse();

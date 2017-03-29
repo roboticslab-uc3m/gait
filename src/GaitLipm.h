@@ -14,9 +14,10 @@ public:
     GaitLipm(kin::Pose initialRightFoot, kin::Pose initialLeftFoot, double newMass);
     long LipmInitialState(physics::StateVariable mx0, physics::StateVariable my0, physics::StateVariable mz0);
     long LipmInitialState(std::vector<double> &xwp, std::vector<double> &ywp, std::vector<double> &zwp, double dt);
+    long LipmInitialState(const std::vector<double> &xyz0, const std::vector<double> &xyz1, const std::vector<double> &D);
 
     double GetSwingYInitialSpeed(double initialY, double swingTime);
-    double LipZmpTrajectoryWithInit(std::vector<double> & xwp, std::vector<double> & ywp, std::vector<double> & zwp, double dt);
+    double LipInitAndGetZmpTrajectory(std::vector<double> & xwp, std::vector<double> & ywp, std::vector<double> & zwp, double dt);
 
     /**
      * @brief LipmAngularResponse: Angular response of an inverted pendulum. Give an initial trajectory,
@@ -45,8 +46,10 @@ private:
 
     //Variables section
     physics::StateVariable mx,my,mz; //currrent inverted pendulum x,y,z mass position from base (foot) variables
-    std::vector<double> trax,tray,traz,trat; //x,y,z, time trajectories
+    std::vector<double> ptx,pty,ptz,ptt; //x,y,z, time trajectories
     double lipMass;
+    double comDisplacement;//y axis com difference over one foot
+    double comHeight;
     double k1,k2,kp,kv;
 
 };
