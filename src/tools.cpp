@@ -157,7 +157,7 @@ Pose::Pose(Pose initialPose, Pose finalPose)
     //Rotation from initial to origin
     Rotation to0(-initialPose.Ux(),-initialPose.Uy(),-initialPose.Uz(),initialPose.Angle());
     to0.RotatePoint(x,y,z);
-    x=-x;y=-y;z=-z;
+    //x=-x;y=-y;z=-z;
 
     //Compute rotation from initialPose to common origin.
     initialPose.GetRotation(ux,uy,uz,angle);
@@ -452,7 +452,7 @@ Pose Pose::Inverse()
 
     kin::Rotation invRotation(-ux,-uy,-uz,angle);
 
-    inverse.SetRotation(-ux,-uy,-ux,angle);
+    inverse.SetRotation(-ux,-uy,-uz,angle);
 
     double ix,iy,iz;
     inverse.GetPosition(ix,iy,iz);
