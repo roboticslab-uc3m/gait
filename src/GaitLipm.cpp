@@ -116,7 +116,7 @@ double GaitLipm::LipZmpTrajectory(std::vector<double> &xwp, std::vector<double> 
         ywp.push_back( my.D(0) );
         zwp.push_back( mz.D(0) );
         timeSpent += dt;
-        std::cout << "newx: " << mx.D(0)<< ", newy: " << my.D(0)<< ", newz: " << mz.D(0) << std::endl;
+        //std::cout << "newx: " << mx.D(0)<< ", newy: " << my.D(0)<< ", newz: " << mz.D(0) << std::endl;
     }
     while( std::abs(ywp.back()) <= std::abs(ywp[0]) );
 
@@ -183,64 +183,99 @@ bool GaitLipm::HalfStepForwardRS()
 
     //define the pose of com from root.
     kin::Pose comFromRoot(0,comDisplacement,comHeight);
+    kin::Pose rootFromCom = comFromRoot.Inverse();
+//    comFromRoot.Print("comFromRoot");
+//    rootFromCom.Print("rootFromCom");
 
 
     //define the pose of com from the actual support foot.
     kin::Pose tFootCom(desiredRightFoot,comFromRoot);
-
-
-    comFromRoot.Print();
-    desiredRightFoot.Print();
-    tFootCom.Print();
+    kin::Pose tComFoot = tFootCom.Inverse();
+//    tFootCom.Print("tFootCom");
+//    tComFoot.Print("tComFoot");
 
     //pendulum mass variables x,y,z from the foot in the pendulum frame (z:height, y:swing, x:0)
     mx = physics::StateVariable(comFromRoot.GetX() - desiredRightFoot.GetX(),0,0);
     my = physics::StateVariable(comFromRoot.GetY() - desiredRightFoot.GetY(),-dy/dt,0);
-    mz = physics::StateVariable(comFromRoot.GetY() - desiredRightFoot.GetZ(),0,0);
+    mz = physics::StateVariable(comFromRoot.GetZ() - desiredRightFoot.GetZ(),0,0);
     //LipmInitialState(sx,sy,sz); (Already initialized in latter lines)
 
 
-    dt = LipZmpTrajectory(ptx,pty,ptz,0.01);
-    std::cout << "dt: " << dt << std::endl;
+    dt=0.01;
+    double totalSwingTime = LipZmpTrajectory(ptx,pty,ptz,dt);
+    std::cout << "totalSwingTime: " << totalSwingTime << std::endl;
+
+    long nKickUp = (long)( ptx.size()/2 );
+    long nKickDown = ptx.size()-nKickUp;
+
+    double dxKick = kickDistance/ptx.size();
+    double dyKick = 0;
+    double dzKick = kickElevation/nKickUp;
+
     //update next y values for com from the foot
 
-    kin::Pose footfinal;
+    //kin::Pose footfinal;
 
-    for (long i=0; i<ptx.size(); i++)
+    for (long i=0; i<nKickUp; i++)
     {
         //update pendulum mass position
-        tFootCom.SetPosition(ptx[i],pty[i],ptz[i]);
+        tComFoot.SetPosition(ptx[i],-pty[i],-ptz[i]);
         //computation of foot position based on com position
-        footfinal = kin::Pose(comFromRoot.Inverse(),tFootCom.Inverse());
-        footfinal.Print();
+        desiredRightFoot = kin::Pose(rootFromCom,tComFoot);
+        desiredLeftFoot.ChangePosition(dxKick, dyKick, dzKick);
+
+//        desiredRightFoot.Print("desiredRightFoot");
+//        comFromRoot.Inverse().Print("comFromRoot.Inverse()");
+//        tFootCom.Inverse().Print("tFootCom.Inverse()");
+
+        trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
+        trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
     }
 
+    dz = -kickElevation/nKickDown;
 
-    //feed zmp trajectory in time
-    //retrieve list of points same size as zmp trajectory
+    for (long i=0; i<nKickDown; i++)
+    {
+        //update pendulum mass position
+        tComFoot.SetPosition(ptx[i],-pty[i],-ptz[i]);
+        //computation of foot position based on com position
+        desiredRightFoot = kin::Pose(rootFromCom,tComFoot);
+        desiredLeftFoot.ChangePosition(dxKick, dyKick, dzKick);
 
-    desiredRightFoot.ChangeRotation(1,0,0,-ankleAngle);
-    dt=trajRightFoot.AddWaypoint(desiredRightFoot);
-    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
+//        desiredRightFoot.Print("desiredRightFoot");
+//        comFromRoot.Inverse().Print("comFromRoot.Inverse()");
+//        tFootCom.Inverse().Print("tFootCom.Inverse()");
 
-    //-3-left foot forward
-    //forward up
-    desiredLeftFoot.ChangePosition(kickDistance/2, 0, kickElevation);
-    dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
-    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
+        trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
+        trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
-    //forward down
-    desiredLeftFoot.ChangePosition(kickDistance/2, 0, -kickElevation);
-    dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
-    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
+    }
 
-    //-4-reset ankle position after landing
-    //remove angle
-    //desiredRightFoot.SetRotation(cux,cuy,cuz,cangle);
-    desiredRightFoot.ChangeRotation(1,0,0,ankleAngle);
-    dt=trajRightFoot.AddWaypoint(desiredRightFoot);
-    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
+//    //feed zmp trajectory in time
+//    //retrieve list of points same size as zmp trajectory
+
+//    desiredRightFoot.ChangeRotation(1,0,0,-ankleAngle);
+//    dt=trajRightFoot.AddWaypoint(desiredRightFoot);
+//    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
+
+//    //-3-left foot forward
+//    //forward up
+//    desiredLeftFoot.ChangePosition(kickDistance/2, 0, kickElevation);
+//    dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
+//    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
+
+//    //forward down
+//    desiredLeftFoot.ChangePosition(kickDistance/2, 0, -kickElevation);
+//    dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
+//    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
+
+//    //-4-reset ankle position after landing
+//    //remove angle
+//    //desiredRightFoot.SetRotation(cux,cuy,cuz,cangle);
+//    desiredRightFoot.ChangeRotation(1,0,0,ankleAngle);
+//    dt=trajRightFoot.AddWaypoint(desiredRightFoot);
+//    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
     //-5-move root over center again (undo former feet movement)
     desiredRightFoot.ChangePosition(-dx,-dy,-dz);

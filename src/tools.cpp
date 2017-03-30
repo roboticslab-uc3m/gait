@@ -371,10 +371,10 @@ double Pose::Uz() const
     return uz;
 }
 
-long Pose::Print()
+long Pose::Print(std::string varName)
 {
-    std::cout << "position: (" << x << ", " << y << ", " << z <<  ")" << std::endl;
-    std::cout << "rotation: (" << Ux() << ", " << Uy() << ", " << Uz() << ", " << Angle()*180/M_PI <<  ")" << std::endl;
+    std::cout << varName << " position: (" << x << ", " << y << ", " << z <<  ")" << std::endl;
+    std::cout << varName << " rotation: (" << Ux() << ", " << Uy() << ", " << Uz() << ", " << Angle()*180/M_PI <<  ")" << std::endl;
 
 }
 
@@ -622,9 +622,9 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
         dtp = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
         dtr = fabs(angle) / defaultRotationSpeed;
         dt= max(dtp,dtr);
-    /*    std::cout << "dtp: " << dtp << " , dtr: " << dtr << std::endl;
+        std::cout << "dtp: " << dtp << " , dtr: " << dtr << std::endl;
         std::cout << "Warning! Adding waypoint [" << waypoints.size()-1 << "] with default velocities. dt = " << dt << std::endl;
-*/
+
 
     }
     time_deltas.push_back(dt);
