@@ -596,8 +596,10 @@ bool SpaceTrajectory::ShowData()
     std::cout << "vector time_totals";
     for (int i=0;i<time_totals.size();i++)
     {
-        std::cout << time_totals[i] << ", ";
+        std::cout << time_totals[i] << std::endl;
+        waypoints[i].Print("");
     }
+
     std::cout << std::endl;
 
 }

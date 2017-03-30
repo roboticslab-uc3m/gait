@@ -201,7 +201,7 @@ bool GaitLipm::HalfStepForwardRS()
     //LipmInitialState(sx,sy,sz); (Already initialized in previous lines)
 
 
-    dt=0.1;
+    dt=0.01;
     double totalSwingTime = LipZmpTrajectory(ptx,pty,ptz,dt);
     std::cout << "totalSwingTime: " << totalSwingTime << std::endl;
 
@@ -224,7 +224,7 @@ bool GaitLipm::HalfStepForwardRS()
         tComFoot.SetPosition(ptx[i],-pty[i],-ptz[i]);
         //computation of foot position based on com position
         desiredRightFoot = kin::Pose(rootFromCom,tComFoot);
-        //desiredLeftFoot.ChangePosition(dxKick, dyKick, dzKick);
+        desiredLeftFoot.ChangePosition(dxKick, dyKick, dzKick);
 
 //        desiredRightFoot.Print("desiredRightFoot");
 //        comFromRoot.Inverse().Print("comFromRoot.Inverse()");
@@ -237,7 +237,7 @@ bool GaitLipm::HalfStepForwardRS()
 
     dzKick = -kickElevation/nKickDown;
 
-    for (long i=nKickUp; i<nKickDown; i++)
+    for (long i=nKickUp; i<ptx.size(); i++)
     {
         //update pendulum mass position
         //As pt (mass point) is based on a frame with the same rotation as the com, and
@@ -245,9 +245,9 @@ bool GaitLipm::HalfStepForwardRS()
         tComFoot.SetPosition(ptx[i],-pty[i],-ptz[i]);
         //computation of foot position based on com position
         desiredRightFoot = kin::Pose(rootFromCom,tComFoot);
-        //desiredLeftFoot.ChangePosition(dxKick, dyKick, dzKick);
+        desiredLeftFoot.ChangePosition(dxKick, dyKick, dzKick);
 
-//        desiredRightFoot.Print("desiredRightFoot");
+        desiredRightFoot.Print("desiredRightFoot");
 //        comFromRoot.Inverse().Print("comFromRoot.Inverse()");
 //        tFootCom.Inverse().Print("tFootCom.Inverse()");
 
@@ -355,7 +355,7 @@ bool GaitLipm::HalfStepForwardLS()
     //LipmInitialState(sx,sy,sz); (Already initialized in previous lines)
 
 
-    dt=0.1;
+    dt=0.01;
     double totalSwingTime = LipZmpTrajectory(ptx,pty,ptz,dt);
     std::cout << "totalSwingTime: " << totalSwingTime << std::endl;
 
@@ -378,7 +378,7 @@ bool GaitLipm::HalfStepForwardLS()
         tComFoot.SetPosition(ptx[i],pty[i],-ptz[i]);
         //computation of foot position based on com position
         desiredLeftFoot = kin::Pose(rootFromCom,tComFoot);
-        //desiredRightFoot.ChangePosition(dxKick, dyKick, dzKick);
+        desiredRightFoot.ChangePosition(dxKick, dyKick, dzKick);
 
 //        desiredRightFoot.Print("desiredRightFoot");
 //        comFromRoot.Inverse().Print("comFromRoot.Inverse()");
@@ -391,7 +391,7 @@ bool GaitLipm::HalfStepForwardLS()
 
     dzKick = -kickElevation/nKickDown;
 
-    for (long i=nKickUp; i<nKickDown; i++)
+    for (long i=nKickUp; i<ptx.size(); i++)
     {
         //update pendulum mass position
         //As pt (mass point) is based on a frame with the same rotation as the com, and
@@ -399,7 +399,7 @@ bool GaitLipm::HalfStepForwardLS()
         tComFoot.SetPosition(ptx[i],pty[i],-ptz[i]);
         //computation of foot position based on com position
         desiredLeftFoot = kin::Pose(rootFromCom,tComFoot);
-        //desiredRightFoot.ChangePosition(dxKick, dyKick, dzKick);
+        desiredRightFoot.ChangePosition(dxKick, dyKick, dzKick);
 
 //        desiredRightFoot.Print("desiredRightFoot");
 //        comFromRoot.Inverse().Print("comFromRoot.Inverse()");
