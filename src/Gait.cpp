@@ -21,7 +21,7 @@ Gait::Gait(kin::Pose initialRightFoot, kin::Pose initialLeftFoot)
     trajLeftFoot.SetInitialWaypoint(initialLeftFoot);
 
     std::cout << "setting default gait parameters: " << std::endl;
-    SetKickParameters(0.05, 0.02); //(Kick distance, Kick height). revisar valores
+    SetKickParameters(0.05, 0.05); //(Kick distance, Kick height). revisar valores
     SetHipParameters(0.10, 0.10); //(hip sideshift, hip squat). revisar estos valores
     std::cout << "SetKickParameters( " << kickDistance << ", " << kickElevation << " )" << std::endl;
     std::cout << "SetHipParameters( "<< hipSideshift << ", " << hipSquat << " )" <<std::endl;

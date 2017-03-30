@@ -59,7 +59,7 @@ public:
 protected:
     //parameters in meters, seconds
 
-    //swing foot parameters
+    //kick foot parameters
     double kickElevation; //meters
     double kickDistance; //meters
     bool startOnRightFootSupport;
