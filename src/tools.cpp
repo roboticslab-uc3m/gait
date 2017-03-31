@@ -731,6 +731,12 @@ void SpaceTrajectory::setDefaultVelocity(double value)
     defaultVelocity = value;
 }
 
+/**
+ * @brief SpaceTrajectory::GetSample: Get the position and orientation for a specific time in a trajectory.
+ * @param sampleTime(i): Time for the requested trajectory.
+ * @param samplePose(o): Pose with position and orientation output.
+ * @return
+ */
 bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
 {
 
@@ -860,6 +866,7 @@ bool SpaceTrajectory::SaveToFile(std::ofstream &csvFile)
     double i,j,k,angle;
     for (int n=0; n<waypoints.size(); n++)
     {
+        csvFile << time_totals[i] << ",";
         //wpPose.GetPosition(x,y,z);
         waypoints[n].GetPosition(x,y,z);
         //wpPose.GetRotation(i,j,k,angle);

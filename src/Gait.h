@@ -23,7 +23,7 @@ public:
     Gait(kin::Pose initialRightFoot, kin::Pose initialLeftFoot);
 
 
-    bool BeforeStep();
+    long BeforeStep();
 
     /**
      * @brief This function will add "stepNumber" steps in forward direction, using
@@ -31,7 +31,7 @@ public:
      * @param stepNumber = Number of steps to add.
      * @return true at success.
      */
-    bool AddStepForward(int stepNumber);
+    long AddStepForward(int stepNumber);
 
 
     /**
@@ -41,7 +41,7 @@ public:
      * @param fileRightFoot: File (std::ofstream) for saving right foot trajectory.
      * @return true on success.
      */
-    bool SaveSpaceTrajectories(std::ofstream &fileRightFoot, std::ofstream &fileLeftFoot);
+    long SaveSpaceTrajectories(std::ofstream &fileRightFoot, std::ofstream &fileLeftFoot);
 
 
     /**
@@ -50,13 +50,13 @@ public:
      * @param swingFootElevation = The distance the floating foot will raise from ground on every step.
      * @return
      */
-    bool SetKickParameters(double swingFootDistance, double swingFootElevation);
-    bool SetHipParameters(double new_hipSideshift, double new_hipLower);
+    long SetKickParameters(double swingFootDistance, double swingFootElevation);
+    long SetHipParameters(double new_hipSideshift, double new_hipLower);
 
 
-    bool GetTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTrajectory& getLeftFoot);
+    long GetTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTrajectory& getLeftFoot);
 
-    bool AfterStep();
+    long AfterStep();
 protected:
     //parameters in meters, seconds
 
