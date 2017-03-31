@@ -56,6 +56,7 @@ public:
 
     bool GetTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTrajectory& getLeftFoot);
 
+    bool AfterStep();
 protected:
     //parameters in meters, seconds
 

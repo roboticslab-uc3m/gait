@@ -575,13 +575,13 @@ int SpaceTrajectory::UpdatePointers(double atTime)
     }
 
     //if no errors, store index values and times.
-    next_wp = last_wp+1; // next_wp >= 1 at this point
+    next_wp = last_wp+1; // next_wp >= 1 from here
     next_wpTime = time_totals[next_wp];
     last_wpTime = time_totals[last_wp];
 
     //recalculate transform between last_wp and next_wp (as a pose) for interpolation
     //and store at segment variable
-    segment = Pose(waypoints[last_wp],waypoints[next_wp]);
+    segment = waypoints[last_wp].ExtrinsicMoveTo(waypoints[next_wp]);//Pose(waypoints[last_wp],waypoints[next_wp]);
     segmentIndex = last_wp;
 
     std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << ", Segment index: " << segmentIndex << std::endl;

@@ -40,6 +40,14 @@ bool Gait::BeforeStep()
 
 }
 
+bool Gait::AfterStep()
+{
+    //Reduce hip elevation by changing z coordinate on both feet.
+    trajLeftFoot.move(0,0,-hipSquat);
+    trajRightFoot.move(0,0,-hipSquat);
+
+}
+
 bool Gait::SaveSpaceTrajectories(ofstream &fileRightFoot, ofstream &fileLeftFoot)
 {
 
