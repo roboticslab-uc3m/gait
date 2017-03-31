@@ -284,8 +284,8 @@ bool GaitLipm::HalfStepForwardRS()
     desiredRightFoot.ChangePosition(-dx,-dy,-dz);
     desiredLeftFoot.ChangePosition(-dx,-dy,-dz);
     //also, move root x axis half a swing positive (feet x axis half a swing negative)
-//    desiredRightFoot.ChangePosition(-kickDistance/2,0,0);
-//    desiredLeftFoot.ChangePosition(-kickDistance/2,0,0);
+    desiredRightFoot.ChangePosition(-kickDistance/2,0,0);
+    desiredLeftFoot.ChangePosition(-kickDistance/2,0,0);
 
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
@@ -323,6 +323,7 @@ bool GaitLipm::HalfStepForwardLS()
     dx=0-actualLeftFoot.GetX();
     dy=-hipSideshift;
     dz=0;
+
     desiredLeftFoot=actualLeftFoot;
     desiredLeftFoot.ChangePosition(dx,dy,dz);
 
@@ -375,7 +376,7 @@ bool GaitLipm::HalfStepForwardLS()
         //update pendulum mass position
         //As pt (mass point) is based on a frame with the same rotation as the com, and
         //position at the base of the foot, coordinates are the same with different signs.
-        tComFoot.SetPosition(ptx[i],pty[i],-ptz[i]);
+        tComFoot.SetPosition(ptx[i],-pty[i],-ptz[i]);
         //computation of foot position based on com position
         desiredLeftFoot = kin::Pose(rootFromCom,tComFoot);
         desiredRightFoot.ChangePosition(dxKick, dyKick, dzKick);
@@ -396,7 +397,7 @@ bool GaitLipm::HalfStepForwardLS()
         //update pendulum mass position
         //As pt (mass point) is based on a frame with the same rotation as the com, and
         //position at the base of the foot, coordinates are the same with different signs.
-        tComFoot.SetPosition(ptx[i],pty[i],-ptz[i]);
+        tComFoot.SetPosition(ptx[i],-pty[i],-ptz[i]);
         //computation of foot position based on com position
         desiredLeftFoot = kin::Pose(rootFromCom,tComFoot);
         desiredRightFoot.ChangePosition(dxKick, dyKick, dzKick);
@@ -414,8 +415,8 @@ bool GaitLipm::HalfStepForwardLS()
     desiredRightFoot.ChangePosition(-dx,-dy,-dz);
     desiredLeftFoot.ChangePosition(-dx,-dy,-dz);
     //also, move root x axis half a swing positive (or feet x axis half a swing negative)
-//    desiredRightFoot.ChangePosition(-kickDistance/2,0,0);
-//    desiredLeftFoot.ChangePosition(-kickDistance/2,0,0);
+    desiredRightFoot.ChangePosition(-kickDistance/2,0,0);
+    desiredLeftFoot.ChangePosition(-kickDistance/2,0,0);
 
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
