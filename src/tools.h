@@ -194,7 +194,7 @@ public:
 
     double Uz() const;
 
-    long Print(std::__cxx11::string varName);
+    long Print(std::string varName);
 
     long SetRotation(Quaternion newRotation);
     kin::Pose WatchFromOriginOf(const kin::Pose &pose0);
