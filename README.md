@@ -47,3 +47,12 @@ ENDIF (NOT GAIT_FOUND)
 ```
 
 Another example of use can be found at [gaitcontrol](https://github.com/roboticslab-uc3m/gaitcontrol), especially at `gaitcontrol/cmake` folder.
+
+## Status
+
+[![Build Status (Linux/OSX)](https://img.shields.io/travis/roboticslab-uc3m/gait/master.svg?label=Build Status (Linux/OSX))](https://travis-ci.org/roboticslab-uc3m/gait)
+
+[![Coverage Status](https://coveralls.io/repos/roboticslab-uc3m/gait/badge.svg)](https://coveralls.io/r/roboticslab-uc3m/gait)
+
+[![Issues](https://img.shields.io/github/issues/roboticslab-uc3m/gait.svg?label=Issues)](https://github.com/roboticslab-uc3m/gait/issues)
+
