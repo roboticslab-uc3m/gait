@@ -8,6 +8,7 @@
 #include <fstream>      // std::ofstream
 #include <iomanip>      // std::setprecision
 #include <math.h>       // std::sqrt
+#include <string>
 
 namespace teo
 {
