@@ -22,6 +22,10 @@ option(ENABLE_Gait "Choose if you want to compile Gait" TRUE)
 ### options: force default
 option(ENABLE_exampleExtraOption "Enable/disable option exampleExtraOption" TRUE)
 
+##### test and coverage options
+option(ENABLE_tests "Choose if you want to compile tests" TRUE)
+option(ENABLE_coverage "Choose if you want to enable coverage collection" FALSE)
+
 if(MSVC)
   MESSAGE(STATUS "Running on windows")    
   set(CMAKE_DEBUG_POSTFIX "d")
@@ -62,9 +66,18 @@ set(GAIT_INCLUDE_DIRS CACHE INTERNAL "appended header dirs" FORCE)
 set(GAIT_LINK_DIRS CACHE INTERNAL "appended link dirs" FORCE)
 set(GAIT_LIBRARIES CACHE INTERNAL "appended libraries" FORCE)
 
+if(ENABLE_coverage)
+  if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage") # enabling coverage
+  endif(CMAKE_COMPILER_IS_GNUCXX)
+endif(ENABLE_coverage)
+
 # add main contents
 #add_subdirectory(share)
 add_subdirectory(src)
+#if (ENABLE_tests)
+#    add_subdirectory(test)
+#endif (ENABLE_tests)
 
 if(NOT GAIT_PART_OF_PROJECT)
 
