@@ -6,6 +6,12 @@ IF (ENABLE_Gait)
 
 set(KEYWORD "Gait")
 
+#-- via http://stackoverflow.com/questions/20826135/passing-std-c11-to-cmakelists we'd think about:
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+#-- but @jgvictores really likes this guy's blog: https://crascit.com/2015/03/28/enabling-cxx11-in-cmake/
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Search for source code.
 file(GLOB folder_source *.cpp *.cc *.c)
 file(GLOB folder_header *.h)
