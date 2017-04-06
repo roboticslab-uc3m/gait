@@ -81,7 +81,7 @@ double GaitLipm::LipInitAndGetZmpTrajectory(std::vector<double> &xwp, std::vecto
     //std::cout << "std::abs(ywp.back()): " << std::abs(ywp.back()) << ", std::abs(ywp[0]): " << std::abs(ywp[0]) << std::endl;
 
     //Compute trajectory for a lipm half cycle with zmp 0,0
-    while( std::abs(ywp.back()) < std::abs(ywp[0]) )
+    while( fabs(ywp.back()) < fabs(ywp[0]) )
     {
         ChangeMassPosition(dt,0,0);
         xwp.push_back( mx.D(0) );
@@ -118,7 +118,7 @@ double GaitLipm::LipZmpTrajectory(std::vector<double> &xwp, std::vector<double> 
         timeSpent += dt;
         //std::cout << "newx: " << mx.D(0)<< ", newy: " << my.D(0)<< ", newz: " << mz.D(0) << std::endl;
     }
-    while( std::abs(ywp.back()) <= std::abs(ywp[0]) );
+    while( fabs(ywp.back()) <= fabs(ywp[0]) );
 
     return timeSpent;
 }
@@ -130,7 +130,7 @@ long GaitLipm::LipmAngularResponse(std::vector<double> &tiltwp, double dt, doubl
 
     double newTilt;
 
-    while( std::abs(tiltwp.back()) < std::abs(tiltwp[0]) )
+    while( fabs(tiltwp.back()) < fabs(tiltwp[0]) )
     {
         //from the solution of the second order pendulum equation
         newTilt = ( tilt.D(0)/(dt*dt) + tilt.D(1)/dt ) / ( -9.81/radius + 1/(dt*dt) );
