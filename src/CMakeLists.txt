@@ -6,6 +6,14 @@ IF (ENABLE_Gait)
 
 set(KEYWORD "Gait")
 
+#-- Not doing because requires cmake 3.1 [source of original code](https://crascit.com/2015/03/28/enabling-cxx11-in-cmake/):
+#set(CMAKE_CXX_STANDARD 11)
+#set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#-- Not doing because requires gcc/g++ 4.7 and higher. [source of original code](http://stackoverflow.com/questions/20826135/passing-std-c11-to-cmakelists):
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+#-- Lower than gcc/g++, as travis uses 4.6.3 [source of original code](https://github.com/travis-ci/travis-ci/issues/4634):
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+
 # Search for source code.
 file(GLOB folder_source *.cpp *.cc *.c)
 file(GLOB folder_header *.h)

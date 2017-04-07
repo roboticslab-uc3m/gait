@@ -8,6 +8,7 @@
 #include <fstream>      // std::ofstream
 #include <iomanip>      // std::setprecision
 #include <math.h>       // std::sqrt
+#include <string>
 
 namespace teo
 {
@@ -193,7 +194,7 @@ public:
 
     double Uz() const;
 
-    long Print(std::__cxx11::string varName);
+    long Print(std::string varName);
 
     long SetRotation(Quaternion newRotation);
     kin::Pose WatchFromOriginOf(const kin::Pose &pose0);
