@@ -62,6 +62,7 @@ set(GAIT_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 # let cmake use them
 list(APPEND CMAKE_MODULE_PATH ${GAIT_MODULE_PATH})
 
+set(GAIT_DEFINES CACHE INTERNAL "appended defines" FORCE)
 set(GAIT_INCLUDE_DIRS CACHE INTERNAL "appended header dirs" FORCE)
 set(GAIT_LINK_DIRS CACHE INTERNAL "appended link dirs" FORCE)
 set(GAIT_LIBRARIES CACHE INTERNAL "appended libraries" FORCE)

@@ -40,6 +40,7 @@ else (folder_source)
 endif (folder_source)
 
   # Exporting dependencies for GAITConfig.cmake quite manually for now...
+  set(GAIT_DEFINES ${GAIT_DEFINES} -std=c++0x CACHE INTERNAL "appended defines")
   set(GAIT_INCLUDE_DIRS ${GAIT_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} CACHE INTERNAL "appended libraries")
   set(GAIT_LIBRARIES ${GAIT_LIBRARIES} Gait CACHE INTERNAL "appended libraries")
 
