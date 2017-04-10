@@ -111,7 +111,7 @@ public:
      * @param pose_z
      * @return
      */
-    bool GetPosition(double &pose_x, double &pose_y, double &pose_z);
+    long GetPosition(double &pose_x, double &pose_y, double &pose_z);
 
     /**
      * @brief GetX: Return the pose x coordinate.
@@ -143,14 +143,14 @@ public:
      * @param pose_angle
      * @return
      */
-    bool GetRotation(double &axis_i, double &axis_j, double &axis_k, double &pose_angle) const;
+    long GetRotation(double &axis_i, double &axis_j, double &axis_k, double &pose_angle) const;
 
     /**
      * @brief GetRotation: Copies the axis-angle rotation on axis_ and pose_angle variables,
      * @param rotation: vetor of (x,y,z,angle)
      * @return
      */
-    bool GetRotation(std::vector<double> &rotation);
+    long GetRotation(std::vector<double> &rotation);
 
 
     /**
@@ -161,7 +161,7 @@ public:
      * @param pose_angle
      * @return
      */
-    bool SetRotation(double axis_i, double axis_j, double axis_k, double pose_angle);
+    long SetRotation(double axis_i, double axis_j, double axis_k, double pose_angle);
 
     //bool PoseDifference(Pose otherPose, Pose &difference);
 
@@ -173,9 +173,9 @@ public:
      * @param factor : The ratio defining the new pose. 0 for initial, 1 for final, other for halfways.
      * @return
      */
-    bool PoseInterpolation(Pose initialPose, Pose finalPose, double factor);
+    long PoseInterpolation(Pose initialPose, Pose finalPose, double factor);
 
-    bool PoseFraction(Pose &fraction, double factor);
+    long PoseFraction(Pose &fraction, double factor);
 
     /**
      * @brief ChangeRotation : Change the rotation of the pose. Added rotation is defined from the actual pose.
@@ -187,7 +187,7 @@ public:
      * @return
      */
     bool ChangeRotation(double u2x, double u2y, double u2z, double angle2);
-    bool ChangePose(Pose variation);
+    long ChangePose(Pose variation);
     double Ux() const;
 
     double Uy() const;
@@ -230,12 +230,12 @@ protected:
      * @param dof: The degree of freedom that will change the pose. Angle for rotations, distance for prismatic.
      * @return
      */
-    virtual bool changePose(double dof) {return true;}
+    virtual long changePose(double dof) {return true;}
 };
 
 class LinkRotZ : public Link
 {
-    bool changePose(double dof);
+    long changePose(double dof);
 
 };
 
@@ -287,14 +287,14 @@ public:
      */
     double AddWaypoint(const kin::Pose &waypoint);
     bool GetLastWaypoint(kin::Pose & waypoint);
-    bool SaveToFile(std::ofstream &csvFile);
+    long SaveToFile(std::ofstream &csvFile);
     bool GetWaypoint(int index, kin::Pose &getWaypoint);
     bool GetWaypoint(int index, kin::Pose &getWaypoint, double &time_total);
 
     int Size();
     double getDefaultVelocity() const;
     void setDefaultVelocity(double value);
-    bool GetSample(double sampleTime, kin::Pose & samplePose);
+    long GetSample(double sampleTime, kin::Pose & samplePose);
     bool GetSampleVelocity(double sampleTime, kin::Pose &samplePoseVelocity);
 
 
@@ -302,7 +302,7 @@ public:
     bool TrajectoryInit();
     int UpdatePointers(double atTime);
 
-    bool ShowData();
+    long ShowData();
 
     /**
      * @brief move: Change actual position by dx, dy, dz and store a new waypoint

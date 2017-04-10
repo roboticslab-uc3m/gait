@@ -204,7 +204,7 @@ Pose::Pose(Pose initialPose, Pose finalPose, double factor)
     PoseInterpolation(initialPose, finalPose, factor);
 }
 
-bool Pose::PoseInterpolation(Pose initialPose, Pose finalPose, double factor)
+long Pose::PoseInterpolation(Pose initialPose, Pose finalPose, double factor)
 {
     double x1,y1,z1;
     double x2,y2,z2;
@@ -215,20 +215,25 @@ bool Pose::PoseInterpolation(Pose initialPose, Pose finalPose, double factor)
     y=y1+((y2-y1)*factor);
     z=z1+((z2-z1)*factor);
 
+    return 0;
+
 }
 
-bool Pose::PoseFraction(Pose & fraction, double factor)
+long Pose::PoseFraction(Pose & fraction, double factor)
 {
     fraction.SetPosition(x*factor,y*factor,z*factor);
     fraction.SetRotation(ux,uy,uz,angle*factor);
+
+    return 0;
+
 }
 
-bool Pose::GetPosition(double &pose_x, double &pose_y, double &pose_z)
+long Pose::GetPosition(double &pose_x, double &pose_y, double &pose_z)
 {
     pose_x=x;
     pose_y=y;
     pose_z=z;
-    return true;
+    return 0;
 }
 
 double Pose::GetX() const
@@ -251,29 +256,29 @@ double Pose::Angle() const
     return angle;
 }
 
-bool Pose::GetRotation(double & axis_i, double & axis_j, double & axis_k, double & pose_angle) const
+long Pose::GetRotation(double & axis_i, double & axis_j, double & axis_k, double & pose_angle) const
 {
     axis_i=ux;
     axis_j=uy;
     axis_k=uz;
     pose_angle=angle;
-    return true;
+    return 0;
 }
 
-bool Pose::GetRotation(std::vector<double> & rotation)
+long Pose::GetRotation(std::vector<double> & rotation)
 {
     rotation.clear();
     rotation.push_back(ux);
     rotation.push_back(uy);
     rotation.push_back(uz);
     rotation.push_back(angle);
-    return true;
+    return 0;
 }
 
 
 
 
-bool Pose::SetRotation(double axis_i, double axis_j, double axis_k, double pose_angle)
+long Pose::SetRotation(double axis_i, double axis_j, double axis_k, double pose_angle)
 {
     ux=axis_i;
     uy=axis_j;
@@ -281,7 +286,7 @@ bool Pose::SetRotation(double axis_i, double axis_j, double axis_k, double pose_
     angle=pose_angle;
 
 
-    return true;
+    return 0;
 }
 
 long Pose::SetRotation(Quaternion newRotation)
@@ -341,7 +346,7 @@ bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
 
 }
 
-bool Pose::ChangePose(Pose variation)
+long Pose::ChangePose(Pose variation)
 {
     double x2,y2,z2;
     variation.GetPosition(x2,y2,z2);
@@ -352,6 +357,7 @@ bool Pose::ChangePose(Pose variation)
 
 
     ChangeRotation(u2x,u2y,u2z,angle2);
+    return 0;
 
 
 }
@@ -375,6 +381,8 @@ long Pose::Print(std::string varName)
 {
     std::cout << varName << " position: (" << x << ", " << y << ", " << z <<  ")" << std::endl;
     std::cout << varName << " rotation: (" << Ux() << ", " << Uy() << ", " << Uz() << ", " << Angle()*180/M_PI <<  ")" << std::endl;
+
+    return 0;
 
 }
 
@@ -475,9 +483,10 @@ Pose Pose::Inverse()
 
 
 
-bool LinkRotZ::changePose(double dof)
+long LinkRotZ::changePose(double dof)
 {
     end.SetRotation(0,0,1,dof);
+    return 0;
 
 }
 
@@ -590,7 +599,7 @@ int SpaceTrajectory::UpdatePointers(double atTime)
 
 }
 
-bool SpaceTrajectory::ShowData()
+long SpaceTrajectory::ShowData()
 {
 
     std::cout << "vector time_totals";
@@ -601,6 +610,7 @@ bool SpaceTrajectory::ShowData()
     }
 
     std::cout << std::endl;
+    return 0;
 
 }
 
@@ -737,7 +747,7 @@ void SpaceTrajectory::setDefaultVelocity(double value)
  * @param samplePose(o): Pose with position and orientation output.
  * @return
  */
-bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
+long SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
 {
 
     //This (if statement) only happens sometimes. At waypoints, or when calling random.
@@ -785,6 +795,7 @@ bool SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
     samplePose.ChangePose(trajPointer);
     //samplePose.PoseInterpolation(waypoints[last_wp], waypoints[next_wp], wpRatio);
 
+    return 0;
 
 }
 
@@ -859,7 +870,7 @@ bool SpaceTrajectory::GetLastWaypoint(Pose &waypoint)
     return true;
 }
 
-bool SpaceTrajectory::SaveToFile(std::ofstream &csvFile)
+long SpaceTrajectory::SaveToFile(std::ofstream &csvFile)
 {
     //Pose wpPose;
     double x,y,z;
@@ -879,6 +890,7 @@ bool SpaceTrajectory::SaveToFile(std::ofstream &csvFile)
         csvFile << k << ",";
         csvFile << angle << std::endl;
     }
+    return 0;
 
 
 }
@@ -1011,6 +1023,8 @@ long StateVariable::Initialize(std::vector<double> newFormer, std::vector<double
     state = newInitial;
     order=state.size();
     former = newFormer;
+    return 0;
+
 }
 
 std::vector<double> StateVariable::getFormer() const
@@ -1087,6 +1101,8 @@ long TimedVariable::Initialize(const std::deque<double> & newValues, const std::
 {
     values = newValues;
     times = newTimes;
+    return 0;
+
 }
 
 TimedVariable::TimedVariable()
@@ -1109,6 +1125,7 @@ double TimedVariable::BackwardFiniteDifference(uint diffOrder)
     {
         std::cout<< "NOT READY!!! TODO:FINISH" << std::endl;
     }
+    return 0;
 
 
 }
