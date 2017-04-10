@@ -24,7 +24,7 @@ option(ENABLE_exampleExtraOption "Enable/disable option exampleExtraOption" TRUE
 
 ##### test and coverage options
 option(ENABLE_tests "Choose if you want to compile tests" TRUE)
-option(ENABLE_coverage "Choose if you want to enable coverage collection" FALSE)
+option(ENABLE_coverage "Choose if you want to enable coverage collection" TRUE)
 
 if(MSVC)
   MESSAGE(STATUS "Running on windows")    
