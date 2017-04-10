@@ -52,7 +52,7 @@ Another example of use can be found at [gaitcontrol](https://github.com/robotics
 
 [![Build Status](https://travis-ci.org/roboticslab-uc3m/gait.svg?branch=master)](https://travis-ci.org/roboticslab-uc3m/gait)
 
-[![Coverage Status](https://coveralls.io/repos/roboticslab-uc3m/gait/badge.svg)](https://coveralls.io/r/roboticslab-uc3m/gait)
+[![Coverage Status](https://coveralls.io/repos/github/roboticslab-uc3m/gait/badge.svg)](https://coveralls.io/github/roboticslab-uc3m/gait)
 
 [![Issues](https://img.shields.io/github/issues/roboticslab-uc3m/gait.svg?label=Issues)](https://github.com/roboticslab-uc3m/gait/issues)
 
