@@ -50,8 +50,6 @@ Another example of use can be found at [gaitcontrol](https://github.com/robotics
 
 ## Status
 
-[//]: # ( [![Build Status (Linux/OSX)](https://img.shields.io/travis/roboticslab-uc3m/gait/master.svg?label=Build Status (Linux/OSX) )](https://travis-ci.org/roboticslab-uc3m/gait) )
-
 [![Build Status](https://travis-ci.org/roboticslab-uc3m/gait.svg?branch=master)](https://travis-ci.org/roboticslab-uc3m/gait)
 
 [![Coverage Status](https://coveralls.io/repos/roboticslab-uc3m/gait/badge.svg)](https://coveralls.io/r/roboticslab-uc3m/gait)
