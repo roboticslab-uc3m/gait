@@ -295,7 +295,7 @@ public:
     double getDefaultVelocity() const;
     void setDefaultVelocity(double value);
     long GetSample(double sampleTime, kin::Pose & samplePose);
-    bool GetSampleVelocity(double sampleTime, kin::Pose &samplePoseVelocity);
+    long GetSampleVelocity(double sampleTime, kin::Pose &samplePoseVelocity);
 
 
     bool SetInitialWaypoint( kin::Pose initialWaypoint);

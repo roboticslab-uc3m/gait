@@ -800,7 +800,7 @@ long SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
 }
 
 
-bool SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelocity)
+long SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelocity)
 {
 
     //This (if statement) only happens sometimes. At waypoints, or when calling random.
@@ -844,7 +844,7 @@ bool SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelo
 
     samplePoseVelocity= velocitiesAbs[segmentIndex];
 
-    return true;
+    return 0;
 
 }
 
