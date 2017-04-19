@@ -753,8 +753,9 @@ long SpaceTrajectory::GetSample(double sampleTime, Pose & samplePose)
     //This (if statement) only happens sometimes. At waypoints, or when calling random.
     if( (sampleTime>next_wpTime)|(sampleTime<last_wpTime) )
     {
+        errorCode = UpdatePointers(sampleTime);
 
-        if (UpdatePointers(sampleTime)<0) return false;
+        if (errorCode<0) return errorCode;
         /*        time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
         if (time_actual == time_totals.end())
         {
@@ -807,6 +808,9 @@ long SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelo
     //if sampleTime is outside actual segment
     if( (sampleTime>next_wpTime)|(sampleTime<last_wpTime) )
     {
+        errorCode = UpdatePointers(sampleTime);
+        if (errorCode<0) return errorCode;
+
         /* time_actual = lower_bound (time_totals.begin(),time_totals.end(),sampleTime);
         //std::cout << "time_totals;" << time_totals[*time_actual-1] << "-" << time_totals[*time_actual] << ",atTime:" << sampleTime;
 
@@ -836,7 +840,6 @@ long SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelo
         segmentIndex = last_wp;
 
         std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << ", Segment index: " << segmentIndex << std::endl;*/
-        if (UpdatePointers(sampleTime)<0) return false;
     }
 
 

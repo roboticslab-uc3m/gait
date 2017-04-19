@@ -342,6 +342,8 @@ private:
     std::map<double,Pose>::iterator it;
     std::pair<std::map<double,Pose>::iterator,bool> error;*/
 
+    long errorCode;
+
 
 };
 
