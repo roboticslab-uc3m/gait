@@ -123,6 +123,61 @@ double GaitLipm::LipZmpTrajectory(std::vector<double> &xwp, std::vector<double> 
     return timeSpent;
 }
 
+double GaitLipm::LipZmpRightFoot(std::vector<double> &xwp, std::vector<double> &ywp, std::vector<double> &zwp, double dt)
+{
+    double timeSpent = 0;
+
+    xwp.clear();
+    ywp.clear();
+    zwp.clear();
+//    std::cout << "order: " << mx.GetOrder() << ", x: " << mx.D(0) << ", Dx: "  << mx.D(1) << ", D2x: "  << mx.D(2)  << std::endl;
+//    std::cout << "order: " << my.GetOrder() << ", y: " << my.D(0) << ", Dy: "  << my.D(1) << ", D2y: "  << my.D(2)  << std::endl;
+//    std::cout << "order: " << mz.GetOrder() << ", z: " << mz.D(0) << ", Dz: "  << mz.D(1) << ", D2z: "  << mz.D(2)  << std::endl;
+
+    //std::cout << "std::abs(ywp.back()): " << std::abs(ywp.back()) << ", std::abs(ywp[0]): " << std::abs(ywp[0]) << std::endl;
+
+    //Compute trajectory for a lipm half cycle over right foot with zmp 0,0.1
+    do
+    {
+        ChangeMassPosition(dt,0,0.011);
+        xwp.push_back( mx.D(0) );
+        ywp.push_back( my.D(0) );
+        zwp.push_back( mz.D(0) );
+        timeSpent += dt;
+        //std::cout << "newx: " << mx.D(0)<< ", newy: " << my.D(0)<< ", newz: " << mz.D(0) << std::endl;
+    }
+    while( fabs(ywp.back()) <= fabs(ywp[0]) );
+
+    return timeSpent;
+}
+
+double GaitLipm::LipZmpLeftFoot(std::vector<double> &xwp, std::vector<double> &ywp, std::vector<double> &zwp, double dt)
+{
+    double timeSpent = 0;
+
+    xwp.clear();
+    ywp.clear();
+    zwp.clear();
+//    std::cout << "order: " << mx.GetOrder() << ", x: " << mx.D(0) << ", Dx: "  << mx.D(1) << ", D2x: "  << mx.D(2)  << std::endl;
+//    std::cout << "order: " << my.GetOrder() << ", y: " << my.D(0) << ", Dy: "  << my.D(1) << ", D2y: "  << my.D(2)  << std::endl;
+//    std::cout << "order: " << mz.GetOrder() << ", z: " << mz.D(0) << ", Dz: "  << mz.D(1) << ", D2z: "  << mz.D(2)  << std::endl;
+
+    //std::cout << "std::abs(ywp.back()): " << std::abs(ywp.back()) << ", std::abs(ywp[0]): " << std::abs(ywp[0]) << std::endl;
+
+    //Compute trajectory for a lipm half cycle over left foot with zmp 0,-0.1
+    do
+    {
+        ChangeMassPosition(dt,0,-0.011);
+        xwp.push_back( mx.D(0) );
+        ywp.push_back( my.D(0) );
+        zwp.push_back( mz.D(0) );
+        timeSpent += dt;
+        //std::cout << "newx: " << mx.D(0)<< ", newy: " << my.D(0)<< ", newz: " << mz.D(0) << std::endl;
+    }
+    while( fabs(ywp.back()) <= fabs(ywp[0]) );
+
+    return timeSpent;
+}
 
 long GaitLipm::LipmAngularResponse(std::vector<double> &tiltwp, double dt, double radius)
 {
@@ -202,7 +257,7 @@ bool GaitLipm::HalfStepForwardRS()
 
 
     dt=0.01;
-    double totalSwingTime = LipZmpTrajectory(ptx,pty,ptz,dt);
+    double totalSwingTime = LipZmpRightFoot(ptx,pty,ptz,dt);
     std::cout << "totalSwingTime: " << totalSwingTime << std::endl;
 
     long nKickUp = (long)( ptx.size()/2 );
@@ -357,7 +412,7 @@ bool GaitLipm::HalfStepForwardLS()
 
 
     dt=0.01;
-    double totalSwingTime = LipZmpTrajectory(ptx,pty,ptz,dt);
+    double totalSwingTime = LipZmpLeftFoot(ptx,pty,ptz,dt);
     std::cout << "totalSwingTime: " << totalSwingTime << std::endl;
 
     long nKickUp = (long)( ptx.size()/2 );

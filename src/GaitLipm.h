@@ -34,6 +34,8 @@ public:
 
     long ConvertLipTrajectory(kin::Pose robotOrigin);
 
+    double LipZmpLeftFoot(std::vector<double> &xwp, std::vector<double> &ywp, std::vector<double> &zwp, double dt);
+    double LipZmpRightFoot(std::vector<double> &xwp, std::vector<double> &ywp, std::vector<double> &zwp, double dt);
 private:
     //Step Definitions.
     bool HalfStepForwardRS();

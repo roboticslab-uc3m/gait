@@ -43,8 +43,9 @@ Gait::Gait(kin::Pose initialRightFoot, kin::Pose initialLeftFoot)
 long Gait::BeforeStep()
 {
     //Reduce hip elevation by changing z coordinate on both feet.
-    trajLeftFoot.move(0,0,hipSquat);
-    trajRightFoot.move(0,0,hipSquat);
+    trajLeftFoot.moveTimed(0,0,hipSquat,3);
+    trajRightFoot.moveTimed(0,0,hipSquat,3);
+
 
     return 0;
 

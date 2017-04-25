@@ -552,8 +552,8 @@ bool SpaceTrajectory::SetInitialWaypoint(kin::Pose initialWaypoint)
 
 bool SpaceTrajectory::TrajectoryInit()
 {
-    defaultVelocity = 0.05; //[m/s]
-    defaultRotationSpeed = 0.025; //[rad/sec]
+    defaultVelocity = 0.1; //[m/s]
+    defaultRotationSpeed = 0.05; //[rad/sec]
     next_wp = 0;
     last_wp = 0;
     next_wpTime = 0;
@@ -726,6 +726,25 @@ double SpaceTrajectory::move(double dx, double dy, double dz)
     return dt;
 }
 
+double SpaceTrajectory::moveTimed(double dx, double dy, double dz, double dt)
+{
+
+
+    //kin::Pose actual;
+    kin::Pose desired;
+
+    //get actual pose
+    GetLastWaypoint(desired);
+
+
+    //desired=actual;
+    desired.ChangePosition(dx,dy,dz);
+
+    AddTimedWaypoint(dt, desired);
+
+    return dt;
+}
+
 int SpaceTrajectory::Size()
 {
     return waypoints.size();
@@ -739,6 +758,12 @@ double SpaceTrajectory::getDefaultVelocity() const
 void SpaceTrajectory::setDefaultVelocity(double value)
 {
     defaultVelocity = value;
+}
+
+void SpaceTrajectory::setDefaultSpeeds(double vel, double rot)
+{
+    defaultVelocity = vel;
+    defaultRotationSpeed = rot;
 }
 
 /**
