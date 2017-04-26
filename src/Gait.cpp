@@ -26,7 +26,7 @@ Gait::Gait(kin::Pose initialRightFoot, kin::Pose initialLeftFoot)
     trajLeftFoot.SetInitialWaypoint(initialLeftFoot);
 
     std::cout << "setting default gait parameters: " << std::endl;
-    SetKickParameters(0.05, 0.05); //(Kick distance, Kick height). revisar valores
+    SetKickParameters(0.2, 0.2); //(Kick distance, Kick height). revisar valores
     SetHipParameters(0.10, 0.10); //(hip sideshift, hip squat). revisar estos valores
     std::cout << "SetKickParameters( " << kickDistance << ", " << kickElevation << " )" << std::endl;
     std::cout << "SetHipParameters( "<< hipSideshift << ", " << hipSquat << " )" <<std::endl;
@@ -57,9 +57,9 @@ long Gait::BeforeStep()
  */
 long Gait::AfterStep()
 {
-    //Reduce hip elevation by changing z coordinate on both feet.
-    trajLeftFoot.move(0,0,-hipSquat);
-    trajRightFoot.move(0,0,-hipSquat);
+    //Recover hip elevation by changing z coordinate on both feet.
+    trajLeftFoot.moveTimed(0,0,-hipSquat,3);
+    trajRightFoot.moveTimed(0,0,-hipSquat,3);
 
     return 0;
 }
