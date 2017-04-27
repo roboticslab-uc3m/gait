@@ -139,7 +139,7 @@ double GaitLipm::LipZmpRightFoot(std::vector<double> &xwp, std::vector<double> &
     //Compute trajectory for a lipm half cycle over right foot with zmp 0,0.1
     do
     {
-        ChangeMassPosition(dt,0,0.011);
+        ChangeMassPosition(dt,0,0.0695);
         xwp.push_back( mx.D(0) );
         ywp.push_back( my.D(0) );
         zwp.push_back( mz.D(0) );
@@ -167,7 +167,7 @@ double GaitLipm::LipZmpLeftFoot(std::vector<double> &xwp, std::vector<double> &y
     //Compute trajectory for a lipm half cycle over left foot with zmp 0,-0.1
     do
     {
-        ChangeMassPosition(dt,0,-0.011);
+        ChangeMassPosition(dt,0,-0.0695);
         xwp.push_back( mx.D(0) );
         ywp.push_back( my.D(0) );
         zwp.push_back( mz.D(0) );
@@ -266,6 +266,7 @@ bool GaitLipm::HalfStepForwardRS()
     double dxKick = kickDistance/ptx.size();
     double dyKick = 0;
     double dzKick = kickElevation/nKickUp;
+//    double dzKick = trajLeftFoot.getDefaultVelocity()*dt;
 
     //update next y values for com from the foot
 
@@ -290,7 +291,8 @@ bool GaitLipm::HalfStepForwardRS()
 
     }
 
-    dzKick = -kickElevation/nKickDown;
+//    dzKick = -kickElevation/nKickDown;
+    dzKick = -dzKick;
 
     for (long i=nKickUp; i<ptx.size(); i++)
     {
@@ -418,9 +420,14 @@ bool GaitLipm::HalfStepForwardLS()
     long nKickUp = (long)( ptx.size()/2 );
     long nKickDown = ptx.size()-nKickUp;
 
+//    double dxKick = kickDistance/ptx.size();
+//    double dyKick = 0;
+//    double dzKick = kickElevation/nKickUp;
+
     double dxKick = kickDistance/ptx.size();
     double dyKick = 0;
     double dzKick = kickElevation/nKickUp;
+//    double dzKick = trajRightFoot.getDefaultVelocity()*dt;
 
     //update next y values for com from the foot
 
@@ -445,7 +452,9 @@ bool GaitLipm::HalfStepForwardLS()
 
     }
 
-    dzKick = -kickElevation/nKickDown;
+//    dzKick = -kickElevation/nKickDown;
+    dzKick = -dzKick;
+
 
     for (long i=nKickUp; i<ptx.size(); i++)
     {
