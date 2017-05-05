@@ -139,7 +139,7 @@ double GaitLipm::LipZmpRightFoot(std::vector<double> &xwp, std::vector<double> &
     //Compute trajectory for a lipm half cycle over right foot with zmp 0,0.1
     do
     {
-        ChangeMassPosition(dt,0,0.0695);
+        ChangeMassPosition(dt,0,0.065);
         xwp.push_back( mx.D(0) );
         ywp.push_back( my.D(0) );
         zwp.push_back( mz.D(0) );
@@ -167,7 +167,7 @@ double GaitLipm::LipZmpLeftFoot(std::vector<double> &xwp, std::vector<double> &y
     //Compute trajectory for a lipm half cycle over left foot with zmp 0,-0.1
     do
     {
-        ChangeMassPosition(dt,0,-0.0695);
+        ChangeMassPosition(dt,0,-0.065);
         xwp.push_back( mx.D(0) );
         ywp.push_back( my.D(0) );
         zwp.push_back( mz.D(0) );
@@ -215,12 +215,12 @@ bool GaitLipm::HalfStepForwardRS()
 
 
     //strategy:
-    //-1-move root hipSideshift meters over right foot ( (0,-hipSideshift,z), z is actual foot elevation)
+    //-1-move root hipSideshift meters over right foot ( (0,hipSideshift,z), z is actual foot elevation)
     //calculate right foot
 
-    //origin (x,y,z) destination (0,0-hipSideshift,z)
+    //origin (x,y,z) destination (0,+initialPoseRightFoot.GetY()+hipSideshift,z)
     dx=0-actualRightFoot.GetX();
-    dy=+hipSideshift;
+    dy=+hipSideshift;//-actualRightFoot.GetY()+initialPoseRightFoot.GetY()+hipSideshift;
     dz=0;
     desiredRightFoot=actualRightFoot;
     desiredRightFoot.ChangePosition(dx,dy,dz);
@@ -291,6 +291,9 @@ bool GaitLipm::HalfStepForwardRS()
 
     }
 
+    double stay=0.0;
+    trajRightFoot.AddTimedWaypoint(stay,desiredRightFoot);
+    trajLeftFoot.AddTimedWaypoint(stay,desiredLeftFoot);
 //    dzKick = -kickElevation/nKickDown;
     dzKick = -dzKick;
 
@@ -376,9 +379,9 @@ bool GaitLipm::HalfStepForwardLS()
     //trajRightFoot.GetLastWaypoint(actualRightFoot);
     //trajLeftFoot.GetLastWaypoint(actualLeftFoot);
 
-    //origin (x,y,z) destination (0,0,z)
+    //origin (x,y,z) destination (0,+initialPoseLeftFoot.GetY()-hipSideshift,z)
     dx=0-actualLeftFoot.GetX();
-    dy=-hipSideshift;
+    dy=-hipSideshift;//-actualLeftFoot.GetY()+initialPoseLeftFoot.GetY()-hipSideshift;
     dz=0;
 
     desiredLeftFoot=actualLeftFoot;
@@ -452,6 +455,9 @@ bool GaitLipm::HalfStepForwardLS()
 
     }
 
+    double stay=0.0;
+    trajRightFoot.AddTimedWaypoint(stay,desiredRightFoot);
+    trajLeftFoot.AddTimedWaypoint(stay,desiredLeftFoot);
 //    dzKick = -kickElevation/nKickDown;
     dzKick = -dzKick;
 

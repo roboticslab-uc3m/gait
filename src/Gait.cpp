@@ -22,6 +22,8 @@ using namespace teo;
  */
 Gait::Gait(kin::Pose initialRightFoot, kin::Pose initialLeftFoot)
 {
+    initialPoseRightFoot = initialRightFoot;
+    initialPoseLeftFoot = initialLeftFoot;
     trajRightFoot.SetInitialWaypoint(initialRightFoot);
     trajLeftFoot.SetInitialWaypoint(initialLeftFoot);
 
@@ -45,6 +47,21 @@ long Gait::BeforeStep()
     //Reduce hip elevation by changing z coordinate on both feet.
     trajLeftFoot.moveTimed(0,0,hipSquat,3);
     trajRightFoot.moveTimed(0,0,hipSquat,3);
+
+    double lateralInitial=hipSideshift;
+    if (startOnRightFootSupport)
+    {
+        lateralInitial = -lateralInitial;
+    }
+
+    trajLeftFoot.moveTimed(0,lateralInitial,0,1);
+    trajRightFoot.moveTimed(0,lateralInitial,0,1);
+
+    trajLeftFoot.moveTimed(0,0,0,1);
+    trajRightFoot.moveTimed(0,0,0,1);
+
+    trajLeftFoot.move(0,-lateralInitial,0);
+    trajRightFoot.move(0,-lateralInitial,0);
 
 
     return 0;

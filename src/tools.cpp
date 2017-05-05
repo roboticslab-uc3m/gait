@@ -552,8 +552,8 @@ bool SpaceTrajectory::SetInitialWaypoint(kin::Pose initialWaypoint)
 
 bool SpaceTrajectory::TrajectoryInit()
 {
-    defaultVelocity = 0.1; //[m/s]
-    defaultRotationSpeed = 0.05; //[rad/sec]
+    defaultVelocity = 0.08; //[m/s]
+    defaultRotationSpeed = 0.04; //[rad/sec]
     next_wp = 0;
     last_wp = 0;
     next_wpTime = 0;
