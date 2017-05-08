@@ -139,7 +139,7 @@ double GaitLipm::LipZmpRightFoot(std::vector<double> &xwp, std::vector<double> &
     //Compute trajectory for a lipm half cycle over right foot with zmp 0,0.1
     do
     {
-        ChangeMassPosition(dt,0,0.065);
+        ChangeMassPosition(dt,0,0.04);
         xwp.push_back( mx.D(0) );
         ywp.push_back( my.D(0) );
         zwp.push_back( mz.D(0) );
@@ -167,7 +167,7 @@ double GaitLipm::LipZmpLeftFoot(std::vector<double> &xwp, std::vector<double> &y
     //Compute trajectory for a lipm half cycle over left foot with zmp 0,-0.1
     do
     {
-        ChangeMassPosition(dt,0,-0.065);
+        ChangeMassPosition(dt,0,-0.04);
         xwp.push_back( mx.D(0) );
         ywp.push_back( my.D(0) );
         zwp.push_back( mz.D(0) );
@@ -229,7 +229,9 @@ bool GaitLipm::HalfStepForwardRS()
     desiredLeftFoot=actualLeftFoot;
     desiredLeftFoot.ChangePosition(dx,dy,dz);
 
-    dt=trajRightFoot.AddWaypoint(desiredRightFoot);
+    dt = sqrt(dx*dx+dy*dy+dz*dz)/hipSpeed;
+
+    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
 
@@ -391,7 +393,9 @@ bool GaitLipm::HalfStepForwardLS()
     desiredRightFoot=actualRightFoot;
     desiredRightFoot.ChangePosition(dx,dy,dz);
 
-    dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
+    dt = sqrt(dx*dx+dy*dy+dz*dz)/hipSpeed;
+
+    trajLeftFoot.AddTimedWaypoint(dt, desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
 

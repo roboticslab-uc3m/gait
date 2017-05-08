@@ -51,7 +51,7 @@ public:
      * @return
      */
     long SetKickParameters(double swingFootDistance, double swingFootElevation);
-    long SetHipParameters(double new_hipSideshift, double new_hipLower);
+    long SetHipParameters(double new_hipSideshift, double new_hipSquat, double new_hipSpeed);
 
 
     long GetTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTrajectory& getLeftFoot);
@@ -68,6 +68,7 @@ protected:
     //support foot parameters
     double hipSideshift; //meters. Lateral hip movement for one leg support.
     double hipSquat; //meters. Hip lowering for step ik reachability.
+    double hipSpeed; //velocity of hip movements.
     double legHeight; //meters. Heigth of one leg.
     //double hipDistance; //meters. distance from root to hip joint.
 

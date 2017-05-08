@@ -29,7 +29,7 @@ Gait::Gait(kin::Pose initialRightFoot, kin::Pose initialLeftFoot)
 
     std::cout << "setting default gait parameters: " << std::endl;
     SetKickParameters(0.2, 0.2); //(Kick distance, Kick height). revisar valores
-    SetHipParameters(0.10, 0.10); //(hip sideshift, hip squat). revisar estos valores
+    SetHipParameters(0.10, 0.10, 0.15); //(hip sideshift, hip squat, hip speed). revisar estos valores
     std::cout << "SetKickParameters( " << kickDistance << ", " << kickElevation << " )" << std::endl;
     std::cout << "SetHipParameters( "<< hipSideshift << ", " << hipSquat << " )" <<std::endl;
     legHeight = initialLeftFoot.GetZ();
@@ -116,10 +116,11 @@ long Gait::SetKickParameters( double kickFloatingFootDistance, double kickFloati
  * @param new_hipLower: The distance the robot will lower the hip before the step.
  * @return 0 for success. negative for error.
  */
-long Gait::SetHipParameters(double new_hipSideshift, double new_hipLower)
+long Gait::SetHipParameters(double new_hipSideshift, double new_hipSquat, double new_hipSpeed)
 {
     hipSideshift = new_hipSideshift;
-    hipSquat = new_hipLower;
+    hipSquat = new_hipSquat;
+    hipSpeed = new_hipSpeed;
 
     return 0;
 }
