@@ -153,6 +153,8 @@ public:
     long GetRotation(std::vector<double> &rotation);
 
 
+    long GetPose(std::vector<double> &pose);
+
     /**
      * @brief SetRotation: Set a new pose rotation given an axis angle. Overwrites old rotation.
      * @param axis_i
@@ -200,12 +202,13 @@ public:
     kin::Pose WatchFromOriginOf(const kin::Pose &pose0);
     Pose Inverse();
     Pose ExtrinsicMoveTo(Pose finalPose);
+    long GetPoseMatrix(std::vector<double> &xyzRotationMatrix);
+    long GetRotationMatrix(std::vector<double> & rotation);
 private:
     double x,y,z; //position
     double ux,uy,uz; //axis
     double angle; //angle
     kin::Quaternion q1,q2,q3; //Not used in addrotation
-
 
 
 

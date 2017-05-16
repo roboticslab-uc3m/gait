@@ -275,6 +275,33 @@ long Pose::GetRotation(std::vector<double> & rotation)
     return 0;
 }
 
+long Pose::GetPoseMatrix(std::vector<double> & xyzRotationMatrix)
+{
+    xyzRotationMatrix[0]=x;
+    xyzRotationMatrix[1]=y;
+    xyzRotationMatrix[2]=z;
+
+}
+
+long Pose::GetRotationMatrix(std::vector<double> &rotation)
+{
+
+}
+
+long Pose::GetPose(std::vector<double> &pose)
+{
+    pose[0] = x;
+    pose[1] = y;
+    pose[2] = z;
+    pose[3] = ux;
+    pose[4] = uy;
+    pose[5] = uz;
+    pose[6] = angle;
+
+    return 0;
+
+}
+
 
 
 
