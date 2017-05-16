@@ -277,14 +277,46 @@ long Pose::GetRotation(std::vector<double> & rotation)
 
 long Pose::GetPoseMatrix(std::vector<double> & xyzRotationMatrix)
 {
+    if (xyzRotationMatrix.size()<12)
+    {
+        std::cerr << "Expected 12 value vector. Resizing" << std::endl;
+        xyzRotationMatrix.resize(12);
+    }
     xyzRotationMatrix[0]=x;
     xyzRotationMatrix[1]=y;
     xyzRotationMatrix[2]=z;
 
+    std::vector<double> rot(9);
+    GetRotationMatrix(rot);
+
+    for (int i=0; i<rot.size(); i++)
+    {
+        xyzRotationMatrix[i+3]=rot[i];
+    }
+
+    return 0;
 }
 
 long Pose::GetRotationMatrix(std::vector<double> &rotation)
 {
+    double c=cos(angle);
+    double s=sin(angle);
+    double t=1-c;
+
+    rotation.clear();
+    rotation.resize(9);
+
+    rotation[0] = t*ux*ux + c;
+    rotation[1] = t*ux*uy - uz*s;
+    rotation[2] = t*ux*uz + uy*s;
+    rotation[3] = t*ux*uy + uz*s;
+    rotation[4] = t*uy*uy + c;
+    rotation[5] = t*uy*uz - ux*s;
+    rotation[6] = t*ux*uz - uy*s;
+    rotation[7] = t*uy*z + ux*s;
+    rotation[8] = t*uz*uz + c;
+
+
 
 }
 
@@ -785,6 +817,11 @@ double SpaceTrajectory::getDefaultVelocity() const
 void SpaceTrajectory::setDefaultVelocity(double value)
 {
     defaultVelocity = value;
+}
+
+double SpaceTrajectory::GetTotalDuration()
+{
+    return time_totals.back();
 }
 
 void SpaceTrajectory::setDefaultSpeeds(double vel, double rot)

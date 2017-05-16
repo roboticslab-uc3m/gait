@@ -297,6 +297,7 @@ public:
     int Size();
     double getDefaultVelocity() const;
     void setDefaultVelocity(double value);
+    double GetTotalDuration();
     long GetSample(double sampleTime, kin::Pose & samplePose);
     long GetSampleVelocity(double sampleTime, kin::Pose &samplePoseVelocity);
 
