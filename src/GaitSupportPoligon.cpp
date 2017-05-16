@@ -59,7 +59,8 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     desiredRightFoot.ChangeRotation(1,0,0,-ankleAngle);
     //apply hip balance
     //desiredRightFoot.ChangePosition(0,+hipAngle,-hipAngle);//-cos(hipAngle)*hipSideshift,-sin(hipAngle)*hipSideshift);
-    dt=trajRightFoot.AddWaypoint(desiredRightFoot);
+    dt=2;
+    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
     //-3-left foot forward
@@ -78,7 +79,8 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     desiredRightFoot.ChangeRotation(1,0,0,+ankleAngle);
     //remove hip balance
     //desiredRightFoot.ChangePosition(0,-hipAngle,+hipAngle);//cos(hipAngle)*hipSideshift,sin(hipAngle)*hipSideshift);
-    dt=trajRightFoot.AddWaypoint(desiredRightFoot);
+    dt=2;
+    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
     //-5-move root over center again (undo former feet movement)
@@ -147,7 +149,8 @@ bool GaitSupportPoligon::HalfStepForwardLS()
     desiredLeftFoot.ChangeRotation(1,0,0,+ankleAngle);
     //apply hip balance
     //desiredLeftFoot.ChangePosition(0,-hipAngle,-hipAngle);//+cos(hipAngle)*hipSideshift,-sin(hipAngle)*hipSideshift);
-    dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
+    dt=2;
+    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
 
@@ -168,7 +171,8 @@ bool GaitSupportPoligon::HalfStepForwardLS()
     desiredLeftFoot.ChangeRotation(1,0,0,-ankleAngle);
     //remove hip balance
     //desiredLeftFoot.ChangePosition(0,+hipAngle,+hipAngle);//-cos(hipAngle)*hipSideshift,sin(hipAngle)*hipSideshift);
-    dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
+    dt=2;
+    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
     //-10-move root over center again (undo former feet movement)
