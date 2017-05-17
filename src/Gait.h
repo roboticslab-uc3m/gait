@@ -53,6 +53,8 @@ public:
     long SetKickParameters(double swingFootDistance, double swingFootElevation);
     long SetHipParameters(double new_hipSideshift, double new_hipSquat, double new_hipSpeed);
 
+    long SetDefaultSpeeds(double velocity, double rotspeed);
+
 
     long GetTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTrajectory& getLeftFoot);
 

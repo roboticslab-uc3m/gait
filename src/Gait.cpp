@@ -125,6 +125,12 @@ long Gait::SetHipParameters(double new_hipSideshift, double new_hipSquat, double
     return 0;
 }
 
+long Gait::SetDefaultSpeeds(double velocity, double rotspeed)
+{
+    trajLeftFoot.setDefaultSpeeds(velocity, rotspeed);
+    trajRightFoot.setDefaultSpeeds(velocity, rotspeed);
+}
+
 /**
  * @brief Gait::GetTrajectories: Getter for the current trajectory objects.
  * @param getRightFoot: right foot trajectory object.

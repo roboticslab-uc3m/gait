@@ -9,6 +9,8 @@ using namespace std;
 
 //kdl
 //#include <frames.hpp>
+#define rlaaOffset +3*0.017
+#define llaaOffset -3*0.017
 
 using namespace teo;
 
@@ -52,6 +54,7 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     //-2-balance over right foot
     //get ankle angle that balances robot over right foot
     ankleAngle = atan( hipSideshift / 2*sqrt(pow(legHeight,2)-pow(hipSideshift,2)) );
+    ankleAngle += rlaaOffset;
     hipAngle = 0.5*hipSquat;
     //std::cout << "VALUES: "<< hipSideshift<< ","<<legWeight << ","<< legHeight<< ","<<hipSideshift << ","<< ankleAngle<< ","<<std::endl;
     //check angle sign before apply!!
@@ -74,14 +77,7 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
-    //-4-reset ankle position after landing
-    //remove angle
-    desiredRightFoot.ChangeRotation(1,0,0,+ankleAngle);
-    //remove hip balance
-    //desiredRightFoot.ChangePosition(0,-hipAngle,+hipAngle);//cos(hipAngle)*hipSideshift,sin(hipAngle)*hipSideshift);
-    dt=2;
-    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
-    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
+
 
     //-5-move root over center again (undo former feet movement)
     desiredRightFoot.ChangePosition(-dx,-dy,-dz);
@@ -93,6 +89,14 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
+    //-4-reset ankle position after landing
+    //remove angle
+    desiredRightFoot.ChangeRotation(1,0,0,+ankleAngle);
+    //remove hip balance
+    //desiredRightFoot.ChangePosition(0,-hipAngle,+hipAngle);//cos(hipAngle)*hipSideshift,sin(hipAngle)*hipSideshift);
+    dt=2;
+    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
+    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
     //half step finished
 
@@ -140,13 +144,14 @@ bool GaitSupportPoligon::HalfStepForwardLS()
     //-7-balance over left foot.
     //get ankle angle that balances robot over left foot
     ankleAngle = atan( hipSideshift / 2*sqrt(pow(legHeight,2)-pow(hipSideshift,2)) );
+    ankleAngle += llaaOffset;
     hipAngle = 0.5*hipSquat;
 
     //check angle sign before apply!!
     //std::cout << "VALUES: "<< hipSideshift<< ","<< legHeight<< ","<<hipSideshift << ","<< ankleAngle<< ","<<std::endl;
 
     //apply angle
-    desiredLeftFoot.ChangeRotation(1,0,0,+ankleAngle);
+    desiredLeftFoot.ChangeRotation(1,0,0,-ankleAngle);
     //apply hip balance
     //desiredLeftFoot.ChangePosition(0,-hipAngle,-hipAngle);//+cos(hipAngle)*hipSideshift,-sin(hipAngle)*hipSideshift);
     dt=2;
@@ -166,14 +171,7 @@ bool GaitSupportPoligon::HalfStepForwardLS()
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
 
-    //-9-reset ankle position after landing
-    //remove angle
-    desiredLeftFoot.ChangeRotation(1,0,0,-ankleAngle);
-    //remove hip balance
-    //desiredLeftFoot.ChangePosition(0,+hipAngle,+hipAngle);//-cos(hipAngle)*hipSideshift,sin(hipAngle)*hipSideshift);
-    dt=2;
-    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
-    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
+
 
     //-10-move root over center again (undo former feet movement)
     desiredRightFoot.ChangePosition(-dx,-dy,-dz);
@@ -183,6 +181,15 @@ bool GaitSupportPoligon::HalfStepForwardLS()
     desiredLeftFoot.ChangePosition(-kickDistance/2,0,0);
 
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
+    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
+
+    //-9-reset ankle position after landing
+    //remove angle
+    desiredLeftFoot.ChangeRotation(1,0,0,+ankleAngle);
+    //remove hip balance
+    //desiredLeftFoot.ChangePosition(0,+hipAngle,+hipAngle);//-cos(hipAngle)*hipSideshift,sin(hipAngle)*hipSideshift);
+    dt=2;
+    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
     //one step finished
