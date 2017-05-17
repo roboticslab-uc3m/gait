@@ -9,8 +9,12 @@ using namespace std;
 
 //kdl
 //#include <frames.hpp>
-#define rlaaOffset +3*0.017
-#define llaaOffset +3*0.017
+#define rlaaOffset +3.5*0.017
+#define llaaOffset +3.5*0.017
+#define rlfyOffset -0.01
+#define llfyOffset +0.01
+#define rlfzOffset -0.005
+#define llfzOffset +0.005
 
 using namespace teo;
 
@@ -68,12 +72,7 @@ bool GaitSupportPoligon::HalfStepForwardRS()
 
     //-3-left foot forward
     //forward up
-    desiredLeftFoot.ChangePosition(kickDistance/2, 0, kickElevation);
-    dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
-    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
-
-    //forward down
-    desiredLeftFoot.ChangePosition(kickDistance/2, 0, -kickElevation);
+    desiredLeftFoot.ChangePosition(kickDistance/2, llfyOffset, kickElevation);
     dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
@@ -86,9 +85,16 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
+    //forward down
+    desiredLeftFoot.ChangePosition(kickDistance/2, llfyOffset, -kickElevation+llfzOffset);
+    dt=trajLeftFoot.AddWaypoint(desiredLeftFoot);
+    trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
+
+
+
     //-5-move root over center again (undo former feet movement)
     desiredRightFoot.ChangePosition(-dx,-dy,-dz);
-    desiredLeftFoot.ChangePosition(-dx,-dy,-dz);
+    desiredLeftFoot.ChangePosition(-dx,-dy,-dz-llfzOffset);
     //also, move root x axis half a swing positive (feet x axis half a swing negative)
     desiredRightFoot.ChangePosition(-kickDistance/2,0,0);
     desiredLeftFoot.ChangePosition(-kickDistance/2,0,0);
@@ -161,14 +167,10 @@ bool GaitSupportPoligon::HalfStepForwardLS()
 
     //-8-right foot forward
     //forward up
-    desiredRightFoot.ChangePosition(kickDistance/2, 0, kickElevation);
+    desiredRightFoot.ChangePosition(kickDistance/2, rlfyOffset, kickElevation);
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
-    //forward down
-    desiredRightFoot.ChangePosition(kickDistance/2, 0, -kickElevation);
-    dt=trajRightFoot.AddWaypoint(desiredRightFoot);
-    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
     //-9-reset ankle position after landing
     //remove angle
@@ -179,9 +181,16 @@ bool GaitSupportPoligon::HalfStepForwardLS()
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
     trajRightFoot.AddTimedWaypoint(dt,desiredRightFoot);
 
+    //forward down
+    desiredRightFoot.ChangePosition(kickDistance/2, rlfyOffset, -kickElevation-rlfzOffset);
+    dt=trajRightFoot.AddWaypoint(desiredRightFoot);
+    trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
+
+
+
 
     //-10-move root over center again (undo former feet movement)
-    desiredRightFoot.ChangePosition(-dx,-dy,-dz);
+    desiredRightFoot.ChangePosition(-dx,-dy,-dz+rlfzOffset);
     desiredLeftFoot.ChangePosition(-dx,-dy,-dz);
     //also, move root x axis half a swing positive (or feet x axis half a swing negative)
     desiredRightFoot.ChangePosition(-kickDistance/2,0,0);
