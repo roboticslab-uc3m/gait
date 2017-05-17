@@ -824,7 +824,7 @@ double SpaceTrajectory::GetTotalDuration()
     return time_totals.back();
 }
 
-void SpaceTrajectory::setDefaultSpeeds(double vel, double rot)
+void SpaceTrajectory::SetDefaultSpeeds(double vel, double rot)
 {
     defaultVelocity = vel;
     defaultRotationSpeed = rot;

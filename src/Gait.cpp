@@ -127,8 +127,8 @@ long Gait::SetHipParameters(double new_hipSideshift, double new_hipSquat, double
 
 long Gait::SetDefaultSpeeds(double velocity, double rotspeed)
 {
-    trajLeftFoot.setDefaultSpeeds(velocity, rotspeed);
-    trajRightFoot.setDefaultSpeeds(velocity, rotspeed);
+    trajLeftFoot.SetDefaultSpeeds(velocity, rotspeed);
+    trajRightFoot.SetDefaultSpeeds(velocity, rotspeed);
 }
 
 /**

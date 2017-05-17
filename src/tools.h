@@ -317,7 +317,7 @@ public:
      */
     double move(double dx, double dy, double dz);
     double moveTimed(double dx, double dy, double dz, double dt);
-    void setDefaultSpeeds(double vel, double rot);
+    void SetDefaultSpeeds(double vel, double rot);
 private:
     std::vector<kin::Pose> waypoints;
     std::vector<kin::Pose> segments;
