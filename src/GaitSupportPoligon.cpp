@@ -9,10 +9,10 @@ using namespace std;
 
 //kdl
 //#include <frames.hpp>
-#define rlaaOffset +3*0.017
-#define llaaOffset +3*0.017
-#define rlfyOffset -0.012
-#define llfyOffset +0.012
+#define rlaaOffset +3.5*0.017
+#define llaaOffset +3.5*0.017
+#define rlfyOffset -0.01
+#define llfyOffset +0.01
 #define rlfzOffset +0.01
 #define llfzOffset +0.01
 
