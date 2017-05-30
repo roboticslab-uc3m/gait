@@ -10,7 +10,7 @@
 #include <math.h>       // std::sqrt
 #include <string>
 
-namespace teo
+namespace roboticslab
 {
 
 namespace kin
@@ -358,7 +358,7 @@ private:
 
 
 
-}//end namespace teo
+}//end namespace roboticslab
 
 
 namespace physics //physics classes

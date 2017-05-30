@@ -1,8 +1,8 @@
 
 /**
-@brief The main, catch-all namespace for TEO.
+@brief The main, catch-all namespace for Robotics Lab UC3M.
  */
-namespace teo {}
+namespace roboticslab {}
 
 /**
  * \defgroup gait_libraries gait Libraries

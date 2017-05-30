@@ -3,7 +3,7 @@
 
 #include "tools.h"
 
-namespace teo
+namespace roboticslab
 {
 
 class Gait

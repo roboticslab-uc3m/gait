@@ -3,8 +3,8 @@
 
 
 using namespace std;
-using namespace teo::kin;
-using namespace teo::tra;
+using namespace roboticslab::kin;
+using namespace roboticslab::tra;
 using namespace physics;
 
 //quaternions
@@ -990,7 +990,7 @@ long SpaceTrajectory::SaveToFile(std::ofstream &csvFile)
 
 
 
-bool teoRightFootInDH(const teo::kin::Pose & gaitRightFootPose, teo::kin::Pose & teoRightFootPose)
+bool teoRightFootInDH(const roboticslab::kin::Pose & gaitRightFootPose, roboticslab::kin::Pose & teoRightFootPose)
 {
 
     //    teoRightFootPose = gaitRightFootPose;
@@ -1000,7 +1000,7 @@ bool teoRightFootInDH(const teo::kin::Pose & gaitRightFootPose, teo::kin::Pose &
 }
 
 
-bool teoLeftFootInDH(const teo::kin::Pose & gaitLeftFootPose, teo::kin::Pose & teoLeftFootPose)
+bool teoLeftFootInDH(const roboticslab::kin::Pose & gaitLeftFootPose, roboticslab::kin::Pose & teoLeftFootPose)
 {
     return true;
 

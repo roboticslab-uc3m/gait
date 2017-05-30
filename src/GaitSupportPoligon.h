@@ -2,7 +2,7 @@
 #include "tools.h"
 #include <stdio.h>
 
-namespace teo
+namespace roboticslab
 {
 
 /**

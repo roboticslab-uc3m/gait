@@ -6,7 +6,7 @@
 #include "tools.h"
 #include <stdio.h>
 
-namespace teo {
+namespace roboticslab {
 
 class GaitLipm : public Gait
 {
@@ -56,6 +56,6 @@ private:
 
 };
 
-} //namespace teo
+} //namespace roboticslab
 
 #endif // GAITLIPM_H
