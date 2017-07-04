@@ -22,6 +22,8 @@ public:
      */
     Gait(kin::Pose initialRightFoot, kin::Pose initialLeftFoot);
 
+    virtual ~Gait();
+
 
     long BeforeStep();
 
