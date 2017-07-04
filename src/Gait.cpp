@@ -38,6 +38,9 @@ Gait::Gait(kin::Pose initialRightFoot, kin::Pose initialLeftFoot)
 
 }
 
+Gait::~Gait()
+{}
+
 /**
  * @brief Gait::BeforeStep: Things to do before step (like Squat).
  * @return 0 for success. negative for error.
