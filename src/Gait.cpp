@@ -75,8 +75,8 @@ long Gait::BeforeStep()
 long Gait::AfterStep()
 {
     //Recover hip elevation by changing z coordinate on both feet.
-    trajLeftFoot.moveTimed(0,0,-hipSquat*0.95,3);
-    trajRightFoot.moveTimed(0,0,-hipSquat*0.95,3);
+    trajLeftFoot.move(0,0,-hipSquat*0.95);
+    trajRightFoot.move(0,0,-hipSquat*0.95);
 
     return 0;
 }
