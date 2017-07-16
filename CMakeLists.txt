@@ -4,8 +4,17 @@
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
-project(Gait)
+# Discard any value previously set.
+unset(GAIT_PART_OF_PROJECT)
 
+if(NOT ${PROJECT_NAME} STREQUAL "Project")
+    message(STATUS "Gait part of existing project: ${PROJECT_NAME}")
+    set(GAIT_PART_OF_PROJECT "")
+else()
+    project(Gait)
+endif()
+
+# Add suffix for debug libraries.
 if(MSVC)
     message(STATUS "Running on windows")    
     set(CMAKE_DEBUG_POSTFIX "d")
@@ -55,7 +64,7 @@ endif()
 # Add main contents.
 add_subdirectory(src)
 
-if(NOT GAIT_PART_OF_PROJECT)
+if(NOT DEFINED GAIT_PART_OF_PROJECT)
 
 # CMake installation path.
 if(WIN32 AND NOT CYGWIN)
@@ -88,4 +97,4 @@ install(EXPORT GAIT_EXPORT
 # Configure and create uninstall target.
 include(AddUninstallTarget)
 
-endif(NOT GAIT_PART_OF_PROJECT)
+endif(NOT DEFINED GAIT_PART_OF_PROJECT)
