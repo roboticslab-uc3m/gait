@@ -6,9 +6,6 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 project(Gait)
 
-### options: cpp libraries
-option(ENABLE_Gait "Choose if you want to compile Gait" TRUE)
-
 if(MSVC)
     message(STATUS "Running on windows")    
     set(CMAKE_DEBUG_POSTFIX "d")

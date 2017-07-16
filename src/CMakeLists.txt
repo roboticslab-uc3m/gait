@@ -1,5 +1,3 @@
-if(ENABLE_Gait)
-
 #-- Compiler issues, see target_compile_options() command below and https://github.com/roboticslab-uc3m/gait/issues/6
 #--------------------------------------------------------------------------------------------------------------------
 #-- Not doing because requires cmake 3.1 [source of original code](https://crascit.com/2015/03/28/enabling-cxx11-in-cmake/):
@@ -45,5 +43,3 @@ install(TARGETS Gait
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
-endif()
