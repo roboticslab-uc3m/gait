@@ -1,5 +1,8 @@
 #include "Oscillator.hpp"
 
+#include <math.h>
+#include <iostream>
+
 Oscillator::Oscillator()
 {
 

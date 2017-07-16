@@ -2,7 +2,6 @@
 
 
 #include <iostream>
-#include <vector>
 #include <math.h>       /* atan, sqrt */
 
 using namespace std;

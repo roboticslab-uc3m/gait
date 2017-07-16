@@ -2,9 +2,6 @@
 #define OSCILLATOR_HPP
 
 #include <vector>
-#include <math.h>
-
-#include "tools.h"
 
 class Oscillator
 {

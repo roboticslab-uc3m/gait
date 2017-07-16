@@ -25,6 +25,15 @@ add_library(Gait Gait.cpp
                  ZeroMomentPoint.cpp
                  ZeroMomentPoint.hpp)
 
+set_property(TARGET Gait PROPERTY PUBLIC_HEADER Gait.h
+                                                GaitLipm.h
+                                                #GaitPatterns.hpp
+                                                GaitSupportPoligon.h
+                                                #Oscillator.hpp
+                                                tools.h
+                                                #ZeroMomentPoint.hpp
+                                                )
+
 target_compile_options(Gait PRIVATE "-std=c++0x")
 
 target_include_directories(Gait PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
@@ -34,6 +43,7 @@ install(TARGETS Gait
         EXPORT GAIT_EXPORT
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 endif()

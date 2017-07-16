@@ -1,10 +1,10 @@
 #ifndef GAITLIPM_H
 #define GAITLIPM_H
 
+#include <vector>
 
 #include "Gait.h"
 #include "tools.h"
-#include <stdio.h>
 
 namespace roboticslab {
 

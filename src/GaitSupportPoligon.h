@@ -1,6 +1,8 @@
+#ifndef __GAIT_SUPPORT_POLIGON_H__
+#define __GAIT_SUPPORT_POLIGON_H__
+
 #include "Gait.h"
 #include "tools.h"
-#include <stdio.h>
 
 namespace roboticslab
 {
@@ -35,3 +37,5 @@ private:
 
 
 }
+
+#endif  // __GAIT_SUPPORT_POLIGON_H__
