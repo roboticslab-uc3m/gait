@@ -1,11 +1,10 @@
+#include "GaitSupportPoligon.h"
+
 #include <iostream>
-#include <vector>
 #include <math.h>       /* atan, sqrt */
 
 using namespace std;
 
-
-#include "GaitSupportPoligon.h"
 
 //kdl
 //#include <frames.hpp>

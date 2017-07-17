@@ -1,6 +1,8 @@
 #ifndef GAIT_H
 #define GAIT_H
 
+#include <fstream>  // std::ofstream
+
 #include "tools.h"
 
 namespace roboticslab
