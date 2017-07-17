@@ -35,7 +35,7 @@ set_property(TARGET Gait PROPERTY PUBLIC_HEADER Gait.h
                                                 #ZeroMomentPoint.hpp
                                                 )
 
-target_compile_options(Gait PRIVATE "-std=c++0x")
+target_compile_options(Gait PUBLIC "-std=c++0x")
 
 target_include_directories(Gait PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
