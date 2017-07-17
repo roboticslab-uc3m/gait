@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 # Discard any value previously set.
 unset(GAIT_PART_OF_PROJECT)
 
-if(NOT ${PROJECT_NAME} STREQUAL "Project")
+if(NOT PROJECT_NAME STREQUAL "Project")
     message(STATUS "Gait part of existing project: ${PROJECT_NAME}")
     set(GAIT_PART_OF_PROJECT "")
 else()
