@@ -39,6 +39,8 @@ target_compile_options(Gait PUBLIC "-std=c++0x")
 target_include_directories(Gait PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
+include(GNUInstallDirs)
+
 install(TARGETS Gait
         EXPORT ${PROJECT_NAME}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
