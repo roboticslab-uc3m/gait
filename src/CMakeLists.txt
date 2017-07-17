@@ -28,12 +28,11 @@ add_library(ROBOTICSLAB::Gait ALIAS Gait)
 
 set_property(TARGET Gait PROPERTY PUBLIC_HEADER Gait.h
                                                 GaitLipm.h
-                                                #GaitPatterns.hpp
+                                                GaitPatterns.hpp
                                                 GaitSupportPoligon.h
-                                                #Oscillator.hpp
+                                                Oscillator.hpp
                                                 tools.h
-                                                #ZeroMomentPoint.hpp
-                                                )
+                                                ZeroMomentPoint.hpp)
 
 target_compile_options(Gait PUBLIC "-std=c++0x")
 
