@@ -8,20 +8,21 @@ endif()
 # Add all targets to the build-tree export set.
 export(TARGETS Gait
        NAMESPACE ROBOTICSLAB::
-       FILE GAITTargets.cmake)
+       FILE ${PROJECT_NAME}Targets.cmake)
 
 # Store the package in the user registry.
-export(PACKAGE Gait)
+export(PACKAGE ${PROJECT_NAME})
 
 # Generate simple <pkg>Config.cmake file.
-file(WRITE ${CMAKE_BINARY_DIR}/GAITConfig.cmake "include(\${CMAKE_CURRENT_LIST_DIR}/GAITTargets.cmake)")
+file(WRITE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+     "include(\${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}Targets.cmake")
 
 # Install GAITConfig.cmake
-install(FILES ${CMAKE_BINARY_DIR}/GAITConfig.cmake
+install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake
         DESTINATION ${GAIT_CMAKE_DESTINATION})
 
 # Install the export set for use with the install-tree.
 install(EXPORT GAIT_EXPORT
         NAMESPACE ROBOTICSLAB::
-        FILE GAITTargets.cmake
+        FILE ${PROJECT_NAME}Targets.cmake
         DESTINATION ${GAIT_CMAKE_DESTINATION})

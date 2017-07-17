@@ -11,7 +11,7 @@ if(NOT ${PROJECT_NAME} STREQUAL "Project")
     message(STATUS "Gait part of existing project: ${PROJECT_NAME}")
     set(GAIT_PART_OF_PROJECT "")
 else()
-    project(Gait)
+    project(ROBOTICSLAB_GAIT)
 endif()
 
 # Pick up our cmake modules - they are all in the cmake subdirectory.
@@ -19,7 +19,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 if(NOT DEFINED GAIT_PART_OF_PROJECT)
     # Define installation paths and build options.
-    include(GAITSystem)
+    include(ROBOTICSLAB_GAITSystem)
     
     # Enabling coverage.
     option(ENABLE_coverage "Choose if you want to enable coverage collection" OFF)
@@ -37,7 +37,7 @@ add_subdirectory(src)
 
 if(NOT DEFINED GAIT_PART_OF_PROJECT)
     # Make this project discoverable by other projects.
-    include(GAITDescribe)
+    include(ROBOTICSLAB_GAITDescribe)
     
     # Configure and create uninstall target.
     include(AddUninstallTarget)
