@@ -7,9 +7,9 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 # Discard any value previously set.
 unset(GAIT_PART_OF_PROJECT)
 
-if(NOT PROJECT_NAME STREQUAL "Project")
+if(DEFINED PROJECT_NAME)
     message(STATUS "Gait part of existing project: ${PROJECT_NAME}")
-    set(GAIT_PART_OF_PROJECT "")
+    set(GAIT_PART_OF_PROJECT TRUE)
 else()
     project(ROBOTICSLAB_GAIT)
 endif()
@@ -17,7 +17,7 @@ endif()
 # Pick up our cmake modules - they are all in the cmake subdirectory.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-if(NOT DEFINED GAIT_PART_OF_PROJECT)
+if(NOT GAIT_PART_OF_PROJECT)
     # Define installation paths and build options.
     include(ROBOTICSLAB_GAITSystem)
     
@@ -35,7 +35,7 @@ endif()
 # Add main contents.
 add_subdirectory(src)
 
-if(NOT DEFINED GAIT_PART_OF_PROJECT)
+if(NOT GAIT_PART_OF_PROJECT)
     # Make this project discoverable by other projects.
     include(ROBOTICSLAB_GAITDescribe)
     
