@@ -22,7 +22,7 @@ install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake
         DESTINATION ${GAIT_CMAKE_DESTINATION})
 
 # Install the export set for use with the install-tree.
-install(EXPORT GAIT_EXPORT
+install(EXPORT ${PROJECT_NAME}
         NAMESPACE ROBOTICSLAB::
         FILE ${PROJECT_NAME}Targets.cmake
         DESTINATION ${GAIT_CMAKE_DESTINATION})
