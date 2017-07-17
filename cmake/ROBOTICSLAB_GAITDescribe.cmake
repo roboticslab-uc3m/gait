@@ -15,7 +15,7 @@ export(PACKAGE ${PROJECT_NAME})
 
 # Generate simple <pkg>Config.cmake file.
 file(WRITE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake
-     "include(\${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}Targets.cmake")
+     "include(\${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}Targets.cmake)")
 
 # Install GAITConfig.cmake
 install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake

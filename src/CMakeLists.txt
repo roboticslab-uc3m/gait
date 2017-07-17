@@ -23,6 +23,9 @@ add_library(Gait Gait.cpp
                  ZeroMomentPoint.cpp
                  ZeroMomentPoint.hpp)
 
+# Target alias, useful for downstreams if Gait is part of an existing project.
+add_library(ROBOTICSLAB::Gait ALIAS Gait)
+
 set_property(TARGET Gait PROPERTY PUBLIC_HEADER Gait.h
                                                 GaitLipm.h
                                                 #GaitPatterns.hpp
