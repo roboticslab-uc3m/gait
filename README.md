@@ -2,7 +2,10 @@
 
 C++ biped gait generation library.
 
-Requirements: CMake 2.8.11 or later.
+Requirements:
+
+* gcc 4.6.3 or later
+* CMake 2.8.12 or later
 
 ## Use as an external library
 
@@ -15,7 +18,9 @@ target_link_libraries(${KEYWORD} ROBOTICSLAB::Gait)
 
 ## Use as part of a project
 
-Just copy this repository to the desired location within your project and traverse it with `add_subdirectory()`. Aditionally, in [kinematics-dynamics](https://github.com/roboticslab-uc3m/kinematics-dynamics) we added these lines to `kinematics-dynamics/libraries/CMakeFiles.txt` to search for a system-available Gait, then fall back (involving GUI options) to a local copy embedded as a git submodule:
+Just copy this repository to the desired location within your project and traverse it with `add_subdirectory()`.
+
+Aditionally, in [kinematics-dynamics](https://github.com/roboticslab-uc3m/kinematics-dynamics) we added these lines to `kinematics-dynamics/libraries/CMakeFiles.txt` to search for a system-available Gait, then fall back (involving GUI options) to a local copy embedded as a git submodule:
 
 ```cmake
 # Try to find Gait library on system, don't fail otherwise.
