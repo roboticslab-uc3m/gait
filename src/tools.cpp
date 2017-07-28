@@ -804,6 +804,25 @@ double SpaceTrajectory::moveTimed(double dx, double dy, double dz, double dt)
     return dt;
 }
 
+double SpaceTrajectory::wait(double dt)
+{
+
+
+    //kin::Pose actual;
+    kin::Pose desired;
+
+    //get actual pose
+    GetLastWaypoint(desired);
+
+
+    //desired=actual;
+    desired.ChangePosition(0,0,0);
+
+    AddTimedWaypoint(dt, desired);
+
+    return dt;
+}
+
 int SpaceTrajectory::Size()
 {
     return waypoints.size();

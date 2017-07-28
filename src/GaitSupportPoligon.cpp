@@ -8,8 +8,8 @@ using namespace std;
 
 //kdl
 //#include <frames.hpp>
-#define rlaaOffset +3.5*0.017
-#define llaaOffset +3.5*0.017
+#define rlaaOffset +4*0.017
+#define llaaOffset +4*0.017
 #define rlfyOffset -0.01
 #define llfyOffset +0.01
 #define rlfzOffset +0.01
@@ -70,6 +70,8 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
+    trajLeftFoot.wait(1);
+    trajRightFoot.wait(1);
 
     //-3-left foot forward
     //forward up
@@ -138,7 +140,7 @@ bool GaitSupportPoligon::HalfStepForwardLS()
 
     //origin (x,y,z) destination (0,0,z)
     dx=0-actualLeftFoot.GetX();
-    dy=-hipSideshift;
+    dy=-hipSideshift;//-llfyOffset;//offset hack for left step
     dz=0;
     desiredLeftFoot=actualLeftFoot;
     desiredLeftFoot.ChangePosition(dx,dy,dz);
