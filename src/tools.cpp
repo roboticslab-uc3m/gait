@@ -785,6 +785,36 @@ double SpaceTrajectory::move(double dx, double dy, double dz)
     return dt;
 }
 
+double SpaceTrajectory::moveBeginSmooth(double dx, double dy, double dz, double dt, long sfactor)
+{
+
+
+
+    //long sfactor=10;
+
+    kin::Pose actual;
+    kin::Pose desired;
+
+    //get actual pose
+    GetLastWaypoint(actual);
+
+//    dtp = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
+//    dtr = fabs(angle) / defaultRotationSpeed;
+//    dt= max(dtp,dtr);
+
+
+    for (int i=0;i<sfactor;i++)
+    {
+
+    }
+    //desired=actual;
+    desired.ChangePosition(dx,dy,dz);
+
+    dt=AddWaypoint(desired);
+
+    return dt;
+}
+
 double SpaceTrajectory::moveTimed(double dx, double dy, double dz, double dt)
 {
 
