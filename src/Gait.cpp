@@ -148,6 +148,36 @@ long Gait::GetTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTraject
 
 }
 
+long Gait::GetSmoothTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTrajectory& getLeftFoot, double accel)
+{
+
+    kin::Pose rfwp, lfwp;
+    kin::Pose rfVel, lfVel;
+    kin::Pose rfwpf, lfwpf;
+    double t;
+    double vx,vy,vz;
+    double rVel;
+    //double rvx,rvy,rvz;
+
+    getRightFoot;
+    getLeftFoot = trajLeftFoot;
+
+    for (int i=0;i<trajLeftFoot.Size();i++)
+    {
+
+        trajLeftFoot.GetWaypoint(i, lfwp, t);
+        //smooth before
+        trajLeftFoot.GetSampleVelocity(t,lfVel);
+        lfVel.GetPosition(vx, vy, vz);
+        rVel = lfVel.Angle();
+
+
+    }
+
+    return 0;
+
+}
+
 /**
  * @brief Gait::AddStepForward: Add steps to exixting trajectory, in forward direction.
  * @param stepNumber: Number of steps to add.

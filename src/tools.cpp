@@ -785,11 +785,13 @@ double SpaceTrajectory::move(double dx, double dy, double dz)
     return dt;
 }
 
-double SpaceTrajectory::moveBeginSmooth(double dx, double dy, double dz, double dt, long sfactor)
+double SpaceTrajectory::moveBeginSmooth(double dx, double dy, double dz, long sfactor)
 {
 
 
 
+    double dfactor=0;
+    double dt;
     //long sfactor=10;
 
     kin::Pose actual;
@@ -805,14 +807,24 @@ double SpaceTrajectory::moveBeginSmooth(double dx, double dy, double dz, double 
 
     for (int i=0;i<sfactor;i++)
     {
-
+        dfactor +=1/i;
     }
-    //desired=actual;
-    desired.ChangePosition(dx,dy,dz);
+    for (int i=sfactor;i>=0;i--)
+    {
+        desired.ChangePosition(dx/(i*dfactor),dy/(i*dfactor),dz/(i*dfactor));
+        dt+=AddWaypoint(desired);
+    }
 
-    dt=AddWaypoint(desired);
+    //desired=actual;
+
+    //dt=AddWaypoint(desired);
 
     return dt;
+}
+
+double SpaceTrajectory::getDefaultRotationSpeed() const
+{
+    return defaultRotationSpeed;
 }
 
 double SpaceTrajectory::moveTimed(double dx, double dy, double dz, double dt)

@@ -319,7 +319,9 @@ public:
     double moveTimed(double dx, double dy, double dz, double dt);
     void SetDefaultSpeeds(double vel, double rot);
     double wait(double dt);
-    double moveBeginSmooth(double dx, double dy, double dz, double dt, long sfactor);
+    double moveBeginSmooth(double dx, double dy, double dz, long sfactor);
+    double getDefaultRotationSpeed() const;
+
 private:
     std::vector<kin::Pose> waypoints;
     std::vector<kin::Pose> segments;

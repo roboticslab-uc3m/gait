@@ -46,6 +46,7 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     desiredRightFoot=actualRightFoot;
     desiredRightFoot.ChangePosition(dx,dy,dz);
 
+
     //left foot moves parallel to right foot
     desiredLeftFoot=actualLeftFoot;
     desiredLeftFoot.ChangePosition(dx,dy,dz);
