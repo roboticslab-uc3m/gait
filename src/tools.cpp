@@ -354,6 +354,12 @@ long Pose::SetRotation(Quaternion newRotation)
     return 0;
 }
 
+bool Pose::ChangeRotationAngle(double angle2)
+{
+    angle=angle2;
+}
+
+
 bool Pose::ChangeRotation(double u2x, double u2y, double u2z, double angle2)
 {
     //double ux1,uy1,uz1,angle1;
@@ -827,6 +833,7 @@ double SpaceTrajectory::getDefaultRotationSpeed() const
     return defaultRotationSpeed;
 }
 
+
 double SpaceTrajectory::moveTimed(double dx, double dy, double dz, double dt)
 {
 
@@ -1016,6 +1023,18 @@ bool SpaceTrajectory::GetWaypoint(int index, Pose &getWaypoint, double &time_tot
     time_total = time_totals[index];
     return true;
 }
+
+double SpaceTrajectory::GetWaypointTd(int index)
+{
+    return time_deltas[index];
+}
+
+long SpaceTrajectory::GetVelocitiesRel(int index, kin::Pose & velsfromLastWp) const
+{
+    velsfromLastWp = velocitiesRel[index];
+    return 0;
+}
+
 
 bool SpaceTrajectory::GetLastWaypoint(Pose &waypoint)
 {

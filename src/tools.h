@@ -204,6 +204,7 @@ public:
     Pose ExtrinsicMoveTo(Pose finalPose);
     long GetPoseMatrix(std::vector<double> &xyzRotationMatrix);
     long GetRotationMatrix(std::vector<double> & rotation);
+    bool ChangeRotationAngle(double angle2);
 private:
     double x,y,z; //position
     double ux,uy,uz; //axis
@@ -322,6 +323,9 @@ public:
     double moveBeginSmooth(double dx, double dy, double dz, long sfactor);
     double getDefaultRotationSpeed() const;
 
+    long GetVelocitiesRel(int index, kin::Pose &velsfromLastWp) const;
+
+    double GetWaypointTd(int index);
 private:
     std::vector<kin::Pose> waypoints;
     std::vector<kin::Pose> segments;

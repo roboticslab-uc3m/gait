@@ -63,7 +63,7 @@ public:
     long GetTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTrajectory& getLeftFoot);
 
     long AfterStep();
-    long GetSmoothTrajectories(tra::SpaceTrajectory &getRightFoot, tra::SpaceTrajectory &getLeftFoot, double accel);
+    long GetSmoothTrajectories(tra::SpaceTrajectory &getRightFoot, tra::SpaceTrajectory &getLeftFoot, double xyz_accel, double rot_accel);
 protected:
     //parameters in meters, seconds
 

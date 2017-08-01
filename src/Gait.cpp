@@ -148,28 +148,83 @@ long Gait::GetTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTraject
 
 }
 
-long Gait::GetSmoothTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTrajectory& getLeftFoot, double accel)
+long Gait::GetSmoothTrajectories(tra::SpaceTrajectory& getRightFoot, tra::SpaceTrajectory& getLeftFoot, double xyz_accel, double rot_accel)
 {
 
     kin::Pose rfwp, lfwp;
-    kin::Pose rfVel, lfVel;
-    kin::Pose rfwpf, lfwpf;
-    double t;
-    double vx,vy,vz;
-    double rVel;
+    kin::Pose rfVel1, lfVel1, rfVel2, lfVel2;
+    kin::Pose add_rfwp, add_lfwp;
+    double t,at;
+    double dvx,dvy,dvz,dvr;
+    double dpx,dpy,dpz,dar;
+    double accx,accy,accz,accr;
+
+    //init empty trajs
+    trajRightFoot.GetWaypoint(0,rfwp);
+    tra::SpaceTrajectory smoothRigth(rfwp);
+    //init empty trajs
+    trajLeftFoot.GetWaypoint(0,lfwp);
+    tra::SpaceTrajectory smoothLeft(lfwp);
+
+    //double rVel,vel;
     //double rvx,rvy,rvz;
 
-    getRightFoot;
-    getLeftFoot = trajLeftFoot;
+    double dts=0.1;
+    double dxdt=0.1/dts;
 
-    for (int i=0;i<trajLeftFoot.Size();i++)
+    long steps=0;
+
+
+    for (int i=1;i<-1+trajLeftFoot.Size();i++)
     {
 
-        trajLeftFoot.GetWaypoint(i, lfwp, t);
-        //smooth before
-        trajLeftFoot.GetSampleVelocity(t,lfVel);
-        lfVel.GetPosition(vx, vy, vz);
-        rVel = lfVel.Angle();
+        //actual wp
+        trajLeftFoot.GetWaypoint(i, lfwp);
+        //time to reach i wp from i-1
+        t = trajLeftFoot.GetWaypointTd(i);
+
+        //vel from last wp (vel(0) for pose0 to pose1)
+        trajLeftFoot.GetVelocitiesRel(i-1, lfVel1);
+        //vel to next wp
+        trajLeftFoot.GetVelocitiesRel(i, lfVel2);
+
+        dvx = lfVel2.GetX()-lfVel1.GetX();
+        dvy = lfVel2.GetY()-lfVel1.GetY();
+        dvz = lfVel2.GetZ()-lfVel1.GetZ();
+        dvr = lfVel2.Angle()-lfVel1.Angle();
+
+        //acceleration time
+        at=sqrt(dvx*dvx + dvy*dvy + dvz*dvz)/xyz_accel;
+        at=max(at,dvr/rot_accel);
+        //steps=max(max(max(dvx,dvy),dvz),dvr)/dts;
+        steps = (long) at/dts;
+
+        accx = dvx/at;
+        accy = dvy/at;
+        accz = dvz/at;
+        accr = dvr/at;
+
+        //first wp is actual
+        add_lfwp=lfwp;
+
+        //then add wp timed
+        for (double st=0; st<at; st+=dts)
+        {
+            dpx=st*st*accx/2;
+            dpy=st*st*accy/2;
+            dpz=st*st*accz/2;
+            dar=st*st*accr/2;
+            add_lfwp.ChangePosition(dpx,dpy,dpz);
+            add_lfwp.ChangeRotationAngle(dar);
+
+
+        }
+
+
+        for (int i=steps; i>=0; i--)
+        {
+
+        }
 
 
     }
