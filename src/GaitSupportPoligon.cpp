@@ -71,8 +71,8 @@ bool GaitSupportPoligon::HalfStepForwardRS()
     dt=trajRightFoot.AddWaypoint(desiredRightFoot);
     trajLeftFoot.AddTimedWaypoint(dt,desiredLeftFoot);
 
-    trajLeftFoot.wait(1);
-    trajRightFoot.wait(1);
+//    trajLeftFoot.wait(1);
+//    trajRightFoot.wait(1);
 
     //-3-left foot forward
     //forward up
