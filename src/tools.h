@@ -2,6 +2,7 @@
 #define TOOLS_H
 
 #include <vector>
+#include <valarray>
 #include <deque>
 #include <map>
 #include <iostream>
