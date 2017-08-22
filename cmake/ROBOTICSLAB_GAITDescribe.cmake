@@ -2,7 +2,7 @@
 if(WIN32 AND NOT CYGWIN)
     set(GAIT_CMAKE_DESTINATION CMake)
 else()
-    set(GAIT_CMAKE_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/gait)
+    set(GAIT_CMAKE_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/roboticslab_gait)
 endif()
 
 # Add all targets to the build-tree export set.
