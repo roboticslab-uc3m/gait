@@ -5,7 +5,7 @@
 #set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #-- Not doing because requires gcc/g++ 4.7 and higher. [source of original code](http://stackoverflow.com/questions/20826135/passing-std-c11-to-cmakelists):
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-#-- Lower than gcc/g++, as travis uses 4.6.3 [source of original code](https://github.com/travis-ci/travis-ci/issues/4634):
+#-- Lower than gcc/g++, works on gcc/g++ 4.6.3. [source of original code](https://github.com/travis-ci/travis-ci/issues/4634):
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 add_library(Gait Gait.cpp
