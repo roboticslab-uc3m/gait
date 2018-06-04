@@ -207,7 +207,9 @@ public:
     long GetRotationMatrix(std::vector<double> & rotation);
     bool ChangeRotationAngle(double angle2);
 private:
-    double x,y,z; //position
+    double
+
+    x,y,z; //position
     double ux,uy,uz; //axis
     double angle; //angle
     kin::Quaternion q1,q2,q3; //Not used in addrotation

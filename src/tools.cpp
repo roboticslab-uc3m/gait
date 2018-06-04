@@ -697,7 +697,7 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
         segment.GetPosition(dx,dy,dz);
 
         dtp = sqrt( dx*dx + dy*dy + dz*dz ) / defaultVelocity;
-        dtr = fabs(angle) / defaultRotationSpeed;
+        dtr = fabs(angle) / defaultRotationSpeed;   //rotation time variaton
         dt= max(dtp,dtr);
         std::cout << "dtp: " << dtp << " , dtr: " << dtr << std::endl;
         std::cout << "Warning! Adding waypoint [" << waypoints.size()-1 << "] with default velocities. dt = " << dt << std::endl;
@@ -717,11 +717,11 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
     //compute velocities and update velocities vector
     Pose velocity;
     segment.PoseFraction(velocity,1/dt);
-/*
+
     std::cout << "velocity: " << velocity.GetX() << "," << velocity.GetY() << "," << velocity.GetZ() << std::endl;
     std::cout << "angular v: " << velocity.Ux() << "," << velocity.Uy() << "," << velocity.Uz() << "," << velocity.Angle() << std::endl;
     std::cout << "segment: " << segment.Ux() << "," << segment.Uy() << "," << segment.Uz() << "," << segment.Angle() << std::endl;
-*/
+
     velocitiesRel.push_back(velocity);
 
     Pose segmentAbs = waypoints.back().ExtrinsicMoveTo(newWaypoint);
