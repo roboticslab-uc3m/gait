@@ -703,7 +703,7 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
         std::cout << "Warning! Adding waypoint [" << waypoints.size()-1 << "] with default velocities. dt = " << dt << std::endl;
 
 
-    }
+    }//add aceleration smooth
     time_deltas.push_back(dt);
     time_totals.push_back(time_totals.back()+dt);
 
