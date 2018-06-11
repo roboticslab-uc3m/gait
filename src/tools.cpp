@@ -585,6 +585,7 @@ SpaceTrajectory::SpaceTrajectory()
 
     TrajectoryInit();
     SetInitialWaypoint(Pose(0,0,0)); //Undefined trajectories start at origin
+    setDefaultAcceleration(0.1,0.1);
 
 
 }
@@ -593,7 +594,7 @@ SpaceTrajectory::SpaceTrajectory(kin::Pose initialWaypoint)
 {
     TrajectoryInit();
     SetInitialWaypoint(initialWaypoint); //Defined trajectories start at initialWaypoint
-
+    setDefaultAcceleration(0.1,0.1);
 }
 
 
@@ -717,20 +718,42 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
     //compute velocities and update velocities vector
     Pose velocity;
     segment.PoseFraction(velocity,1/dt);
+    
+    Pose acceleration(velocity, velocitiesRel.back());
 
+    acceleration.PoseFraction(acceleration, 1/dt);
+
+
+    //double angularAccelerationModule = acceleration.Angle();
+
+    //double ax, ay, az;
+    //double linearAccelerationModule = sqrt( ax*ax + ay*ay + az*az);
+    //acceleration.GetPosition(ax, ay, az);
+
+    //if ((linearAccelerationModule > defaultAngularAcceleration)|(angularAccelerationModule > defaultAngularAcceleration))
+    //{
+        //double
+
+    //}
+    
     std::cout << "velocity: " << velocity.GetX() << "," << velocity.GetY() << "," << velocity.GetZ() << std::endl;
     std::cout << "angular v: " << velocity.Ux() << "," << velocity.Uy() << "," << velocity.Uz() << "," << velocity.Angle() << std::endl;
     std::cout << "segment: " << segment.Ux() << "," << segment.Uy() << "," << segment.Uz() << "," << segment.Angle() << std::endl;
 
-    velocitiesRel.push_back(velocity);
+    //comprobar primero la velocidad respecto del anterior
 
+
+
+    velocitiesRel.push_back(velocity);
+    
     Pose segmentAbs = waypoints.back().ExtrinsicMoveTo(newWaypoint);
     Pose velocityAbs;
+    
     segmentAbs.PoseFraction(velocityAbs,1/dt);
     velocitiesAbs.push_back(velocityAbs);
 
     waypoints.push_back(newWaypoint);
-
+    
     return true;
 }
 
@@ -897,6 +920,15 @@ void SpaceTrajectory::SetDefaultSpeeds(double vel, double rot)
     defaultVelocity = vel;
     defaultRotationSpeed = rot;
 }
+void SpaceTrajectory::setDefaultAcceleration(double rotAcc, double linearAcc)
+{
+    defaultLinearAcceleration = linearAcc;
+    defaultAngularAcceleration = rotAcc;
+}
+double SpaceTrajectory::getDefaultLinearAcceleration() const
+{
+    return defaultLinearAcceleration;
+}
 
 /**
  * @brief SpaceTrajectory::GetSample: Get the position and orientation for a specific time in a trajectory.
@@ -997,6 +1029,8 @@ long SpaceTrajectory::GetSampleVelocity(double sampleTime, Pose & samplePoseVelo
         segmentIndex = last_wp;
 
         std::cout << "New trajectory segment : " << last_wp << "->" << next_wp << ", Segment index: " << segmentIndex << std::endl;*/
+
+
     }
 
 

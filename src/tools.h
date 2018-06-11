@@ -325,6 +325,7 @@ public:
     double wait(double dt);
     double moveBeginSmooth(double dx, double dy, double dz, long sfactor);
     double getDefaultRotationSpeed() const;
+    double getDefaultLinearAcceleration() const;
 
     long GetVelocitiesRel(int index, kin::Pose &velsfromLastWp) const;
 
@@ -352,6 +353,8 @@ private:
     //movement parameters
     double defaultVelocity; //default tip velocity (m/s)
     double defaultRotationSpeed; //default tip rotational speed (rad/s)
+    double defaultLinearAcceleration;// default acceleration
+    double defaultAngularAcceleration;
 
     /*
     std::map<double,Pose> waypoints;
@@ -360,7 +363,8 @@ private:
     std::pair<std::map<double,Pose>::iterator,bool> error;*/
 
     long errorCode;
-
+    //
+    void setDefaultAcceleration(double rotAcc, double linearAcc);
 
 };
 
