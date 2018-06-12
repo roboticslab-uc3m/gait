@@ -719,9 +719,9 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
     Pose velocity;
     segment.PoseFraction(velocity,1/dt);
     
-    Pose acceleration(velocity, velocitiesRel.back());
+    //Pose acceleration(velocity, velocitiesRel.back());
 
-    acceleration.PoseFraction(acceleration, 1/dt);
+    //acceleration.PoseFraction(acceleration, 1/dt);
 
 
     //double angularAccelerationModule = acceleration.Angle();
@@ -739,8 +739,6 @@ bool SpaceTrajectory::AddTimedWaypoint(double &dt,const Pose& newWaypoint)
     std::cout << "velocity: " << velocity.GetX() << "," << velocity.GetY() << "," << velocity.GetZ() << std::endl;
     std::cout << "angular v: " << velocity.Ux() << "," << velocity.Uy() << "," << velocity.Uz() << "," << velocity.Angle() << std::endl;
     std::cout << "segment: " << segment.Ux() << "," << segment.Uy() << "," << segment.Uz() << "," << segment.Angle() << std::endl;
-
-    //comprobar primero la velocidad respecto del anterior
 
 
 
