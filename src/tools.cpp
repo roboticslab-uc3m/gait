@@ -849,6 +849,30 @@ double SpaceTrajectory::moveBeginSmooth(double dx, double dy, double dz, long sf
     return dt;
 }
 
+void SpaceTrajectory::UpdateTimeTotals(double actualTime, double extraTime)
+{
+    int actualWp=0;
+
+    for(int i=0; i<sizeof(time_totals); i++)
+    {
+        if((time_totals[i]<actualTime)&&(time_totals[i+1]>actualTime))
+        {
+            actualWp = i;
+            i=sizeof(time_totals);
+        }
+    }
+
+    for(int i=actualWp; i<sizeof(time_totals); i++)
+    {
+        if(time_totals[i+1]!=0)
+        {
+            time_totals[i+1]=time_totals[i+1]+extraTime;
+        }
+    }
+    return;
+}
+
+
 double SpaceTrajectory::getDefaultRotationSpeed() const
 {
     return defaultRotationSpeed;
@@ -912,6 +936,16 @@ double SpaceTrajectory::GetTotalDuration()
 {
     return time_totals.back();
 }
+double SpaceTrajectory::GetIndividualDuration(int index)
+{
+    return time_totals[index];
+}
+int SpaceTrajectory::GetTimeTotalsSize()
+{
+    int size=sizeof(time_totals);
+    return size;
+}
+
 
 void SpaceTrajectory::SetDefaultSpeeds(double vel, double rot)
 {

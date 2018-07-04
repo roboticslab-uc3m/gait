@@ -305,6 +305,7 @@ public:
     long GetSample(double sampleTime, kin::Pose & samplePose);
     long GetSampleVelocity(double sampleTime, kin::Pose &samplePoseVelocity);
 
+    void UpdateTimeTotals(double actualTime, double extraTime);
 
     bool SetInitialWaypoint( kin::Pose initialWaypoint);
     bool TrajectoryInit();
@@ -326,6 +327,8 @@ public:
     double moveBeginSmooth(double dx, double dy, double dz, long sfactor);
     double getDefaultRotationSpeed() const;
     double getDefaultLinearAcceleration() const;
+    double GetIndividualDuration(int index);
+    int GetTimeTotalsSize();
 
     long GetVelocitiesRel(int index, kin::Pose &velsfromLastWp) const;
 

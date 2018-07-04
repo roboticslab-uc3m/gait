@@ -8,12 +8,12 @@ using namespace std;
 
 //kdl
 //#include <frames.hpp>
-#define rlaaOffset +3.0*0.017
-#define llaaOffset +4.5*0.017
+#define rlaaOffset +2.0*0.017
+#define llaaOffset +2.0*0.017
 #define rlfyOffset -0.01
 #define llfyOffset +0.01
 #define rlfzOffset +0.005
-#define llfzOffset +0.01
+#define llfzOffset +0.005
 
 using namespace roboticslab;
 
