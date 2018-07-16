@@ -69,6 +69,32 @@ long Gait::BeforeStep()
     return 0;
 
 }
+long Gait::Squat(double squatHeight)
+{
+    //Reduce hip elevation by changing z coordinate on both feet.
+    trajLeftFoot.moveTimed(0,0,squatHeight,squatHeight*200);
+    trajRightFoot.moveTimed(0,0,squatHeight,squatHeight*200);
+
+    double lateralInitial=squatHeight;
+    if (startOnRightFootSupport)
+    {
+        lateralInitial = -lateralInitial;
+    }
+
+//    trajLeftFoot.move(0,lateralInitial,0);
+//    trajRightFoot.move(0,lateralInitial,0);
+
+//    trajLeftFoot.move(0,0,0);
+//    trajRightFoot.move(0,0,0);
+
+//    trajLeftFoot.move(0,-lateralInitial,0);
+//    trajRightFoot.move(0,-lateralInitial,0);
+
+    
+    return 0;
+}
+
+
 
 /**
  * @brief Gait::AfterStep: Things to do after step (like unSquat).

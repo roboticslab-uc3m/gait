@@ -26,6 +26,7 @@ public:
 
     virtual ~Gait();
 
+    long Squat(double squatHeight);
 
     long BeforeStep();
 
