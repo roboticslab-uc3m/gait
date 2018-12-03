@@ -1,7 +1,4 @@
-os:
-  - linux
-
-sudo: required
+os: linux
 dist: trusty
 
 language:
