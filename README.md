@@ -52,7 +52,7 @@ Another example of use can be found at [gaitcontrol](https://github.com/robotics
 
 ## Status
 
-[![Build Status](https://travis-ci.org/roboticslab-uc3m/gait.svg?branch=master)](https://travis-ci.org/roboticslab-uc3m/gait)
+[![Build Status](https://travis-ci.com/roboticslab-uc3m/gait.svg?branch=master)](https://travis-ci.com/roboticslab-uc3m/gait)
 
 [![Coverage Status](https://coveralls.io/repos/github/roboticslab-uc3m/gait/badge.svg)](https://coveralls.io/github/roboticslab-uc3m/gait)
 
